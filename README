@@ -18,8 +18,6 @@ Prerequisites
 
 This routines have been tested on a Ubuntu 16.04 64-bit machine.
 
-
-
 Installation
 --------------------------------------------------------------------
 In src type:
@@ -27,15 +25,30 @@ In src type:
 executable will be create in the /bin folder
 
 
-Preparation
+Data
 --------------------------------------------------------------------
-Untar CCD_data.tar 
+We provide data from January, 2009 from station CCD (Concordia, Antarctica) to reproduce the published 
+results. Data are free to donwload from ORFEUS data center. They are provided by GEOSCOPE:
+
+Institut De Physique Du Globe De Paris (IPGP); Ecole Et Observatoire Des Sciences De La Terre De Strasbourg (EOST).
+(1982). GEOSCOPE, French Global Network of broad band seismic stations. Institut de Physique du Globe de Paris (IPGP). 
+https://doi.org/10.18715/geoscope.g
+
+The code works with chunks of 8162 samples. We provide data ready-to-use, corrected for the
+instrument response.
 
 
 Run a demo measurement
 --------------------------------------------------------------------
 To run the DOP-E measurement routine type:
-> python run_DOP-E.py
+> python start.py
+
+The program will start computing the DOP-E analysis on the data from CCD station, day by day. It will take a couple of hours, 
+depending on the machine computational power.
+After the end of the measurement stage, results for each day will be stored in files in CCD_data/1.2009/<day>/<day>.1.2009.demo.asc
+The file contains 7 columns:
+back azimuth | frequency | degree of polarization | begin time of the sample | not used variable | H/V ratio | not used variable 
+
 
 
 
