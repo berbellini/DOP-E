@@ -74,7 +74,6 @@ for m in range(1,2):   #12):
 				Zfile = f
 				Nfile = f.replace("BHZ","BHN")
 				Efile = f.replace("BHZ","BHE")
-			
 				if os.path.isfile(Zfile) and os.path.isfile(Zfile) and os.path.isfile(Zfile):
 					print Zfile
 					print Nfile
@@ -89,12 +88,9 @@ for m in range(1,2):   #12):
 					os.system("rm Z.sac")
 					os.system("rm N.sac")
 					os.system("rm E.sac")
-					sys.exit()
 			os.system("cp output_file.asc " + output_file)
 			os.system("rm output_file.asc")
 			os.system("cp run_DOP-E.cmd " + day_folder)
-			
-			
 		else:
 			pass
 		print output_file
