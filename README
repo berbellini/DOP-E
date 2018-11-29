@@ -22,7 +22,7 @@ Installation
 --------------------------------------------------------------------
 In src type:
 > make
-executable will be create in the /bin folder
+executable will be create in the bin/ folder
 
 
 Data
@@ -43,11 +43,45 @@ Run a demo measurement
 To run the DOP-E measurement routine type:
 > python start.py
 
+This Python routine calls resursively the bash script run_DOP-E.cmd that calls the executable bin/DOP-E_v1.0. 
+The parameters for DOP-E are defined in run_DOP-E.cmd. By default we keep the same parameters used in our paper
+(See table 1, supplementary material).
+
 The program will start computing the DOP-E analysis on the data from CCD station, day by day. It will take a couple of hours, 
 depending on the machine computational power.
 After the end of the measurement stage, results for each day will be stored in files in CCD_data/1.2009/<day>/<day>.1.2009.demo.asc
 The file contains 7 columns:
 back azimuth | frequency | degree of polarization | begin time of the sample | not used variable | H/V ratio | not used variable 
+
+Plotting results
+--------------------------------------------------------------------
+After the measurement plot the results using the routine provided. Type:
+> python plot_results.py
+
+This routine merges all the results for each day into a single file, reads the results, compute the median and plot the
+ellipticity curve. It also plots the ellipticity values measured from earthquake data using the method by 
+Berbellini et al. (2016). It also compare the results with the theoretical ellipticity curve measured using the method
+by Herrmann (2013) from the model Litho1.0 and Crust1.0 (Laske, 2013)
+
+
+References
+--------------------------------------------------------------------
+Berbellini, A., Schimmel, M., Ferreira, A.M.G., Morelli, A., Constraining S-wave velocity using 
+Rayleigh wave ellipticity from polarization analysis of seismic noise, Geophysical Journal
+International, 2018, in press.
+    
+Berbellini, A., Morelli, A., & Ferreira, A. M., 2016. Ellipticity of Rayleigh waves in basin and
+hard-rock sites in Northern Italy, Geophysical Journal International, 206(1), 395–407.
+
+Herrmann, R. B., 2013. Computer Programs in Seismology: An Evolving Tool for Instruction and
+Research, Seismol. Res. Lett., 84(6), 1081–1088.
+
+Laske, G., Masters, G., Ma, Z., & Pasyanos, M., 2013. Update on CRUST1.0 - A 1-degree Global
+Model of Earth’s Crust, Geophys. Res. Abstr., 15, EGU General Assembly 2013, held 7-12 April,
+2013 in Vienna, Austria, id. EGU2013-2658.
+
+
+
 
 
 
