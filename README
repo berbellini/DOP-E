@@ -1,0 +1,44 @@
+Read me for the DOP-E analysis.
+--------------------------------------------------------------------
+
+
+Citation
+--------------------------------------------------------------------
+Berbellini, A., Schimmel, M., Ferreira, A.M.G., Morelli, A.,
+    Constraining S-wave velocity using Rayleigh wave ellipticity
+    from polarization analysis of seismic noise, Geophysical Journal
+    International, 2018, in press.
+
+
+Prerequisites
+--------------------------------------------------------------------
+- gfortran or ifort
+- python 2.7
+- matplotlib 2.1.2
+
+This routines have been tested on a Ubuntu 16.04 64-bit machine.
+
+
+
+Installation
+--------------------------------------------------------------------
+In src type:
+> make
+executable will be create in the /bin folder
+
+
+Preparation
+--------------------------------------------------------------------
+Untar CCD_data.tar 
+
+
+Run a demo measurement
+--------------------------------------------------------------------
+To run the DOP-E measurement routine type:
+> python run_DOP-E.py
+
+
+
+
+
+
