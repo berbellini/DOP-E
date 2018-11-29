@@ -27,7 +27,8 @@ This routines have been tested on a Ubuntu 16.04 64-bit machine.
 
 Installation
 --------------------------------------------------------------------
-In src type:
+modify the makefile (src/makefile) setting the correct fortran compiler.
+In src/ directory type:
 > make
 executable will be create in the bin/ folder
 
