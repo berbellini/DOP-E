@@ -2,6 +2,7 @@ Read me for the DOP-E analysis.
 --------------------------------------------------------------------
 Disclaimer: this package is a beta version
 
+
 Citation
 --------------------------------------------------------------------
 Berbellini, A., Schimmel, M., Ferreira, A.M.G., Morelli, A.,
@@ -17,6 +18,7 @@ Prerequisites
 - matplotlib 2.1.2
 
 This routines have been tested on a Ubuntu 16.04 64-bit machine.
+
 
 Installation
 --------------------------------------------------------------------
@@ -52,6 +54,7 @@ depending on the machine computational power.
 After the end of the measurement stage, results for each day will be stored in files in CCD_data/1.2009/<day>/<day>.1.2009.demo.asc
 The file contains 7 columns:
 back azimuth | frequency | degree of polarization | begin time of the sample | not used variable | H/V ratio | not used variable 
+
 
 Plotting results
 --------------------------------------------------------------------
