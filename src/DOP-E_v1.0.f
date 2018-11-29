@@ -1,26 +1,39 @@
-      program polfre_s1
+      program dop_e_v10 
 c
 c-----------------------------------------------------------
-c This version: polfre_s1.69el:
-c =============================
-c This is the same as polfre_s1.68el.f but output zdeg and wdeg
-c optionally.
-c Below the changes of polfre_s1.68el:
-c This is the same as polfre_s1.66el.f with some addition:
-c (1) The output file contains now 6 more columns for the normalized
-c semi-major and semi-minor vector length.
-c (2) Set DOP to zero whenever the particle motion is in a plane
-c which  deviates from the vertical plane by more than "zdeg" deg.
-c (3) Set DOP to zero whenever the semi major vector is not
-c in the horizontal plane or parallel to the vertical axis. 
-c A tolerance/deviation of "wdeg" deg is permitted.
-c "zdeg" and "wdeg" are the variables used in the code.
-c (4) Option to output 6 more columns for the normalized
-c semi-major and semi-minor vector.
-c (5) Option to output H/V ratio.
-c-----------------------------------------------------------
+c This version: dop-e_v1.0:
+c =========================
+c 20181129: polfre_s1.69el.f has been renamed to dop-e_v1.0.f
+c on Andrea Berbellini's request, basically to avoid confusions with
+c other "polfre" releases for different other applications and to 
+c stress that this is the code used for the 2018 paper (Berbellini
+c et al., GJI).
+c 
+c Further:
+c ========
+c Note this is a WORKING (RESEARCH) version rather than a final
+c program. Simplifications are required for the straight final code.
+c The program contains options which are not useful any more or
+c which were coded for a very specific purpose. These will be
+c removed soon to make the code cleaner and faster. A parrellized 
+c version is also on the way ... . 
 c
-c WORKING PG for linear/elliptical particle motion.
+c If you use results from this program in publications etc. then, 
+c please, cite Berbellini et al. (GJI, 2018) for the adaptation 
+c and application of the DOP polarization approach to extract
+c frequency-dependent Rayleigh wave ellipticity to constrain the
+c S-wave velocity as function of depth and Schimmel & Gallart (2004)
+c for the main theoretical development  or Schimmel et al. (2011) 
+c for the main adaptation to noise studies. Thanks.
+c 
+c This research algorithm has been distributed in the hope to
+c be useful for your research. Please, note I can not take any
+c warranties, i.e., use this program on your own risk.
+c
+c Copyright & Author: Martin Schimmel (schimmel@ictja.csic.es)
+c-----------------------------------------------------------
+c Brief description:
+c ==================
 c
 c This program computes the degree of polarization (dop)
 c for three component sensors employing sliding data windows
@@ -45,7 +58,10 @@ c
 c The polarization approach has been used for filtering 
 c Schimmel and Gallart (2003,2004,2005) and signal characterization
 c Stutzmann et al. (2009), Schimmel et al. (2011), Obrebski et al. (2012),
-c Sergeant et al. (2013), among others.
+c Sergeant et al. (2013), among many others. One of the most recent
+c applications is the extraction of the ellipticity from seismic noise 
+c and earthquake data to constrain the structure below individual
+c stations (Berbellini et al., 2018).
 c
 c REFERENCES for methodology and examples:
 c Schimmel M., and J. Gallart, The use of instantaneous 
@@ -74,25 +90,28 @@ c Sergeant A., Stutzmann E., Maggi A., Schimmel M., Ardhuin F.,
 c    Obrebski M., Frequency-dependent noise sources in the North 
 c    Atlantic Ocean, Geochem. Geophys. Geosyst., 14, 
 c    doi:10.1002/2013GC004905, 2013.
+c Davy, C., Stutzmann, E., Barruol, G., Fontaine, FR, Schimmel, M., 
+c    Sources of secondary microseisms in the Indian Ocean, Geophys. J. 
+c    Int., 202, 1180-1189, 2015.
+c Agurto-Detzel, H., Bianchi, M, Assumpção, M., Schimmel, M., 
+c    Collação, B., Ciardelli, C., Barbosa, J.R., Calhau, J., 
+c    The tailings dam failure of 5 November 2015 in SE Brazil and 
+c    its preceding seismic sequence, Geophys. Res. Lett., 43(10), 
+c    pp. 4929-4936, 2016.
+c Berbellini, A., Schimmel, M., Ferreira, A.M.G., Morelli, A.,
+c    Constraining S-wave velocity using Rayleigh wave ellipticity from 
+c    polarization analysis of seismic noise, GJI, 2018.
 c
 c (PDFs can be downloaded from my home-page.)
 c---------------------------------------------------------------
-c This a WORKING (RESEARCH) VERSION rather than a final program.
-c I constantly adapt it. ...
-c Simplifications are required for the straight final code.
-c The program contains options which are not useful any more
-c or which were coded for a very specific purpose. These will be
-c removed in a future version of this program.
-c This research program is not for distribution.
-c Copyright & Author: Martin Schimmel (schimmel@ictja.csic.es)
 c
 c HOW to start:
 c 1. compile together with sac-library.
-c 2. just execute polfre_s1.66el without any argument to
+c 2. just execute dop_e_v1.0 without any argument to
 c    obtain the list of parameters and their usage.
-c 3. see my example and play with the scripts.
+c 3. see the example and play with the scripts.
 c
-c BUGS & COMMENTS: Please, report remaining bugs! Also, do
+c BUGS & COMMENTS: Please, report bugs! Also, do
 c not hesitate to send me your comments on interesting,
 c modifications or results.
 c----------------------------------------------------------------
@@ -1101,7 +1120,7 @@ c Parameter check:
       write(*,*)'  '
       write(*,*)'check carefully the used parameters!'
       write(*,*)
-      write(*,*)"---------------- polfre_s1.6 finished ------"//
+      write(*,*)"---------------- dop-e_v1.0 finished ------"//
      & "--------------"
       write(*,*)
 
@@ -1771,9 +1790,9 @@ c defaults et al.:
            par1=par(7:l)
            read(par1,*)wlenf
            lwlenf=.true.
-        else if (par(1:4).eq.'ntr=') then
-           par1=par(5:l)
-           read(par1,*)ntrac
+c       else if (par(1:4).eq.'ntr=') then
+c          par1=par(5:l)
+c          read(par1,*)ntrac
         else if (par(1:4).eq.'nsp=') then
            par1=par(5:l)
            read(par1,*)nsamp
@@ -1850,14 +1869,14 @@ c  Author: M. Schimmel (schimmel@ictja.csic.es)
 ccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 
       write(*,*)
-      write(*,*)'USAGE:  polfre in1 in2 in3  [parameters]'
+      write(*,*)'USAGE:  dop-e_v1.0 in1 in2 in3  [parameters]'
       write(*,*)
       write(*,*)' in?    :  bin/sac files.'
       write(*,*)'             (use 1=Z, 2=N, 3=E)'
       write(*,*)' '
-      write(*,*)' parameters: wlen= wlenf= pow= dt= nsp= ntr= nfr='
+      write(*,*)' parameters: wlen= wlenf= pow= dt= nsp= nfr='
       write(*,*)'             nflen= f1= f2= nocyc= cycle= med '
-      write(*,*)'             ave fre='
+      write(*,*)'             ave fre= ... '
       write(*,*)' '
       write(*,*)'  f1,f2 :  Min & max frequency to be analysed.'
       write(*,*)'  nfr   :  # of frequency samples.'
@@ -1869,7 +1888,7 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       write(*,*)'  bin   :  Use bin i/o (rather than default: sac)'
       write(*,*)'           i: without header, o: 1 line header.'
       write(*,*)'  dt    :  Data time increment (not needed for SAC).'
-      write(*,*)'  ntr   :  # of traces in bin files.'
+c     write(*,*)'  ntr   :  # of traces in bin files.'
       write(*,*)'  nsp   :  # of samples per trace in bin files.'
       write(*,*)'           Not needed for SAC data whenever the entire'
       write(*,*)'           trace is analyzed. But, can be used to '//
@@ -1982,11 +2001,18 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
      & 'be useful for your' 
       write(*,*)'research. Please, note I can not take any '//
      & 'warranties, i.e., use'
-      write(*,*)'this program on your own risk. If you use '//
-     & 'results from this'
-      write(*,*)'program in publications then, please, cite '//
-     & 'Schimmel & Gallart'
-      write(*,*)'(2004) and Schimmel et al. (2011). Thanks! '
+      write(*,*)'this program on your own risk.'
+      write(*,*)'The program contains options which are not useful '//
+     & 'any more or'
+      write(*,*)'which were coded for a very specific purpose. '// 
+     & 'These will be'
+      write(*,*)'removed soon to make the code cleaner and faster. '//
+     & 'A parrellized'
+      write(*,*)'version is also on the way ... .'
+      write(*,*)'If you use results from this program in publications'//
+     & ' etc. then, please,'
+      write(*,*)'cite Berbellini, Schimmel, Ferreira, Morelli (2018).'//
+     & 'Thanks.'
       write(*,*)
       write(*,*)'(1) Main theoretical development:'
       write(*,*)' Schimmel & Gallart, Degree of polarization '// 
@@ -2001,6 +2027,14 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       write(*,*)' Earths Ambient Microseismic Noise, Geochem. '//
      & 'Geophys. Geosyst., '
       write(*,*)' doi:10.1029/2011GC003661, 2011.'
+      write(*,*)'(3) Main adaptation/application to constrain '//
+     & 'S-wave velocities:'
+      write(*,*)' Berbellini, A., Schimmel, M., Ferreira, A.M.G., '//
+     & 'Morelli, A.,'
+      write(*,*)' Constraining S-wave velocity using Rayleigh wave '//
+     & 'ellipticity from'
+      write(*,*)' polarization analysis of seismic noise, Geophys. '//
+     & 'J.  Int., 2018.'
       write(*,*)' '
       write(*,*)'BUGS & COMMENTS: Please, report '//
      & 'bugs! Do not hesitate to'
@@ -2009,7 +2043,7 @@ ccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       write(*,*)'nice results, ...'
 
       write(*,*)' '
-      write(*,*)'LAST MODIFICATION: 22.09.2015 '
+      write(*,*)'LAST MODIFICATION: 28.11.2018 '
       write(*,*)' '
       write(*,*)'AUTHOR:  M. Schimmel (schimmel@ictja.csic.es) '
       write(*,*)' '
