@@ -1,0 +1,25 @@
+GSAC Command Reference Manual                                    CUT
+Cut a trace as it is read.
+
+SUMMARY:
+
+CUT [ON|OFF] refbeg offset refend offset
+
+INPUT:
+	ON	Permit cutting on read
+	OFF	Turn off cutting on read
+	ref	A header reference value for the cut
+               which is one of B|E|O|A|Tn where n=0,...,9
+       offset  Number of seconds relative to the reference value.
+		refbeg offset refers to the start point
+		refend offset refers to the  end  point
+
+DESCRIPTION:
+
+SAC COMPATIBILITY:
+	SAC permitted a simpler input, e.g., cut 10 30 or 
+	or cut b 10 30. GSAC requires a full expression, such as
+	cut b 10 b 30
+SEE ALSO:
+       CUTERR
+

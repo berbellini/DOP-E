@@ -1,0 +1,9 @@
+#!/bin/sh
+
+if [ $# -eq 0 ]
+then
+	echo 'Usage: MFTSRF do_mft.dsp_files > surf96_dispersion_file'
+else
+cat $* | awk '{ printf "SURF96 %s %s X %s %s %s %s\n", $2, $3, $4, $5, $6, $7}'
+fi
+

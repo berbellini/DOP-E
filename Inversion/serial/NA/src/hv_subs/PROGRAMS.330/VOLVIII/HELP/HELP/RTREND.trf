@@ -1,0 +1,19 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                   RTREND
+.S2 SUMMARY:
+Remove linear trend from waveform
+
+RTRend
+.S2 INPUT:
+None.
+.S2 DESCRIPTION:
+This fits a straight line through the data and removes the trend
+by a simple least squares algorithm. 
+
+.S2 "SEE ALSO":
+RMEAN
+

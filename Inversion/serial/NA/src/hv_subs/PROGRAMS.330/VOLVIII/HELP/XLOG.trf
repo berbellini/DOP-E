@@ -1,0 +1,25 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    XLOG
+.S2 SUMMARY:
+Logarithmic x-axis for plot, plotpk
+
+.S2 XLOG 
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+
+.S2 "DEFAULT:"
+Linear x-axis
+
+.S2 "SEE ALSO":
+XLIN, YLIN, YLOG, LINLIN
+
+
+
+       
+

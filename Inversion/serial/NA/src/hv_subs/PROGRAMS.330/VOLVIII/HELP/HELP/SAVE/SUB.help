@@ -1,0 +1,19 @@
+GSAC Command Reference Manual                                     SUB
+
+SUMMARY:
+Subtract a constant to  all SAC data files in  memory.
+
+SUB [v], 
+
+INPUT:
+       [v] : constant to be subtracted to all files
+
+SAC COMPATIBILITY:
+       SAC permits an extended syntax that permits applying different constants
+       to respective files in memory. We have not implemented this complexity.
+DEFAULT
+       SUB 0
+
+SEE ALSO:
+	ADD, MUL, DIV
+

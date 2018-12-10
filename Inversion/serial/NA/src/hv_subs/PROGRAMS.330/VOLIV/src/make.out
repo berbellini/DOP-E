@@ -1,0 +1,294 @@
+g77 -O -Wall  -c surf96.f
+surf96.f: In program `joint96':
+surf96.f:110: warning: unused variable `instr'
+g77 -O -Wall  -c modls.f
+modls.f: In subroutine `sgvsol':
+modls.f:715: warning: `k' might be used uninitialized in this function
+modls.f:747: warning: `l' might be used uninitialized in this function
+g77 -O -Wall  -c jsamat.f
+jsamat.f: In subroutine `jsamat':
+jsamat.f:118: warning: `sumwv1' might be used uninitialized in this function
+jsamat.f:123: warning: `sumwg1' might be used uninitialized in this function
+jsamat.f: In subroutine `cslmod':
+jsamat.f:653: warning: `u0c0' might be used uninitialized in this function
+jsamat.f:655: warning: `uu0' might be used uninitialized in this function
+g77 -O -Wall  -c jramat.f
+g77 -O -Wall  -c samat.f
+samat.f: In subroutine `samat':
+samat.f:49: warning: unused variable `nzday'
+samat.f:49: warning: unused variable `nzmon'
+samat.f:49: warning: unused variable `nzmin'
+samat.f:49: warning: unused variable `nzhour'
+samat.f:49: warning: unused variable `nzjday'
+samat.f:49: warning: unused variable `nzyear'
+samat.f:48: warning: unused variable `kstnm'
+samat.f:39: warning: unused variable `redv'
+samat.f:39: warning: unused variable `sum2r'
+samat.f:39: warning: unused variable `sum2p'
+samat.f:39: warning: unused variable `sum2o'
+samat.f:38: warning: unused variable `iid'
+samat.f:38: warning: unused variable `mm2'
+samat.f:38: warning: unused variable `mm'
+samat.f:38: warning: unused variable `nhgh'
+samat.f:38: warning: unused variable `nlow'
+samat.f:36: warning: unused variable `ostr'
+samat.f:35: warning: unused variable `names'
+cp ../../SUBS/igetmod.f .
+g77 -O -Wall -c igetmod.f
+cp ../../SUBS/iputmod.f .
+g77 -O -Wall -c iputmod.f
+g77 -O -Wall  -c shwrfw.f
+g77 -O -Wall  -c query.f
+g77 -O -Wall  -c smenu.f
+smenu.f: In subroutine `menu':
+smenu.f:2: warning: unused variable `lout'
+cp ../../SUBS/lgstr.f .
+g77 -O -Wall -c lgstr.f
+g77 -O -Wall  -c shwctl.f
+g77 -O -Wall  -c shwwtv.f
+g77 -O -Wall  -c shwwtq.f
+cp ../../SUBS/mchdep.f .
+g77 -O -Wall -c mchdep.f
+cp ../../SUBS/mnmarg.f .
+g77 -O -Wall -c mnmarg.f
+cp ../../SUBS/mgtarg.f .
+g77 -O -Wall -c mgtarg.f
+g77 -O -Wall  -c ssytem.f
+g77 -O -Wall  -o surf96 surf96.o  modls.o jsamat.o jramat.o \
+	query.o smenu.o samat.o shwrfw.o \
+	igetmod.o iputmod.o lgstr.o shwctl.o shwwtv.o shwwtq.o mchdep.o mnmarg.o mgtarg.o ssytem.o 
+mv surf96 ../../bin
+g77 -O -Wall  -c srfdis96.f
+srfdis96.f: In program `srfdis96':
+srfdis96.f:135: warning: `jsol' might be used uninitialized in this function
+srfdis96.f: In subroutine `getsol':
+srfdis96.f:385: warning: `idir' might be used uninitialized in this function
+srfdis96.f: In subroutine `sphere':
+srfdis96.f:461: warning: `tmp' might be used uninitialized in this function
+srfdis96.f: In subroutine `nevill':
+srfdis96.f:578: warning: `m' might be used uninitialized in this function
+srfdis96.f: In function `dltar':
+srfdis96.f:630: warning: `dltar' might be used uninitialized in this function
+srfdis96.f: In subroutine `var':
+srfdis96.f:862: warning: `x' might be used uninitialized in this function
+srfdis96.f:883: warning: `y' might be used uninitialized in this function
+srfdis96.f:884: warning: `z' might be used uninitialized in this function
+srfdis96.f:885: warning: `cosq' might be used uninitialized in this function
+g77 -O -Wall  -o srfdis96 srfdis96.o   mchdep.o igetmod.o
+mv srfdis96 ../../bin
+rm -f srfdis96.o
+g77 -O -Wall  -c srfdrl96.f
+g77 -O -Wall  -o srfdrl96 srfdrl96.o mchdep.o
+mv srfdrl96 ../../bin
+rm -f srfdrl96.o
+g77 -O -Wall  -c srfdrr96.f
+srfdrr96.f: In subroutine `var':
+srfdrr96.f:761: warning: `w' might be used uninitialized in this function
+srfdrr96.f:762: warning: `x' might be used uninitialized in this function
+srfdrr96.f:763: warning: `cosp' might be used uninitialized in this function
+srfdrr96.f:783: warning: `y' might be used uninitialized in this function
+srfdrr96.f:784: warning: `z' might be used uninitialized in this function
+srfdrr96.f:785: warning: `cosq' might be used uninitialized in this function
+g77 -O -Wall  -o srfdrr96 srfdrr96.o mchdep.o
+mv srfdrr96 ../../bin
+rm -f srfdrr96.o
+g77 -O -Wall  -c srfinv96.f
+srfinv96.f: In subroutine `qrbd':
+srfinv96.f:661: warning: `l' might be used uninitialized in this function
+g77 -O -Wall  -o srfinv96 srfinv96.o mchdep.o
+mv srfinv96 ../../bin
+rm -f srfinv96.o
+g77 -O -Wall  -c srfpre96.f
+srfpre96.f: In subroutine `getdsp':
+srfpre96.f:478: warning: `ilorr' might be used uninitialized in this function
+srfpre96.f:493: warning: `iobs' might be used uninitialized in this function
+g77 -O -Wall  -c setdsp.f
+g77 -O -Wall  -c setmod.f
+g77 -O -Wall  -o srfpre96 srfpre96.o lgstr.o \
+	igetmod.o iputmod.o setdsp.o setmod.o mchdep.o
+mv srfpre96 ../../bin
+rm -f srfpre96.o
+cp srfgph ../../bin
+touch Makefile
+g77 -O -Wall  -c srfphv96.f
+srfphv96.f: In subroutine `vmat':
+srfphv96.f:356: warning: `isym' might be used uninitialized in this function
+srfphv96.f: In subroutine `cslmod':
+srfphv96.f:670: warning: `u0c0' might be used uninitialized in this function
+srfphv96.f:672: warning: `uu0' might be used uninitialized in this function
+cp ../../SUBS/grphsubf.f .
+g77 -O -Wall -c grphsubf.f
+grphsubf.f: In subroutine `dology':
+grphsubf.f:116: warning: `jpow' might be used uninitialized in this function
+grphsubf.f: In subroutine `dologx':
+grphsubf.f:285: warning: `jpow' might be used uninitialized in this function
+grphsubf.f: In subroutine `rclip':
+grphsubf.f:1208: warning: `slope' might be used uninitialized in this function
+grphsubf.f:1209: warning: `slopeinv' might be used uninitialized in this function
+grphsubf.f:1224: warning: `y' might be used uninitialized in this function
+grphsubf.f:1225: warning: `x' might be used uninitialized in this function
+grphsubf.f: In subroutine `mynum':
+grphsubf.f:1367: warning: `nman' might be used uninitialized in this function
+grphsubf.f:1378: warning: `nexp' might be used uninitialized in this function
+g77 -O -Wall  -o srfphv96 srfphv96.o igetmod.o grphsubf.o  \
+	 lgstr.o mchdep.o mnmarg.o mgtarg.o ssytem.o ../../lib/libcalpltf.a
+mv srfphv96 ../../bin
+rm -f srfphv96.o
+g77 -O -Wall  -c srfphr96.f
+srfphr96.f: In program `srfphr96':
+srfphr96.f:248: warning: `x0' might be used uninitialized in this function
+g77 -O -Wall  -o srfphr96 srfphr96.o grphsubf.o lgstr.o ../../lib/libcalpltf.a mchdep.o
+mv srfphr96 ../../bin
+rm -f srfphr96.o
+cp srfrph ../../bin
+touch Makefile
+cp srfvph ../../bin
+touch Makefile
+g77 -O -Wall  -c rftn96.f
+g77 -O -Wall  -c ramat.f
+ramat.f: In subroutine `ramat':
+ramat.f:49: warning: unused variable `nzday'
+ramat.f:49: warning: unused variable `nzmon'
+ramat.f:49: warning: unused variable `nzmin'
+ramat.f:49: warning: unused variable `nzhour'
+ramat.f:49: warning: unused variable `nzjday'
+ramat.f:49: warning: unused variable `nzyear'
+ramat.f:48: warning: unused variable `kstnm'
+ramat.f:39: warning: unused variable `redv'
+ramat.f:39: warning: unused variable `sum2r'
+ramat.f:39: warning: unused variable `sum2p'
+ramat.f:39: warning: unused variable `sum2o'
+ramat.f:38: warning: unused variable `iid'
+ramat.f:38: warning: unused variable `mm2'
+ramat.f:38: warning: unused variable `mm'
+ramat.f:38: warning: unused variable `nhgh'
+ramat.f:38: warning: unused variable `nlow'
+ramat.f:36: warning: unused variable `ostr'
+ramat.f:35: warning: unused variable `names'
+g77 -O -Wall  -c rmenu.f
+rmenu.f: In subroutine `menu':
+rmenu.f:2: warning: unused variable `lout'
+g77 -O -Wall  -o rftn96 rftn96.o  modls.o jsamat.o jramat.o \
+	query.o rmenu.o ramat.o shwrfw.o \
+	igetmod.o iputmod.o lgstr.o shwctl.o shwwtv.o shwwtq.o mchdep.o mnmarg.o mgtarg.o ssytem.o 
+mv rftn96 ../../bin
+g77 -O -Wall  -c rftndr96.f
+rftndr96.f: In subroutine `doit':
+rftndr96.f:288: warning: unused variable `newa'
+rftndr96.f:288: warning: unused variable `olda'
+rftndr96.f:274: warning: unused variable `drda'
+rftndr96.f: In subroutine `excit':
+rftndr96.f:1376: warning: unused variable `pexa'
+rftndr96.f:1376: warning: unused variable `exa'
+rftndr96.f: In subroutine `gthska':
+rftndr96.f:1528: warning: unused variable `iptrb'
+rftndr96.f: In subroutine `pgthska':
+rftndr96.f:1584: warning: `hsav' might be used uninitialized in this function
+rftndr96.f:1584: warning: `asav' might be used uninitialized in this function
+rftndr96.f:1584: warning: `bsav' might be used uninitialized in this function
+rftndr96.f: In subroutine `pgteni':
+rftndr96.f:1681: warning: unused variable `hsav'
+rftndr96.f:1681: warning: `asav' might be used uninitialized in this function
+rftndr96.f:1681: warning: `bsav' might be used uninitialized in this function
+cp ../../SUBS/sacsubf.f .
+g77 -O -Wall -c sacsubf.f
+sacsubf.f: In subroutine `arsach':
+sacsubf.f:336: warning: `ln' might be used uninitialized in this function
+sacsubf.f: In subroutine `getfhv':
+sacsubf.f:365: warning: unused variable `cstr'
+sacsubf.f:365: warning: unused variable `istr'
+sacsubf.f: In subroutine `getnhv':
+sacsubf.f:430: warning: unused variable `cstr'
+sacsubf.f:430: warning: unused variable `rstr'
+sacsubf.f: In subroutine `getkhv':
+sacsubf.f:497: warning: unused variable `istr'
+sacsubf.f:497: warning: unused variable `rstr'
+sacsubf.f: In subroutine `getlhv':
+sacsubf.f:552: warning: unused variable `cstr'
+sacsubf.f:552: warning: unused variable `istr'
+sacsubf.f:552: warning: unused variable `rstr'
+sacsubf.f: In subroutine `setfhv':
+sacsubf.f:725: warning: unused variable `cstr'
+sacsubf.f:725: warning: unused variable `istr'
+sacsubf.f: In subroutine `setnhv':
+sacsubf.f:786: warning: unused variable `cstr'
+sacsubf.f:786: warning: unused variable `rstr'
+sacsubf.f: In subroutine `setkhv':
+sacsubf.f:846: warning: unused variable `istr'
+sacsubf.f:846: warning: unused variable `rstr'
+sacsubf.f: In subroutine `setlhv':
+sacsubf.f:898: warning: unused variable `cstr'
+sacsubf.f:898: warning: unused variable `istr'
+sacsubf.f:898: warning: unused variable `rstr'
+sacsubf.f: In subroutine `setihv':
+sacsubf.f:1051: warning: unused variable `ival'
+g77 -O -Wall  -c twofft.f
+twofft.f: In subroutine `realft':
+twofft.f:156: warning: `s' might be used uninitialized in this function
+twofft.f:156: warning: `c' might be used uninitialized in this function
+g77 -O -Wall  -o rftndr96 rftndr96.o lgstr.o sacsubf.o \
+	igetmod.o iputmod.o twofft.o mchdep.o mnmarg.o mgtarg.o ssytem.o
+mv rftndr96 ../../bin
+g77 -O -Wall  -c rftnpr96.f
+g77 -O -Wall  -o rftnpr96 rftnpr96.o lgstr.o sacsubf.o igetmod.o \
+iputmod.o setmod.o mchdep.o
+mv rftnpr96 ../../bin
+rm -f rftnpr96.o
+rm -f rftnpr96.o
+g77 -O -Wall  -c rftnpv96.f
+rftnpv96.f: In subroutine `pltrcv':
+rftnpv96.f:144: warning: `y0' might be used uninitialized in this function
+rftnpv96.f:172: warning: `itmod' might be used uninitialized in this function
+g77 -O -Wall  -o rftnpv96 rftnpv96.o igetmod.o grphsubf.o lgstr.o \
+	mchdep.o mnmarg.o mgtarg.o ssytem.o ../../lib/libcalpltf.a
+mv rftnpv96 ../../bin
+rm -f rftnpv96.o
+cp rftnvp ../../bin
+touch Makefile
+g77 -O -Wall  -c joint96.f
+g77 -O -Wall  -c jamat.f
+jamat.f: In subroutine `jamat':
+jamat.f:49: warning: unused variable `nzday'
+jamat.f:49: warning: unused variable `nzmon'
+jamat.f:49: warning: unused variable `nzmin'
+jamat.f:49: warning: unused variable `nzhour'
+jamat.f:49: warning: unused variable `nzjday'
+jamat.f:49: warning: unused variable `nzyear'
+jamat.f:48: warning: unused variable `kstnm'
+jamat.f:39: warning: unused variable `redv'
+jamat.f:39: warning: unused variable `sum2r'
+jamat.f:39: warning: unused variable `sum2p'
+jamat.f:39: warning: unused variable `sum2o'
+jamat.f:38: warning: unused variable `iid'
+jamat.f:38: warning: unused variable `mm2'
+jamat.f:38: warning: unused variable `mm'
+jamat.f:38: warning: unused variable `nhgh'
+jamat.f:38: warning: unused variable `nlow'
+jamat.f:36: warning: unused variable `ostr'
+jamat.f:35: warning: unused variable `names'
+g77 -O -Wall  -c jmenu.f
+jmenu.f: In subroutine `menu':
+jmenu.f:2: warning: unused variable `lout'
+g77 -O -Wall  -o joint96 joint96.o  modls.o jsamat.o jramat.o \
+	query.o jmenu.o jamat.o shwrfw.o \
+	igetmod.o iputmod.o lgstr.o shwctl.o shwwtv.o shwwtq.o mchdep.o mnmarg.o mgtarg.o ssytem.o 
+mv joint96 ../../bin
+g77 -O -Wall  -c jntpre96.f
+jntpre96.f: In subroutine `getdsp':
+jntpre96.f:485: warning: `ilorr' might be used uninitialized in this function
+jntpre96.f:500: warning: `iobs' might be used uninitialized in this function
+jntpre96.f: In subroutine `setjobs':
+jntpre96.f:802: warning: unused variable `dd'
+g77 -O -Wall  -o jntpre96 jntpre96.o sacsubf.o  lgstr.o \
+	igetmod.o iputmod.o setdsp.o setmod.o mchdep.o
+mv jntpre96 ../../bin
+rm -f jntpre96.o
+rm -f *.o
+rm -f grphsubf.f
+rm -f igetmod.f
+rm -f iputmod.f
+rm -f lgstr.f
+rm -f mnmarg.f
+rm -f mgtarg.f
+rm -f mchdep.f
+rm -f sacsubf.f

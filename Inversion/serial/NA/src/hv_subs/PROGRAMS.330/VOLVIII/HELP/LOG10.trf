@@ -1,0 +1,22 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    LOG10
+.S2 SUMMARY:
+Take base 10 log of trace
+
+.S2 LOG10 
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+This takes the base 10 logarithm of a trace.
+However NOTHING will be done if the
+trace value is negative or zero.
+
+.S2 "SEE ALSO":
+SQRT, SQR, EXP, ABS
+       
+

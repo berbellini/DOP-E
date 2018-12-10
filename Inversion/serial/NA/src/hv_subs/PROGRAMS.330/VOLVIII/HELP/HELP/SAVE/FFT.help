@@ -1,0 +1,22 @@
+GSAC Command Reference Manual                                      FFT
+
+SUMMARY:
+Obtain the discrete Fourier transform of traces in memory
+
+FFT  
+
+DESCRIPTION:
+      This estimates the discrete Fourier transform of the traces in 
+by using a version of Brenner's original FOUR1 routine. The definition
+of the DFT is
+
+                      N-1       j {2 pi n k/N}
+      H( n DF ) = DT  SUM h(k) e              
+                      k=0                     
+where DF = 1/(N DT), DT = sampling interval, DELTA, and N is a power of
+2. Note that this is an extension to the definition  of a DFT in that
+physical dimension are introduced
+
+SEE ALSO:
+         PLOTSP
+

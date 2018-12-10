@@ -1,0 +1,79 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    CHANGEHEADER
+.S2 SUMMARY:
+Change header values in memory
+
+ChangeHeader [ name value ]
+
+.S2 INPUT:
+name     : SAC header name
+.BR
+value    : New value for that header variable
+
+.S2 DESCRIPTION:
+This commands lets one change many of the header values associated with a trace.
+If more than one trace is in memory, then all header variables are updated.
+The following listing gives the header names that can be changed:
+.sp
+.nr 
+.na
+Reals: DELTA, DEPMIN, DEPMAX, SCALE, ODELTA, B,
+E, O, A, FMT, T0, T1,
+T2, T3, T4, T5, T6, T7,
+T8, T9, F, RESP0,
+RESP1, RESP2, RESP3, RESP4, RESP5, RESP6,
+RESP7, RESP8, RESP9, STLA, STLO, STEL,
+STDP, EVLA, EVLO, EVEL, EVDP,
+USER0, USER1, USER2, USER3, USER4, USER5,
+USER6, USER7, USER8, USER9, DIST, AZ,
+BAZ, GCARC, SB, SDELTA, DEPMEN, CMPAZ,
+CMPINC, XMINIMUM, XMAXIMUM, YMINIMUM, YMAXIMUM, ADJTM   
+.sp
+Integers: NZYEAR, NZJDAY, NZHOUR, NZMIN, NZSEC, NZMSEC,
+N NINF, NHST, NPTS, NSNPTS, NSN,
+NXSIZE, NYSIZE, IFTYPE, IDEP, IZTYPE,
+IINST, ISTREG, IEVREG, IEVTYP, IQUAL, ISYNTH,
+IDHR12, IDHR13, IDHR14, IDHR15, IDHR16, IDHR17,
+IDHR18, IDHR19, IDHR20, LPSPOL, LOVROK, LCALDA,
+.sp
+Strings: KSTNM, KEVNM, KHOLE, KO, KA, KT0,
+KT1, KT2, KT3, KT4, KT5, KT6,
+KT7, KT8, KT9, KF, KUSER0, KUSER1,
+KUSER2, KCMPNM, KNETWK, KDATRD, KINST
+.fi
+.ad
+.sp
+NOTE THAT ANY ATTEMPT TO CHANGE NVHDR or NPTS IS IGNORED
+.sp
+Because SAC permits something like
+.sp
+   ch o 10
+.sp
+   ch o gmt 2004 123 10 20 30 500
+.sp
+The command parsing is complicated. GSAC handles this by internally 
+concatenating the o and gmt to form the new GSAC ogmt. GMT introduces the
+following time commands:
+.sp
+Setting GMT Time: OGMT, AGMT, T0GMT, T1GMT, T2GMT, T3GMT,
+T4GMT, T5GMT, T6GMT, T7GMT, T8GMT, T9GMT
+.sp
+Also since it is often inconvenient to determine the day of the year, GSAC permits entries of the form
+.sp
+   ch OCAL 2004 05 02 10 20 30 500
+.sp
+   ch o cal 2004 05 02 10 20 30 500
+.sp
+Setting Calendar Time: OCAL, ACAL, T0CAL, T1CAL, T2CAL, T3CAL,
+T4CAL, T5CAL, T6CAL, T7CAL, T8CAL, T9CAL
+.sp
+NOTE You can assign values to USER1 and USER2 if followed by a WRITEHEADER. However if you follow by a WRITE, then the USER1 and USER2 fileds will be the minimum and maximum filter periods.  THIS WAS A DESIGN DECISION.
+
+.S2 "SEE ALSO":
+WriteHeader, ListHeader
+       
+

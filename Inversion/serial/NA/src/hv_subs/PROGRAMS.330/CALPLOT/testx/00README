@@ -1,0 +1,50 @@
+
+
+XOR
+
+When we use XAllocColor, we ask for the color closet to the
+requested RGB.  The output is then an integer (pixel) and RGB values flags and pad
+
+The pixel is the value used in an XOR
+
+For example, on the SPARC
+
+Color	Pixel
+
+White	0
+Black	1
+Red	60
+
+         XOR operation             result maps to color
+           Rd Wh Bl             
+        Rd  0 60 61                Wh Rd  ?
+        Wh 60  0  1                Rd Wh Bl
+        Bl 61  1  0                ?  Bl Wh
+
+        The ? means that CALPLOT means that CALPLOT fortunately was able to
+        map 61 -> reddish green
+
+
+For LINUX
+Color	Pixel
+
+White	1
+Black	0
+Red	27
+
+         XOR operation             result maps to color
+           Rd Wh Bl             
+        Rd  0 26 27                Bl  ? Rd
+        Wh 26  0  1                 ? Bl Wh
+        Bl 27  1  0                Rd Wh Bl
+	
+	The ? means that whatever pixel 26 points to, is the color shown
+
+-------------------------
+Conclusion: the use of XOR with color is very dependent on the color server.
+Perhaps I should modify XviG to pass back the pixel values -
+
+So on LINUX, if I choose BLACK - I do not see anything different
+So on Solaris, if I choose WHITE I do not see anything different
+
+	since anything XOR 0 = anything 

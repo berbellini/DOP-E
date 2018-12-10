@@ -1,0 +1,59 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                HIGHPASS
+.S2 SUMMARY:
+HighPass filter traces
+
+HighPass [options] 
+
+where options is one or more of the following:
+
+[Butter | BEssel | C1 ] [ Corner fc ] [ Npoles npoles ] [ Passes npass] [ Tranbw tranbw ] [ Atten atten ]
+
+.S2 INPUT:
+.BR
+Butter   : Butterworth filter
+.BR
+BEssel   : Bessel filter
+.BR
+C1       : Chebyshev Type I filter
+.BR
+Corner   : Corner frequency (R) range 0 \- Nyquist
+.BR
+Npoles   : Number of poles  (I) range 1 \- 10
+.BR
+Passes   : Number of passes (I) range 1 \- 2
+.BR
+Tranbw   : Chebyshev transition bandwidth fraction (0.3 default)
+.BR
+Atten    : Chebyshev stop band attenuation (30 default)
+.BR
+
+.S2 DESCRIPTION:
+Highpass filter using a BI\-LINEAR Z\-transformation implementation of
+a highpass filter. A bi\-linear method is chosen since this is easily
+implemented algebraically. Passes = 1 gives a causal filter while 
+Passes = 2 gives a zero\-phase filter with a 6db point at the corner 
+frequency.
+.sp
+The lowpass filter design of the Chebyshev Type 1 filter is based on the information in  Hamming (1997) equation (13.5.4) and Figure 13.6.1, This filter attempts to approximate a sharp lowpass filter. In reality a transition band is defined by Fp and Fs, where Fp is the lowpass corner frequency and Fs is the stopband, where Fs = (1 + tranbw)*Fp.  The amplitude level of the stop band (f > Fs) is 1/atten.  Actual implementation requires a parameter epsilon, eps, which defines the lowpass ripple, which varies between 1 and 1/sqrt(1 + eps*eps).
+.in +5n
+Hamming, Richard W. (1997). Digital Filters (3rd edition), Dover Publications, 296 pp, ISBN 048665088X
+.in -5n
+Given npoles and eps, the poles and zeros are given by 
+.in +5n 
+http://www.answers.com/topic/chebyshev-filter
+.in -5n
+The correct normalization amplitude together with poles and zeros is given in
+.in +5n
+Digital Filter Designers Handbook with C++ algorithms, C.  Britton Rorabaugh 2nd Edition, McGraw Hill, New York, 479 pp 1997  Chapter 5
+.in -5n
+
+.S2 "HEADER VALUES SET"
+	USER1 = permin, USER2=permax, where permin=1.0/(2*dt), and	permax= 1.0/(filt_fl) for use by sacmft96 adn sacpom96
+.S2 "SEE ALSO":
+	LOWPASS, BANDPASS, BANDREJECT
+

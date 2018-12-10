@@ -1,0 +1,48 @@
+#-------------------------------------------------------------------------------
+#       Standard Makefile Macro Setup for NA program and utilities
+#      
+#       Note that you must edit this file to suit your platform 
+#
+#       Platforms where the code has been successfully run with 
+#       identical results: 
+#
+#                Platform                       Compiler
+#                SUN (Solaris)                  native 
+#                SUN (Solaris)                  g77,gcc 
+#                SUN (running SuSe Linux)       g77,gcc 
+#                Compaq Alpha (OSF1 V4.0)       native compiler
+#                PC  Linux                      g77,gcc compiler
+#                SGI                            native compiler
+#
+#	Options that have worked on a linux system using intel compiler and F77 code
+#
+#       This version links the glibc library from Red Hat 8 into the compilation
+#       on redhat 9. This was necessary with the earlier version of the intel compiler
+#       but is obsolete with the current version.
+#
+#-------------------------------------------------------------------------------
+#
+F77     = /opt/intel/compiler70/ia32/bin/ifc # Fortran compiler
+CC      = /opt/intel/compiler70/ia32/bin/icc # C compiler
+FFLAGS  = -O -w -Vaxlib -tpp7 -xW -L/rh8/lib -lc-2.2.93  # Fortran compiler options
+CFLAGS  = -O -w -Vaxlib -tpp7 -xW -L/rh8/lib -lc-2.2.93 # C compiler options
+AR      = /usr/bin/ar           # archiver
+XFLAGS  = -O -L/rh8/X11R6/lib -lX11  # X library flags
+X       = yes                   # compile X-utility programs (yes,no)
+MACH    = lin                   # platform type (e.g. sun,dec,sgi,lin)
+TYPE    = serial                # installation type (e.g. serial or mpi)
+#TYPE   = mpi                   # installation type (e.g. serial or mpi)
+MF77    = /usr/local/bin/mpif77 # MPI fortran compiler (only used if TYPE=mpi)
+#
+#                                     By default, NA uses some fortran90 features like
+#                                     dynamic memory allocation. If you prefer to use
+#                                     the static memory version compiled under F77
+#                                     change the following option. In this case the
+#                                     file na_param.inc will be used at compile time
+#                                     to set array sizes.
+#
+F77_COMPAT = -DNA_F77_COMPATIBILITY=1   # For F77
+#F77_COMPAT = -DNA_F77_COMPATIBILITY=0    # For F90
+
+
+#

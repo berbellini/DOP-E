@@ -1,0 +1,32 @@
+
+#!/bin/sh
+
+#####
+#	Script for compiling the IRIS utilities
+#####
+DEST=../../bin
+
+
+cd rdseedv5.3.slu
+make rdseed clean
+mv rdseed ${DEST}
+#cd Man
+#groff -man rdseed.l -P-pletter > rdseed.ps
+#ps2pdf rdseed.ps
+#mv rdseed.ps ../../../DOC/IRIS.ps
+#mv rdseed.pdf ../../../DOC/IRIS.pdf 
+#cd ..
+cd ..
+
+cd evalresp-3.3.3.slu
+./configure
+make 
+mv evalresp ${DEST}
+make clean
+#groff -man evalresp.man -P-pletter > evalresp.ps
+#ps2pdf evalresp.ps
+#mv evalresp.ps ../../DOC/IRIS.ps
+#mv evalresp.pdf ../../DOC/IRIS.pdf
+cd ..
+
+echo Compile and Installation of IRIS Utilities Completed

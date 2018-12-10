@@ -1,0 +1,148 @@
+
+Rick
+
+Here is the result of attempting to compile rdseed4.5 and evalresp from IRIS and qlib2,ms2sac and qmerge from PASSCAL ucb contribution
+
+My purpose was to see if I could get therse to compile on different paltforms, specifically
+
+LINUX on Intel
+Solaris on SPARC
+CYGWIN in Windows on Intel
+MACOS-X on Mac
+
+My choise of programs are those that I need to manipulate SEED and
+MiniSeed.  I did modify rdseed to do the following
+
+Main/output_resp.c in routine print_resp () to add
+	
+fprintf(stderr,"%3s %5s %2s %3s %s %s %10.6f %11.6f %7.1f %5.1f %5.1f %10.4g %s  \n",current_station->network_code ? current_station->network_code : "**",
+current_station->station,
+(strlen(current_channel->location) != 0 ) ?  current_channel->location : "**",
+current_channel->channel,
+current_channel->start,
+(current_channel->end != NULL) ?  current_channel->end : "2999,000,00:00:00.0000",
+current_channel->latitude,
+current_channel->longitude,
+current_channel->elevation,
+current_channel->dip,
+current_channel->azimuth,
+current_channel->samplerate,
+outfile_name);
+
+The reason is that I needed to know the orientation of the horizontals at RSSD and ANMO in a general manner and because I wanted to set up a 'grep' and 'awk'
+based database of response SEED response fiels from the dataless seed.
+
+OK TO THE COMPIELR CHECK
+
+
+I have the following:
+
+
+DOCOMPILE - a shell script that tries to compile everything.
+	IT cd's to different directories, compiles and then tries
+	to make the manyal page. I did note that the GhostScript took
+	ps2pdf  is not on the MAc but a pstopdf does exist
+
+Docompile.out:
+	Result of compiling on
+
+Linux crust.eas.slu.edu 2.4.18-14smp #1 SMP Wed Sep 4 12:34:47 EDT 2002 i686 i686 i386 GNU/Linux
+
+gcc version 3.2 20020903 (Red Hat Linux 8.0 3.2-7
+
+---
+
+Docompile.out.osx - result of compiling on a MAC with
+	
+Darwin mulder.eas.slu.edu 7.4.0 Darwin Kernel Version 7.4.0: Wed May 12 16:58:24 PDT 2004; root:xnu/xnu-517.7.7.obj~7/RELEASE_PPC  Power Macintosh powerpc
+
+gcc version 3.3 20030304 (Apple Computer, Inc. build 1495)
+
+-----
+
+DOCOMPILE.out.solgcc - Solaris compile
+
+SunOS rbh.eas.slu.edu 5.8 Generic_108528-01 sun4u sparc SUNW,Ultra-5_10
+
+gcc version 2.95.2 19991024 (release)
+
+
+---------------------------------------------------------
+Summary
+---------------------------------------------------------
+
+LINUX - everything compiles
+	rdseed warning
+	gcc -I../Include -c -g   -c -o decode_steim.o decode_steim.c
+	decode_steim.c: In function `decode_steim':
+	decode_steim.c:231: warning: integer overflow in expression
+	decode_steim.c:231: warning: integer overflow in expression
+
+---------------------------------------------------------
+
+MACOSX -
+	qtime.c - Neuhauser lib
+
+	qtime.c:1254: error: invalid operands to binary -
+	qtime.c: In function `int_time_from_timeval':
+	qtime.c:1327: warning: passing arg 1 of `gmtime' from incompatible pointer type
+	make: *** [qtime.o] Error 1
+
+	qmerge.c - Neuhauser 
+	
+	gcc -O -I../qlib2 -DNO_AUTO_VERIFY -DDEFAULT_NETWORK=\"BK\"   -c -o qmerge.o qmerge.c
+	In file included from /usr/include/math.h:26,
+                 from qmerge.c:212:
+	/usr/include/architecture/ppc/math.h:251: error: parse error before numeric constant
+	/usr/include/architecture/ppc/math.h:263: error: parse error before "double"
+	make: *** [qmerge.o] Error 1
+
+rdseed - IRIS
+	gcc -I../Include -c -g   -c -o get_date.o get_date.c
+I	get_date.c: In function `get_date':
+I	get_date.c:26: warning: passing arg 1 of `localtime' from incompatible pointer type
+
+evalresp - IRIS
+	if gcc -DHAVE_CONFIG_H -I. -I. -I.     -Wall -g -MT file_ops.o -MD -MP -MF ".deps/file_ops.Tpo" \
+  	-c -o file_ops.o `test -f 'file_ops.c' || echo './'`file_ops.c; \
+	then mv -f ".deps/file_ops.Tpo" ".deps/file_ops.Po"; \
+	else rm -f ".deps/file_ops.Tpo"; exit 1; \
+	fi
+	file_ops.c: In function `start_child':
+	file_ops.c:308: error: `SIGCLD' undeclared (first use in this function)
+	file_ops.c:308: error: (Each undeclared identifier is reported only once
+	file_ops.c:308: error: for each function it appears in.)
+	make[1]: *** [file_ops.o] Error 1
+	make: *** [all] Error 2
+
+---------------------------------------------------------
+SOLARIS - 
+	rdseed -
+
+	decode_steim.c: In function `decode_steim':
+	decode_steim.c:231: warning: integer overflow in expression
+	decode_steim.c:231: warning: integer overflow in expression
+
+	Undefined                       first referenced
+ 	symbol                             in file
+	xdrstdio_create                     Main/output_ah.o
+	xdr_short                           Ah/ioroutin.o
+	xdr_float                           Ah/ioroutin.o
+	xdr_array                           Ah/ioroutin.o
+	xdr_bytes                           Ah/ioroutin.o
+	xdr_double                          Ah/ioroutin.o
+	xdr_long                            Ah/ioroutin.o
+
+	evalresp -
+
+I	gcc -DHAVE_CONFIG_H -I. -I. -I.      -Wall -g -c `test -f 'string_fctns.c' || echo './'`string_fctns.c
+I	string_fctns.c: In function `get_line':
+I	string_fctns.c:205: warning: subscript has type `char'
+I	string_fctns.c: In function `next_line':
+I	string_fctns.c:270: warning: subscript has type `char'
+I	string_fctns.c: In function `add_null':
+I	string_fctns.c:642: warning: subscript has type `char'
+
+
+
+

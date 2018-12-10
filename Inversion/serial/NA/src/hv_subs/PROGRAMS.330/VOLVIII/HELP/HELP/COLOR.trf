@@ -1,0 +1,40 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    COLOR
+.S2 SUMMARY:
+Controls color of trace plots
+.sp
+COLOR [ON|OFf] [options]  
+where options is on of the following:
+     DEFAULT RAINBOW LIST list_entries
+.S2 INPUT:
+ON        : Enable color output
+.BR
+OFf       : Disable color output \- traces will be CALPLOT foreground
+.BR
+DEFAULT   : Use the default color sequence
+.BR
+.BR
+LIST      : A user specificed list for the alternating colors is used
+which are one of the following keywords: BLAck, REd, Green
+BLUe, ORange, Cyan, Yellow
+.BR
+RAINBOW   : A selection of colors from RED to BLUE (or light to dark in
+gray scale), with colors chosen according to the trace number. Two traces
+will plot as RED and BLUE.
+.S2 DESCRIPTION:
+This permits different traces to be plotted with different colors. 
+color BLACK is actually the foreground color. By default this is BLACK in
+CALPLOT, but if the interactive disply environment is set by the SHELL  
+command  'export PLOTXVIG=:\-K:\-I:' under the 'bash shell', the background
+will be black and the foreground white.
+.BR
+The RAINBOW option indicates that the traces will be plotted in a
+progression from RED to BLUE, as in a rainbow.
+
+.S2 "SEE ALSO":
+       
+

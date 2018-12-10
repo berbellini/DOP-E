@@ -1,0 +1,25 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                 INTERPOLATE
+.S2 SUMMARY:
+Resample the current traces in memory
+
+INTERPOLATE [Delta new_delta}
+
+.S2 INPUT:
+Delta new_delta : Define the new sample interval. This may be greater
+or less than the current DELTA of the trace.
+
+.S2 DESCRIPTION:
+When comparing observed and synthetics quantitatively, the traces sample
+intervals must be identical. This routine permits a resampling at an 
+arbitrary new DELTA. The start time of the trace is maintained, but the 
+number of points and end time are changed. When the new_delta > the 
+original DELTA, it is best to lowpass filter the trace before 
+interpolating
+.S2 "SEE ALSO":
+       
+

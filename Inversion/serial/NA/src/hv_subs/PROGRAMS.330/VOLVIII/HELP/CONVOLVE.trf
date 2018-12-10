@@ -1,0 +1,40 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th CONVOLVE
+.S2 SUMMARY:
+Convolve traces
+
+CONvolve 
+Zero [B|O|A|T0|T1|T2|T3|T4|T5|T6|T7|T8|T9]
+File external_sac_file
+[Suffix suffix]
+
+.S2 INPUT:
+.BR
+Zero            : Specify marker to define the zero time for the external pulse. Since the external pulse may have been delayed, one marker must be set. The default is the O (oh) marker
+.BR
+File FILE       : Name of external file containing the impulse response of the filter
+.BR
+Suffix   suffix : Suffix to be appended to the file name in memory after convolution.The default value ofthe suffix is '.con' After the convolution operation, the files are named as follow: original_name{suffix}, e.g.,  SLMNMBHZ.con.
+
+.S2 DESCRIPTION:
+All traces in memory are convolved with the external trace specificed on the command line. with the master trace is computed.
+If the  trace in memory is called x, and the external trace is called h, the
+convolution is defined as
+.BR
+  INT x(tau) h(t - tau) dtau
+.BR
+where dtau is the sample interval.
+.BR
+The input trace is linearly interpolated to match the sampling of the traces in memory. The convolution is implemented in the time domain to avoid discrete Fourier transform (DFT) wrap-around problems.
+.BR
+The zero lag time for the external trace, h(t), is specified on the command lineas one of the B, O, A, T0, ..., T9 markers, which must be set in the external file. Otherwise the convolution will not occur.
+.BR
+Note the only the DEPMAX, DEPMIN and DEPMEN header values are changed for the traces in memory.  The zero marker from the external trace is not written on the the headers of the traces in memory.
+.S2 "DEFAULT":
+Align O Suffix .con
+.S2 "SEE ALSO":

@@ -1,0 +1,48 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                   PLOTSP
+.S2 SUMMARY:
+Plot spectra traces
+
+PlotSP  [options]
+.S2 INPUT:
+AMplitude          : Plot amplitude spectrum (default)
+.BR
+PHase              : Plot phase spectrum
+.BR 
+PErplot [n|OFF]    : Plot n spectra per frame (default off)
+.BR
+Overlay [ON|OFF]   : Overlay all spectra (default off)
+.BR
+XLIn               : X-axis is linear
+.BR
+XLOg               : X-axis is logarithmic (default)
+.BR
+YLIn               : Y-axis is linear
+.BR
+YLOg               : Y-axis is logarithmic (default)
+.BR
+FMIn               : Minimum frequency for plot (default: DF for XLOG and 
+                     0 for XLIN)
+.BR
+FMAx               : Maximum frequency for plot (default: Nyquist)
+.BR 
+AMIn               : Minimum spectral amplitude to plot (default:
+                     0 for YLIN  and 0.0001 Amax for YLOG)
+.BR 
+AMAx               : Maximum spectral amplitude to plot (default: maximum)
+.BR
+Default            : Reset to default
+
+.S2 DESCRIPTION:
+After using the FFT command, the spectra are stored in memory along with the trace.
+.S2 "SAC Compatibility"
+If one wishes to look at the spectra and then the trace, SAC requires that the trace be reread. GSAC has both in memory, so that one can alternate PLOT1 and PLOTSP to see the traces and the spectra.
+
+.S2 "SEE ALSO":
+.S2 Notes
+The plot limits for this will be independent of the plot limits of the trace plots.
+

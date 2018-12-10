@@ -1,0 +1,24 @@
+
+08 AUG 2002
+
+
+This directory contains codes for regional waveform inversion for
+source parameters. These codes are those of C. J. Ammon,
+Penn State University. The front end, output and use of Green's functions
+have been modified to use the Computer Programs in Seismology 
+definitions.
+
+
+AS OF NOW SACSUBF IS OUT OF SYNC WITH SACSUBC
+
+24 AUG 2002
+
+The routine
+	bar_chart will give trash and get in an infinite
+	loop if we look at misfit of low amplitude
+	signals
+
+16 SEP 2010 - added a new program wvfdly96 which assumes that the waveform 
+time shift  is due to a difference in location and origin time and converts
+to distance assuming a group velocity of Love and Rayleigh waves
+for dreger cannot use the evp since these are all positive - need a sign

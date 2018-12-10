@@ -1,0 +1,31 @@
+.de BR
+.in 0
+.in +8n
+.ti -5n
+..
+
+
+.Th TRIANGLE
+.S2 SUMMARY:
+Convolve with unit area triangle
+
+TRIANGLE  [ Half half_width ] [ Width width ]
+
+.S2 INPUT:
+Half half-width : the half-width of the isoceles triangle function rounded to the next sample interval.
+.BR
+Width width : the base width of the isoceles triangle function rounded to the next sample interval.
+.S2 DESCRIPTION:
+This routine convolves all traces in memory with a unit area isoceles trianglar pulse.  This command is equivalent to
+.sp
+	TRAPEZOID WIDTH half_width 0.0 half_width
+.sp
+	TRAPEZOID WIDTH width/2 0.0 width/2
+.sp
+This acts as a lowpass filter.
+.sp
+If half_width < DELTA, no filtering is done
+.S2 EXAMPLES:
+
+.S2 "SEE ALSO":
+TRAPEZOID, BOXCAR

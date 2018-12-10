@@ -1,0 +1,21 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th ECHO
+.S2 SUMMARY:
+Echo a line of text to the terminal
+
+ECHO [message]
+
+.S2 INPUT:
+message  : text to be output to terminal.
+
+.S2 DESCRIPTION:
+
+.S2 EXAMPLES:
+
+.S2 "SEE ALSO":
+PAUSE

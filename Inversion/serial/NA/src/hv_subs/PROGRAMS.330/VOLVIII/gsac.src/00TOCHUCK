@@ -1,0 +1,38 @@
+
+> Larry Baker of the USGS caught some undefined variables in some
+> FORTRAN code -
+> perhaps this will explain some previous problems
+>
+> Please comment on GSAC -
+>
+> I now have xlim and ylim working and prs is a little cleaner
+> If the program complains about a command syntax, do a  help command
+>
+> I have to do a little more -
+>       ppk will have a ppk regional or ppk teleseismic
+>       A menu appears (basically unadorned boxes at the bottom fo the page)
+>       with names such as P Pg S Lg for regional phases, 0 1 2 3 4 for
+>       relative weights, and if you choose P for the first arrival
+>       you will see I E for quality, C D + - X for polarity
+>
+>       prs needs more work to do reduced travel times
+>
+>       I need something like flim alim alog alin flog flin for PLOTSP
+>
+>       I need to clean up the HOLD option (a la MATLAB) for plot overlays
+>
+>       I need to put in warping in the digital filters
+>
+>       Finally I have to clean up the routine that draws the linear axes
+>
+> ---------------
+> Concerning organization of everything, I thing i will mv
+>       saccvt, sacdecon sacevalr sacfilt saciterd saclhdr sacspc96 from
+>       VOLV/src to VOLVIII/src since these are true SAC programs and have
+>       nothing to do directly with synthetics
+>
+>       This means that if someone is only interested in GSAC, they only need
+>       the PROGRAMS.330/CALPLOT PROGRAMS.330/SUBS and PROGRAMS.330/VOLVIII
+>       source trees
+>
+

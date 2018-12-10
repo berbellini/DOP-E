@@ -1,0 +1,133 @@
+
+Date July 23 2002
+
+The following is a description of SAC header values that are
+used by programs in the computer program sin seismology suite.
+Although particular header value may have more than one meaning, but
+header values are chosen to be consistent with the particular
+use of a SAC file.
+
+Header  Variable        Definition      Programs        Language        
+
+USER1   permin  Minimum usable period   sacmat96        F77
+                                        sacmft96        F77
+                                        sacpom96        F77
+                                        sacevalr        F77
+                                        sacfilt         F77
+KUSER1  PER_MIN identifier flag
+
+
+USER2   permax  Maximum usable period   sacmat96        F77
+                                        sacmft96        F77
+                                        sacpom96        F77
+                                        sacevalr        F77
+                                        sacfilt         F77
+KUSER2  PER_MAX identifier flag
+
+[ The purpose of these flags is to identify the usable period range in
+  a data set. For example, phase-match filtering of a surface wave
+  is limited to the range of periods in the group velocity data set. 
+  Further processing of a phase match filtered trace, should not
+  be permitted to use periods outside this range since the signal lacks
+  these spectral components.  sacmft96 and sacmat96 use these flags.
+
+  The programs sacfilt and sacevalr permit deconvolving of instrument
+  response from a signal. Deconvolution is made stable by applying
+  a water level deconvolution  to yield a stable output signal. 
+  The permin and permax are set to indicate the range of periods
+  within the bounds of the high and low pass filters applied as part
+  of the water level deconvolution ]
+
+KUSER1  FD_DECON                        rftndr96        F77
+                                        hrftn96         F77
+                                        trftn96         F77
+                                        sacdecon        F77
+
+KUSER1  IT_DECON                        saciterd        C
+
+[ This is an informational flag that indicates the type of
+  deconvolution performed, FD to frequency domain or TD for time domain.
+  The receiver functions arising from hrftn96 trfth96 and rftndr96
+  are are acceptable since these are based on synthetics and the
+  deconvolution process is stable.
+
+  sacdecon permits a receiver function to be computed by a water level
+  deconvolution. We prefer the iterative time domain deconvolution program 
+  saciterd for stability ]
+
+USER0   gauss   Gauss filter parameter  jntpre96        F77
+                                        rftndr96        F77
+                                        rftnpr96        F77
+                                        hrftn96         F77
+                                        trftn96         F77
+                                        saciterd        F77
+KUSER0  Rftn                            rftndr96        F77
+                                        saciterd        F77
+                                        hrftn96         F77
+                                        trftn96         F77
+        Decon                           sacdecon        F77
+
+[ These flags are used to denote the resulting time series, e.g.,
+  either it is a receiver function or it is a deconvolution of
+  two time series.
+
+  The parameter gauss is the Gaussian Alpha filter parameter defined
+  by Ammon et al (19XX) to control high frequency noise in a 
+  deconvolution ]
+
+USER5   fit     Goodness of fit         saciterd        F77
+KUSER5  FIT                             saciterd        F77
+
+[ This is a quantitative measure of the goodness of fit of a 
+  receiver function. It is defined as 100 x SUM (obs - pred)/SUM obs
+  or such.  A high value reflects the quality of the original signals
+  used to obtain the receiver function ]
+
+USER5   100.0   Goodness of fit         rftndr96        F77
+                                        hrftn96         F77
+                                        trftn96         F77
+
+[ By definition (and hopefully good programming), the goodness of fit
+  for synthetic RFTN's is perfect ]
+
+USER4   rayp    Ray parameter (sec/km)  hrftn96         F77
+                                        trftn96         F77
+                                        rftnpr96        F77
+                                        rftndr96        F77
+                                        saciterd        F77
+[ The computation of receiver functions requires a ray parameter.
+  At present the user must remember which phase is associated with the
+  value, either P or S. The program saciterd does not use this value,
+  but instead places it in the SAC header if given ont he saciterd
+  command line. ]
+
+KEVNM   Rftn                            rftndr96        F77
+                                        hrftn96         F77
+                                        trftn96         F77
+KCMPNM  Rftn                            rftndr96        F77
+                                        hrftn96        	F77
+                                        trftn96        	F77
+[ These are identifiers set to identify a trace as a receiver function.
+  NOTE WE SHOULD PROBABLY TRY TO BE MORE PRECISE AND DENOTE
+  P or S or Radial or Transverse RFTN's ]
+
+KA      P                               f96tosac
+KT0     SV                              f96tosac
+KT1     SH                              f96tosac
+
+A       ptime                           f96tosac
+T0      svtime                          f96tosac
+T1      shtime                          f96tosac
+
+[ The program f96tosac converts the ASCII file96 timeseries to SAC
+  binary or alpha files. The surface wave and wavenumber integration programs
+  compute the expected first arrival of P, SV and SH signals. The SV and SH
+  first arrivals are different in TI media. 
+
+  This distinction becomes odd when the Z R and T traces are rotated to
+  form Z N E traces when invoking fmech96 (fmech96 reads Green's functions
+  and writes a 3-component trace).  At present these are written to the header.
+
+  LOGICALLY I SHOULD BE MORE CAREFUL, e.g., for R component out tsv in T0
+  and for T componet put tsh in T0, for N or E put earlier of tsv or tsh in T0
+  so that an S is always in  T0 ]

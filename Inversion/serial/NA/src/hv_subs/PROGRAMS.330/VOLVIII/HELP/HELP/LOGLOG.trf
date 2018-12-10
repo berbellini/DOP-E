@@ -1,0 +1,23 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    LOGLOG
+.S2 SUMMARY:
+log-log plot for plot, plotpk
+
+.S2 LOGLOG 
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+
+.S2 "DEFAULT:"
+Linear x-axis and linear y-axis
+
+.S2 "SEE ALSO":
+XLIN, YLIN, XLOG, YLOG, LINLIN, LINLOG, LOGLIN
+
+       
+

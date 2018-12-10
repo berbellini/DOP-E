@@ -1,0 +1,14 @@
+
+
+08 15 99 - modified color.c from previous distribution to work
+	with greater than 8-bit color plane. Tested for
+	monochrome, speusocolor (8), trucolor(16,24)
+	
+	Also note the cursor response in xvig.c should be
+	changed when the clipregion includes the entire screen
+	As is it now, the response inside the cursor region
+	when we use the X11 default arrow is slow!!
+
+02 25 00 - changed the routine my_findpath in init.c to avoid destroying the
+	getenv PATH variable
+

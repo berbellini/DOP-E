@@ -1,0 +1,20 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    ENVELOPE
+.S2 SUMMARY:
+Get the envolope of  a trace.
+
+ENVELOPE 
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+This determines the envelope by first computing the Hilbert transform, q(t), of the trace, h(t), and then performing the operation sqrt[h(t)*h(t) + q(t)*q(t)].
+
+.S2 "SEE ALSO":
+ENVELOPE
+       
+

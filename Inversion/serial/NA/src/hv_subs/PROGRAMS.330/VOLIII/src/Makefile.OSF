@@ -1,0 +1,197 @@
+#####
+# Makefile for Volume V - Computer Programs in Seismology
+#
+
+#####
+#	DEC ALPHA Compilers
+#####
+FCMP=f77  -O
+CCMP= cc  -O
+MCHDEP=mchdep.o 
+MCHCMD=mnmarg.o mgtarg.o
+GSUBSF=grphsubf.o
+SSUBS=sio.o
+TSUBS=tio.o
+CALFLAG=../../lib/libcalpltf.a
+GETMOD=igetmod.o
+TGETMOD=tgetmod.o
+
+
+
+DEST=../../bin
+
+
+.f.o:
+	$(FCMP) -c $<
+
+.c.o:
+	$(CCMP) -c $<
+
+f2csub.o:
+	cp ../../SUBS/f2csub.f .
+	$(FCMP) -c f2csub.f
+
+f96subf.o:
+	cp ../../SUBS/f96subf.f .
+	$(FCMP) -c f96subf.f
+
+igetmod.o:
+	cp ../../SUBS/igetmod.f .
+	$(FCMP) -c igetmod.f
+
+tgetmod.o:
+	cp ../../SUBS/tgetmod.f .
+	$(FCMP) -c tgetmod.f
+
+mnmarg.o:
+	cp ../../SUBS/mnmarg.f .
+	$(FCMP) -c mnmarg.f
+
+mgtarg.o:
+	cp ../../SUBS/mgtarg.f .
+	$(FCMP) -c mgtarg.f
+
+mchdep.o:
+	cp ../../SUBS/mchdep.f .
+	$(FCMP) -c mchdep.f
+
+solidf.o: 
+	cp ../../SUBS/solidf.f .
+	$(FCMP) -c solidf.f
+
+
+lgstr.o:
+	cp ../../SUBS/lgstr.f .
+	$(FCMP) -c lgstr.f
+
+grphsubf.o:
+	cp ../../SUBS/grphsubf.f .
+	$(FCMP) -c grphsubf.f
+
+all: sprep96 sdisp96 \
+	sdpsrf96 sdpegn96 sdpder96 \
+	slegn96 sregn96 \
+	slat2d96 \
+	spulse96 \
+	scomb96 \
+	sdpdsp96 \
+	sdprad96 \
+	sdpspc96 \
+	srfgrd96 \
+	tprep96  tdisp96  tregn96  tlegn96  tdpsrf96  tdpegn96  tdpder96 tpulse96  tcomb96 \
+	clean
+
+#####
+#	isotropic model code
+#####
+
+sprep96:	sprep96.o $(GETMOD) lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) sprep96.o $(GETMOD) lgstr.o $(MCHDEP) $(MCHCMD) -o sprep96
+	mv sprep96 $(DEST)
+
+sdisp96:	sdisp96.o $(GETMOD) $(SSUBS)  lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) sdisp96.o $(GETMOD) $(SSUBS) lgstr.o $(MCHDEP) $(MCHCMD) -o sdisp96
+	mv sdisp96 $(DEST)
+
+slegn96:	slegn96.o $(GETMOD) $(SSUBS)  lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) slegn96.o $(GETMOD) $(SSUBS) lgstr.o $(MCHDEP) $(MCHCMD) -o slegn96
+	mv slegn96 $(DEST)
+
+sregn96:	sregn96.o $(GETMOD) $(SSUBS)  lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) sregn96.o $(GETMOD) $(SSUBS) lgstr.o $(MCHDEP) $(MCHCMD) -o sregn96
+	mv sregn96 $(DEST)
+
+sdpsrf96:	sdpsrf96.o $(SSUBS) $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) sdpsrf96.o $(SSUBS) $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD) $(CALFLAG) -o sdpsrf96
+	mv sdpsrf96 $(DEST)
+
+sdpegn96:	sdpegn96.o rddisp.o solidf.o $(SSUBS) $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) sdpegn96.o rddisp.o solidf.o $(SSUBS) $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD) $(CALFLAG) -o sdpegn96
+	mv sdpegn96 $(DEST)
+
+sdpder96:	sdpder96.o $(SSUBS) $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) sdpder96.o $(SSUBS) $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD) $(CALFLAG) -o sdpder96
+	mv sdpder96 $(DEST)
+
+spulse96:	spulse96.o $(SSUBS) f96subf.o lgstr.o $(GETMOD) $(MCHDEP) $(MCHCMD)
+	$(FCMP) spulse96.o $(SSUBS) f96subf.o lgstr.o $(GETMOD) $(MCHDEP) $(MCHCMD) -o spulse96
+	mv spulse96 $(DEST)
+
+
+scomb96:	scomb96.o $(SSUBS) $(MCHDEP) $(MCHCMD)
+	$(FCMP) scomb96.o $(SSUBS) $(MCHDEP) $(MCHCMD) -o scomb96
+	mv scomb96 $(DEST)
+
+slat2d96:	slat2d96.o $(SSUBS) $(MCHDEP) $(MCHCMD)
+	$(FCMP) slat2d96.o $(SSUBS) $(MCHDEP) $(MCHCMD) -o slat2d96
+	mv slat2d96 $(DEST)
+
+sdpdsp96:	sdpdsp96.o rddisp.o solidf.o $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) sdpdsp96.o rddisp.o solidf.o $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD)  $(CALFLAG) -o sdpdsp96
+	mv sdpdsp96 $(DEST)
+
+sdprad96:	sdprad96.o $(SSUBS) $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) sdprad96.o $(SSUBS) $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD) $(CALFLAG) -o sdprad96
+	mv sdprad96 $(DEST)
+
+sdpspc96:	sdpspc96.o $(SSUBS) $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) sdpspc96.o $(SSUBS) $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD) $(CALFLAG) -o sdpspc96
+	mv sdpspc96 $(DEST)
+
+srfgrd96:	srfgrd96.o $(SSUBS) lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) srfgrd96.o $(SSUBS) lgstr.o $(MCHDEP) $(MCHCMD) -o srfgrd96
+	mv srfgrd96 $(DEST)
+
+
+
+######
+#      Transverse Isotropy Code
+######
+
+tprep96:	tprep96.o $(TGETMOD) lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) tprep96.o $(TGETMOD) lgstr.o $(MCHDEP) $(MCHCMD) -o tprep96
+	mv tprep96 $(DEST)
+
+tdisp96:	tdisp96.o $(TGETMOD) $(TSUBS) lgstr.o $(MCHDEP) $(MCHCMD) 
+	$(FCMP) tdisp96.o $(TGETMOD) $(TSUBS) lgstr.o $(MCHDEP) $(MCHCMD) -o tdisp96
+	mv tdisp96 $(DEST)
+
+tlegn96:	tlegn96.o $(TGETMOD) $(TSUBS)  lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) tlegn96.o $(TGETMOD) $(TSUBS) lgstr.o $(MCHDEP) $(MCHCMD) -o tlegn96
+	mv tlegn96 $(DEST)
+
+tregn96:	tregn96.o $(TGETMOD) $(TSUBS) lgstr.o $(MCHDEP) $(MCHCMD) 
+	$(FCMP) tregn96.o $(TGETMOD) $(TSUBS) lgstr.o $(MCHDEP) $(MCHCMD) -o tregn96
+	mv tregn96 $(DEST)
+
+tdpsrf96:	tdpsrf96.o $(TSUBS) $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) tdpsrf96.o $(TSUBS) $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD) $(CALFLAG) -o tdpsrf96
+	mv tdpsrf96 $(DEST)
+
+tdpegn96:	tdpegn96.o rddisp.o solidf.o $(TSUBS) $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) tdpegn96.o rddisp.o solidf.o $(TSUBS) $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD) $(CALFLAG) -o tdpegn96
+	mv tdpegn96 $(DEST)
+
+tdpder96:	tdpder96.o $(TSUBS) $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) tdpder96.o $(TSUBS) $(GSUBSF) lgstr.o $(MCHDEP) $(MCHCMD) $(CALFLAG) -o tdpder96
+	mv tdpder96 $(DEST)
+
+tpulse96:	tpulse96.o $(TSUBS) f96subf.o lgstr.o $(TGETMOD) $(MCHDEP) $(MCHCMD)
+	$(FCMP) tpulse96.o $(TSUBS) f96subf.o lgstr.o $(TGETMOD) $(MCHDEP) $(MCHCMD) -o tpulse96
+	mv tpulse96 $(DEST)
+
+tcomb96:	tcomb96.o $(TSUBS) $(MCHDEP) $(MCHCMD)
+	$(FCMP) tcomb96.o $(TSUBS) $(MCHDEP) $(MCHCMD) -o tcomb96
+	mv tcomb96 $(DEST)
+
+
+
+
+
+clean:
+	rm -f $(MCHCMD) $(MCHDEP)
+	rm -f f96subf.f f2csub.f igetmod.f mnmarg.f mgtarg.f grphsubf.f mchdep.f
+	rm -f lgstr.f
+	rm -f solidf.f
+	rm -f *.o
+

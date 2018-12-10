@@ -1,0 +1,61 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th CORRELATE
+.S2 SUMMARY:
+Compute auto- and cross correlation of traces
+
+CORRELATE 
+[Master n]
+[Number n]
+[Length ON|OFF|Window]
+[Default]
+[Suffix suffix]
+[Reverse]
+[2]
+
+.S2 INPUT:
+Master   : Trace uses as master trace. Default if first in memory
+.BR
+Number   : Number of correlation windows to be used. The original trace is split into Number segments; the cross-correlation is determined for each segment and then summed.
+.BR
+Length   : The original time series is broken into segments of Window seconds; the cross-correlation is determined for each segment and
+then summed.
+.BR
+Suffix   suffix :  The traces are renamed and the original traces in memory are overwritten to be of the form
+ [STA2][CMP2]_[STA1][CMP1].suffix. The default value ofthe suffix is '.cor'
+.BR     
+2        : Use a double length time series to prevent FFT periodicity.
+Output length is not changed
+.BR
+Reverse  : Instead of computing INT x(tau)y(t + tau) dtau compute
+INT y(tau)x(t + tau) dtau, where x is the amster trace.
+
+
+.S2 DESCRIPTION:
+A cross-correlation of all traces in memory with the master trace is computed.
+If the master (first) trace is called x, and the other trace is called y, the
+cross-correlation is defined as
+.BR
+  INT x(tau)y(t + tau) dtau
+.BR
+.sp
+When the Number or Length options are used, the original time series are cut into segments of equal length. The correlations are computed and then stacked. The average of the stack is then output.
+.sp
+After the correlation operation, the files are named as follow: [STA1][CMP1]_[STA2][CMP2]. The EVLA and EVLO are that of STA1 and the STLA and STLO are those of STA2.
+
+.S2 "CAUTION"
+Note that correlation is done in absolute time. If the x(t) and y(t)
+have vastly different reference times, the values of the B and E may not
+be correct because of the problem of stuffing a double into a float.
+.S2 "HEADER CHANGES:"
+DEPMIN, DEPMAX, DEPMEN, EVLA, EVLO, STLA, STLO, DIST, GCARC. The time markers
+O, B and E are set. The others are reset to -12345.  T9 is set to the offset time of the maximum of the cross-correlation
+
+.S2 "DEFAULT:"
+MASTER 1 NUMBER 1 LENGTH OFF
+
+.S2 "SEE ALSO:"

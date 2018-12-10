@@ -1,0 +1,17 @@
+for do_pom and do_mft  make heirarchy of routines
+
+Ensure that mftdsp is not inadvertantly free'd else I get junk
+
+
+main
+	do_page1
+		do_page2
+			do_page3
+				do_page4
+					do_start
+						get_mft_output
+							mftdsp=calloc
+					get_action
+						do_matchprep
+					get_action1
+						doout1 - output to PMF

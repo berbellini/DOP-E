@@ -1,0 +1,22 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                     SUB
+.S2 SUMMARY:
+Subtract a constant to  all SAC data files in  memory.
+
+SUB [v] 
+.S2 INPUT:
+[v]      : constant to be subtracted to all files
+
+.S2 "SAC COMPATIBILITY:"
+SAC permits an extended syntax that permits applying different constants
+to respective files in memory. We have not implemented this complexity.
+.S2 DEFAULT
+SUB 0
+
+.S2 "SEE ALSO":
+ADD, MUL, DIV
+

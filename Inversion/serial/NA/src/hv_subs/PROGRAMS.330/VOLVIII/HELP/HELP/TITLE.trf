@@ -1,0 +1,35 @@
+.de BR
+.in 0
+.in +8n
+.ti -5n
+..
+
+
+.Th TITLE
+.S2 SUMMARY:
+This command defines the title for a plot
+
+Title [ON|OFF] [Location Top|Bottom|Right|Left ] [Size Tiny|Small|Medium|Large] [Default] Text text
+
+
+.S2 INPUT:
+Location Top|Bottom|Right|Left  : Position of title with respect to plot frame
+.BR
+Size Tiny|Small|Medium|Large    : Size of characters - these are scaled to a fraction of the plot dimensions
+.BR
+Default                         : Reset all parameters
+.BR 
+ON|OFF                          : turn the title on or off
+.BR
+Text text                       : the title text. Note that if the text constains spaces it must be in within quotes.
+
+.S2 DESCRIPTION:
+If this option is on, a title can be placed on the plot.  Of course, if the CALPLOT graphic file is converted to Encapsulated PostScript, then the title can be added using the programs xfig of Illustrator.
+.S2 "SAC COMPATIBILITY:"
+Note that sac2000 does not require the text to be defined by a keyword.
+gsac requires that the title be keyed using the Text keyword.
+
+.S2 DEFAULT:
+Title OFF Location Top Size Small Text None
+
+.S2 "SEE ALSO":

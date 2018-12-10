@@ -1,0 +1,16 @@
+GSAC Command Reference Manual                                     DIF
+
+SUMMARY:
+Differentiate  all SAC data files in  memory.
+
+DIF 
+
+
+SAC COMPATIBILITY:
+       SAC permits  a choice of TWO, THREE and FIVE point oeprators. A simple       two-point rule is used. 
+DEFAULT
+       
+
+SEE ALSO:
+	INT
+

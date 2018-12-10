@@ -1,0 +1,13 @@
+GSAC Command Reference Manual                                    RMEAN
+
+SUMMARY:
+Remove mean from waveform
+
+RMEAN  
+
+DESCRIPTION:
+      This removes the trace mean from the trace.
+
+SEE ALSO:
+RTREND
+

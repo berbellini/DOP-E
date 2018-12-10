@@ -1,0 +1,19 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th CONVOLVE
+.S2 SUMMARY:
+Convolve traces
+
+CONVOLVE 
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+
+.S2 EXAMPLES:
+
+.S2 "SEE ALSO":

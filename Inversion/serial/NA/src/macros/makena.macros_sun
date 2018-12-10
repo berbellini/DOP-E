@@ -1,0 +1,44 @@
+#-------------------------------------------------------------------------------
+#       Standard Makefile Macro Setup for NA program and utilities
+#      
+#       Note that you must edit this file to suit your platform 
+#
+#       Platforms where the code has been successfully run with 
+#       identical results: 
+#
+#                Platform                       Compiler
+#                SUN (Solaris)                  native 
+#                SUN (Solaris)                  g77,gcc 
+#                SUN (running SuSe Linux)       g77,gcc 
+#                Compaq Alpha (OSF1 V4.0)       native compiler
+#                PC  Linux                      g77,gcc compiler
+#                SGI                            native compiler
+#
+#       Below is a set of options that I have found work on 
+#       a Sun running Solaris 2.7
+#
+#-------------------------------------------------------------------------------
+#
+CC      = /opt/SUNWspro/bin/cc      # C compiler
+F77     = /opt/SUNWspro/bin/f77     # Fortran compiler
+FFLAGS  = -O			    # Fortran compiler options
+CFLAGS  = -O			    # C compiler options
+AR      = ar                        # archiver 
+XFLAGS  = -lX11 -lsocket 	    # X library flags 
+X       = yes                       # compile X-utility programs (yes,no)
+MACH    = sun                       # platform type (e.g. sun,dec,sgi,lin)
+TYPE    = serial                    # installation type (e.g. serial or mpi)
+#TYPE   = mpi                       # installation type (e.g. serial or mpi)
+MF77    = /usr/local/bin/mpif77     # MPI fortran compiler (used if TYPE=mpi)
+#
+#                                     By default, NA uses some fortran90 features like
+#                                     dynamic memory allocation. If you prefer to use
+#                                     the static memory version compiled under F77
+#                                     change the following option. In this case the
+#                                     file na_param.inc will be used at compile time
+#                                     to set array sizes.
+#
+F77_COMPAT = -DNA_F77_COMPATIBILITY=1   # For F77
+#F77_COMPAT = -DNA_F77_COMPATIBILITY=0    # For F90
+
+

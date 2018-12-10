@@ -1,0 +1,467 @@
+/* File>>> cursor.c
+--
+-- %M% -- version %I% (IMEC)            last updated: %E%
+--
+-- Copyright (c) 1993
+-- IMEC vzw
+-- Kapeldreef 75
+-- B-3001 LEUVEN
+-- BELGIUM
+--
+-- Author   : A. Demaree
+--
+-- Date     : February 1, 1993
+--
+-- Function :
+--
+-- Comment  :
+--
+-- Review   :
+--
+*/
+ /* Revision history
+  * 2004 MAR 18 changerd XviG_GetChar replacing
+  *  XviG_MESSAGE_KEY_BUTTON by  XviG_MESSAGE_KEY for masking
+  *  This prevents a mounse button from messing up text input
+  * */
+
+
+/*------------------------------------------------------------------------------
+-- Global include files
+------------------------------------------------------------------------------*/
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+
+/*------------------------------------------------------------------------------
+-- Local include files
+------------------------------------------------------------------------------*/
+
+#include "xviglocal.h"
+
+/*------------------------------------------------------------------------------
+-- Static variable declarations
+------------------------------------------------------------------------------*/
+
+static CurItem cursor_item = (CurItem) NULL;
+static Window save_window;
+static Pixmap save_pixmap;
+
+/*------------------------------------------------------------------------------
+-- Local function declarations
+------------------------------------------------------------------------------*/
+
+
+/*------------------------------------------------------------------------------
+--
+--
+--
+------------------------------------------------------------------------------*/
+
+void XviG_OpenCursor(unsigned int width,
+                     unsigned int height,
+                     int hot_x,
+                     int hot_y)
+{
+  GC gc;
+  Pixmap cursor_pixmap;
+  unsigned int loc_width, loc_height;
+
+  /*
+  -- If there is a cursor pixmap currently active, free it
+  */
+
+  if (cursor_item)
+    XFreePixmap(XviG_display, cursor_item->pixmap);
+
+  /*
+  -- Use the default graphical context to clear the cursor pixmap
+  */
+
+  gc = DefaultGC(XviG_display, XviG_screen_nr);
+
+  XSetFunction(XviG_display, gc, GXclear);
+  XSetFillStyle(XviG_display, gc, FillSolid);
+
+  /*
+  -- Create the cursor pixmap and clear it
+  -- (maximum size can be twice the screen size)
+  */
+
+  loc_width  = (width == 0)
+               ? 1 : Min(width, 2*DisplayWidth(XviG_display, XviG_screen_nr));
+  loc_height = (height == 0)
+               ? 1 : Min(height, 2*DisplayHeight(XviG_display, XviG_screen_nr));
+
+  cursor_pixmap = XCreatePixmap(XviG_display, XviG_dummy_window,
+                                loc_width, loc_height,
+                                DefaultDepth(XviG_display, XviG_screen_nr));
+  XFillRectangle(XviG_display, cursor_pixmap, gc, 0, 0, loc_width, loc_height);
+
+  /*
+  -- Update the cursor list
+  */
+
+  if (cursor_item)
+  {
+    cursor_item->pixmap = cursor_pixmap;
+    cursor_item->width = loc_width;
+    cursor_item->height = loc_height;
+    cursor_item->hot_x = hot_x;
+    cursor_item->hot_y = hot_y;
+  }
+  else
+    cursor_item = New_CurItem(cursor_pixmap,
+                              loc_width, loc_height, hot_x, hot_y);
+
+  /*
+  -- Set the current window and pixmap to draw to
+  */
+
+  save_window = XviG_window;
+  save_pixmap = XviG_pixmap;
+
+  XviG_window = XviG_dummy_window;
+  XviG_pixmap = cursor_pixmap;
+
+  XviG_cursor_mode = True;
+}
+
+/*------------------------------------------------------------------------------
+--
+--
+--
+------------------------------------------------------------------------------*/
+
+long XviG_CloseCursor(void)
+{
+  long cursor;
+
+  if (cursor_item == (CurItem) NULL)
+    return 0L;
+
+  cursor = (long) cursor_item;
+  cursor_item = (CurItem) NULL;
+
+  /*
+  -- Reset the current window and pixmap to draw to
+  */
+
+  XviG_window = save_window;
+  XviG_pixmap = save_pixmap;
+
+  XviG_cursor_mode = False;
+
+  /*
+  -- Return the cursor identifier
+  */
+
+  return cursor;
+}
+
+/*------------------------------------------------------------------------------
+--
+--
+--
+------------------------------------------------------------------------------*/
+
+void XviG_DeleteCursor(long cursor)
+{
+  if (cursor)
+  {
+    XFreePixmap(XviG_display, ((CurItem) cursor)->pixmap);
+    Delete_CurItem((CurItem) cursor);
+  }
+}
+
+/*------------------------------------------------------------------------------
+--
+--
+--
+------------------------------------------------------------------------------*/
+
+void XviG_SetCursor(long cursor)
+{
+  XviG_event.xclient.message_type = XviG_MESSAGE_CURSOR;
+  XviG_event.xclient.format = 32;
+  XviG_event.type = ClientMessage;
+fprintf(stderr,"cursor %d\n",cursor);
+  if (cursor == XviG_CURSOR_ARROW){
+    XviG_event.xclient.data.l[0] = DATA_CURSOR_ARROW;
+  } else if (cursor == XviG_CURSOR_XORARROW){
+    XviG_event.xclient.data.l[0] = DATA_CURSOR_XORARROW;
+    XviG_event.xclient.data.l[1] = XviG_xhair_color;
+  } else if (cursor == XviG_CURSOR_XHAIR) {
+    XviG_event.xclient.data.l[0] = DATA_CURSOR_XHAIR;
+    XviG_event.xclient.data.l[1] = (long) XviG_xhair_color;
+  } else if (cursor == XviG_CURSOR_BOX) {
+    XviG_event.xclient.data.l[0] = DATA_CURSOR_BOX;
+    XviG_event.xclient.data.l[1] = (long) XviG_xhair_color;
+  } else if (cursor == XviG_CURSOR_RUBBER) {
+    XviG_event.xclient.data.l[0] = DATA_CURSOR_RUBBER;
+    XviG_event.xclient.data.l[1] = (long) XviG_xhair_color;
+  } else if (cursor == XviG_CURSOR_OFF) {
+    XviG_event.xclient.data.l[0] = DATA_CURSOR_OFF;
+    XviG_event.xclient.data.l[1] = (long) XviG_xhair_color;
+  } else if (cursor == XviG_CURSOR_PLUS) {
+    XviG_event.xclient.data.l[0] = DATA_CURSOR_PLUS;
+    XviG_event.xclient.data.l[1] = (long) XviG_xhair_color;
+  } if (cursor == XviG_CURSOR_HYPERBOLA) {
+    XviG_event.xclient.data.l[0] = DATA_CURSOR_HYPERBOLA;
+    XviG_event.xclient.data.l[1] = (long) XviG_xhair_color;
+fprintf(stderr,"XviG_SetCursor %d %d\n",XviG_event.xclient.data.l[0],XviG_event.xclient.data.l[1]);
+  } else {
+    XviG_event.xclient.data.l[0] = (long) ((CurItem) cursor)->pixmap;
+        /* Let's hope that the pixmap id never has the same value as the one */
+        /* that I have choosen for DATA_CURSOR_ARROW   */
+    XviG_event.xclient.data.l[1] = (long) ((CurItem) cursor)->width;
+    XviG_event.xclient.data.l[2] = (long) ((CurItem) cursor)->height;
+    XviG_event.xclient.data.l[3] = (long) ((CurItem) cursor)->hot_x;
+    XviG_event.xclient.data.l[4] = (long) ((CurItem) cursor)->hot_y;
+  }
+
+  if (!XSendEvent(XviG_display, XviG_window, False, NoEventMask, &XviG_event))
+    fprintf(stderr, "ERROR : Cannot send ClientMessage 'cursor'.\n");
+}
+
+/*------------------------------------------------------------------------------
+--
+--
+--
+------------------------------------------------------------------------------*/
+
+int XviG_GetCursor(int type,
+                   int *x_pos,
+                   int *y_pos)
+{
+  int character;
+  char tmpstr[8];
+
+  /*
+  -- First send the ClientMessage to set the event type to receive
+  */
+
+  switch (type)
+  {
+    case XviG_KEY:
+        XviG_event.xclient.message_type = XviG_MESSAGE_KEY;
+        break;
+    case XviG_BUTTON:
+        XviG_event.xclient.message_type = XviG_MESSAGE_BUTTON;
+        break;
+    case XviG_KEY_BUTTON:
+        XviG_event.xclient.message_type = XviG_MESSAGE_KEY_BUTTON;
+        break;
+  }
+  XviG_event.xclient.format = 8;
+  XviG_event.type = ClientMessage;
+
+  if (!XSendEvent(XviG_display, XviG_window, False, NoEventMask, &XviG_event))
+  {
+    fprintf(stderr, "ERROR : Cannot send ClientMessage 'key_button'.\n");
+    return 0;
+  }
+
+  /*
+  -- The event loop
+  */
+
+  while (1)
+  {
+    XNextEvent(XviG_display, &XviG_event);
+
+    if (XviG_event.type == ButtonPress)
+    {
+      *x_pos = XviG_event.xbutton.x;
+      *y_pos = XviG_event.xbutton.y;
+
+      switch (XviG_event.xbutton.button)
+      {
+        case Button1: character = XviG_BUTTON1; break;
+        case Button2: character = XviG_BUTTON2; break;
+        case Button3: character = XviG_BUTTON3; break;
+        case Button4: character = XviG_BUTTON4; break;
+        case Button5: character = XviG_BUTTON5; break;
+        default: character = 0;
+      }
+
+      break;
+    }
+    else
+    if (XviG_event.type == KeyPress)
+    {
+      *x_pos = XviG_event.xkey.x;
+      *y_pos = XviG_event.xkey.y;
+
+      if (XLookupString(&XviG_event.xkey, tmpstr, 8,
+                        (KeySym *) NULL, (XComposeStatus *) NULL) == 1)
+        character = tmpstr[0];
+      else
+        character = 0;
+
+      break;
+    }
+    /*
+    else
+      printf("WARNING : Other event received .....\n");
+    */
+  }
+
+  return character;
+}
+
+/* RBH extension */
+
+void XviG_SendMessage(int type, int i1, int  i2, int i3, int i4)
+{
+/* 
+	send general messages to the program xvig
+	type
+	1       Purpose: Pass inforation on border and title sizes
+	        i1:     border
+	        i2:     title
+	        i3:     not used
+	        i4:     not used
+	
+	2       Purpose: Pass information on current clip region
+	        i1:     LX - lower X
+	        i2:     LY - lower Y
+	        i3:     UX - upper X
+	        i4:     UY - upper Y
+	
+	3       Purpose: Reverse Video
+	        i1:     1 = on, 0 = off
+	
+	4       Purpose: Change color map to gray scale
+	        i1:     1 = to gray, 0 to color
+	
+	5       Purpose: Define the color map size
+	        i1:     color map size
+	
+	6       Purpose: Define the i'th colormap entry
+	        i1:     color map index
+	        i2:     red value
+	        i3:     green value
+	        i4:    	blue value
+	
+	7       Purpose: Reset the color map
+*/
+
+	switch(type)
+	{
+	case 1:
+		XviG_event.xclient.message_type = XviG_MESSAGE_BOUNDS;
+		XviG_event.xclient.format = 32;
+		XviG_event.type = ClientMessage;
+		XviG_event.xclient.data.l[0] = i1;
+		XviG_event.xclient.data.l[1] = i2;
+		if (!XSendEvent(XviG_display, XviG_window, False, 
+			NoEventMask, &XviG_event))
+    		fprintf(stderr, "ERROR: Cannot send ClientMessage 'bounds'\n");
+		break;
+	case 2:
+		XviG_event.xclient.message_type = XviG_MESSAGE_CLIP;
+		XviG_event.xclient.format = 32;
+		XviG_event.type = ClientMessage;
+		XviG_event.xclient.data.l[0] = i1;
+		XviG_event.xclient.data.l[1] = i2;
+		XviG_event.xclient.data.l[2] = i3;
+		XviG_event.xclient.data.l[3] = i4;
+		if (!XSendEvent(XviG_display, XviG_window, False, 
+			NoEventMask, &XviG_event))
+    		fprintf(stderr, "ERROR: Cannot send ClientMessage 'clip'\n");
+		break;
+	case 3:
+		XviG_event.xclient.message_type = XviG_MESSAGE_REVERSE;
+		XviG_event.xclient.format = 32;
+		XviG_event.type = ClientMessage;
+		XviG_event.xclient.data.l[0] = i1;
+		if (!XSendEvent(XviG_display, XviG_window, False, 
+			NoEventMask, &XviG_event))
+    		fprintf(stderr, "ERROR: Cannot send ClientMessage 'reverse'\n");
+		break;
+	case 4:
+		XviG_event.xclient.message_type = XviG_MESSAGE_TOGRAY;
+		XviG_event.xclient.format = 32;
+		XviG_event.type = ClientMessage;
+		XviG_event.xclient.data.l[0] = i1;
+		if (!XSendEvent(XviG_display, XviG_window, False, 
+			NoEventMask, &XviG_event))
+    		fprintf(stderr, "ERROR: Cannot send ClientMessage 'gray'\n");
+		break;
+	case 5:
+		XviG_event.xclient.message_type = XviG_MESSAGE_LCMAP_SIZE;
+		XviG_event.xclient.format = 32;
+		XviG_event.type = ClientMessage;
+		XviG_event.xclient.data.l[0] = i1;
+		if (!XSendEvent(XviG_display, XviG_window, False, 
+			NoEventMask, &XviG_event))
+    		fprintf(stderr, "ERROR: Cannot send ClientMessage 'gray'\n");
+		break;
+	case 6:
+		XviG_event.xclient.message_type = XviG_MESSAGE_LCMAP_ENTRY;
+		XviG_event.xclient.format = 32;
+		XviG_event.type = ClientMessage;
+		XviG_event.xclient.data.l[0] = i1;
+		XviG_event.xclient.data.l[1] = i2;
+		XviG_event.xclient.data.l[2] = i3;
+		XviG_event.xclient.data.l[3] = i4;
+		if (!XSendEvent(XviG_display, XviG_window, False, 
+			NoEventMask, &XviG_event))
+    		fprintf(stderr, "ERROR: Cannot send ClientMessage 'gray'\n");
+		break;
+	case 7:
+		XviG_event.xclient.message_type = XviG_MESSAGE_LCMAP_RESET;
+		XviG_event.xclient.format = 32;
+		XviG_event.type = ClientMessage;
+		if (!XSendEvent(XviG_display, XviG_window, False, 
+			NoEventMask, &XviG_event))
+    		fprintf(stderr, "ERROR: Cannot send ClientMessage 'gray'\n");
+		break;
+	}
+}
+
+/* wait for a key event, and return the character if printable */
+
+int XviG_GetChar(void)
+{
+  int character;
+  char tmpstr[8];
+  XviG_event.xclient.format = 8;
+  XviG_event.type = ClientMessage;
+  XviG_event.xclient.message_type = XviG_MESSAGE_KEY_BUTTON;
+  XviG_event.xclient.message_type = XviG_MESSAGE_KEY;
+
+  if (!XSendEvent(XviG_display, XviG_window, False, NoEventMask, &XviG_event))
+  {
+    fprintf(stderr, "ERROR : Cannot send ClientMessage 'key_button'.\n");
+    return 0;
+  }
+
+  while (1)
+  {
+    XNextEvent(XviG_display, &XviG_event);
+
+
+    if (XviG_event.type == KeyPress)
+    {
+
+      if (XLookupString(&XviG_event.xkey, tmpstr, 8,
+                        (KeySym *) NULL, (XComposeStatus *) NULL) == 1)
+        character = tmpstr[0];
+      else
+        character = 0;
+
+      break;
+    }
+    /* 
+    else
+      printf("WARNING : Other event received .....\n");
+    */
+  }
+
+  return character;
+}

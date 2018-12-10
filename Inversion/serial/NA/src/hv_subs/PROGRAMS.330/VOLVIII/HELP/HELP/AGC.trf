@@ -1,0 +1,25 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th AGC
+.S2 SUMMARY:
+AGC traces
+
+AGC W window
+
+.S2 INPUT:
+W window : Define the averaging window in seconds
+
+.S2 DESCRIPTION:
+This routine applies an AGC operator to the trace such that the
+mean signal amplitude is near unity. The operator is obtained
+by using a running average of the absolute value of the trace.
+.S2 EXAMPLES:
+
+.S2 "HEADER VALUES SET:"
+DEPMAX, DEPMIN and DEPMEN are updated.
+
+.S2 "SEE ALSO":

@@ -1,0 +1,15 @@
+14 JAN 2007
+
+WRITE - OK currently WRITE works as follows
+
+	WRITE - overwrites those in memory
+	WRITE 1 2 3
+		write output in order of memory as 1 2 3
+		else complains if there are not three in memory
+
+	To implement prepend append or prefix suffix (prefix is hard because of absolute path - more parsing work
+
+	perhaps add a verbose operator to say what is actually written
+	usefile if we do a filelist - e.g., 
+	1234 -> A   to show what the original is renamed as
+

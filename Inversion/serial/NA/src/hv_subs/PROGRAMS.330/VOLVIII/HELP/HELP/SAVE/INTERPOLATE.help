@@ -1,0 +1,21 @@
+GSAC Command Reference Manual                                 INTERPOLATE
+
+SUMMARY:
+Resample the current traces in memory
+
+INTERPOLATE [DELTA new_delta}
+
+INPUT:
+      DELTA new_delta	Define the new sample interval. This may be greater
+		or less than the current DELTA of the trace.
+
+DESCRIPTION:
+	When comparing observed and synthetics quantitatively, the traces sample
+	intervals must be identical. This routine permits a resampling at an 
+	arbitrary new DELTA. The start time of the trace is maintained, but the 
+	number of points and end time are changed. When the new_delta > the 
+	original DELTA, it is best to lowpass filter the trace before 
+	interpolating
+SEE ALSO:
+       
+

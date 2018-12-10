@@ -1,0 +1,27 @@
+.de BR
+.in 0
+.in +8n
+.ti -5n
+..
+
+
+.Th RICKER
+.S2 SUMMARY:
+Convolve with Ricker wavelet
+
+RIcker F frequency [Default]
+
+.S2 INPUT:
+F frequency :  the frequency of the Ricker wavelet
+
+.S2 DESCRIPTION:
+The Ricker wavelet with frequency 'f' is defined as follows:
+.sp
+f(t) = [ 1 - 0.5 * (2 pi t t )^2 ] exp [ - ( pi f t )^2]
+.sp
+
+.S2 Default:
+RIcker F 25
+
+.S2 "SEE ALSO":
+TRIANGLE, TRAPEZOID, BOXCAR

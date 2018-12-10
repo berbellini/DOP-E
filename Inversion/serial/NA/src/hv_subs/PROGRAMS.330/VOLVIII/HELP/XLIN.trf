@@ -1,0 +1,22 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    XLIN
+.S2 SUMMARY:
+Linear x-axis for plot, plotpk
+
+.S2 XLIN 
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+
+.S2 "DEFAULT:"
+Linear X-axis
+
+.S2 "SEE ALSO":
+YLIN, XLOG, YLOG, LINLIN, LINLOG
+       
+

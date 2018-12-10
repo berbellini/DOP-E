@@ -1,0 +1,57 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                            BEGINGRAPHICS
+.S2 SUMMARY:
+Initialize the graphics device 
+
+BeginGraphics [options] 
+BeginDevices [options] 
+
+where options is one or more of the following:
+
+[X | W | Plt ]  [ GEOM width height ] [ REVERSE ] [ GRAY ] [ COLOR]
+
+.S2 INPUT:
+X or W     : Interactive windows display
+.BR
+Plt        : Generate external Calplot PLT file
+.BR
+[These are only useful if nothing has been plotted on screen in window mode]
+.BR
+GEOM height width : set screen window height and width
+.BR
+GRAY       : use gray scale insteadk of color
+.BR
+COLOR      : use color scale insteadk of gray
+.BR
+REVERSE    : invert the foreground and background
+.BR
+.BR
+.S2 DESCRIPTION:
+This initializes the graphics. For an interactive display under
+X11 or Windows, the graphics display is initialized at the time of the
+first plot command (Plot Plot1 PlotPK). 
+.sp
+Invocation of the PLT option causes the creation of a CALPLOT plot 
+file of the form Pxxxx.PLT, where the xxxx is a unique number incremented
+each time the BG PLT is invoked
+.sp
+For windows plot, the screen geometry and color map is defined by the
+external environment parameter PLOTXVIG. One may define this variable
+or override the shell version through this command. However, because of
+low level problems of color maps and malloc s, the window definition can only
+per performed ONCE BEFORE an actual screen plot is made.
+
+.S2 "SAC COMPATIBILITY:"
+SUNWINDOWS SGF and Tektronix are not supported. A separate Pnnn.PLT
+CALPLOT binary file is created for each plot made. P0001.PLT is always the
+first plot file. To convert to PostScript use plotnps < Pxxxx.PLT ; 
+to convert to an EPS file, use 
+.BR
+cat Pxxxx.PLT | reframe \-Npage_number \-O | plotnps \-EPS \-F7 \-W10 > epsfile
+
+.S2 "SEE ALSO":
+

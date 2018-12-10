@@ -1,0 +1,41 @@
+for CTL = we cannot output the CTL until we actually plot else the
+prs_vmin prs_vmax etc are not defined these are the hvmin hvmax
+
+----
+6 SEPT 05 -   idea set up an array for the 
+	P Refr T0 p			10
+	S Refr T0 p			10
+	P Refl Mult  T0 p**2		10x10
+	S Refl Mult  T0 p**2		10x10
+then output at the end of the plot
+
+----
+22 SEP 05
+	augment ginfo  or perhaps add a gcontrol
+to
+	1. indicate whether plotxvig.c should call show_menu
+		since for this program we turn that off - this is 
+		a gframe call -  unless I do the following in 
+		plotxvig.c
+
+		If gframe is called and we did not set initialize
+		the gframe(2)  or dv_erase(2) will then set a flag that
+		says no Quit or Next menu - so we need  two flags
+
+		current argument of dv_erase which is initialized
+		initialization flag
+
+		static int initialized = NO;
+		static int showmenu = YES;
+
+int dv_erase
+		if(initialized == YES) then permit an actual erase
+		else just save the parameter showmenu = YES or NO
+-----
+For the hyperbola, I could just position the cursor in the 3 quadrant of the
+display area and use that to control the hyperbola
+
+I will also need to tell the underlying routine where the origin of the user
+x-t space is in the screen space
+
+

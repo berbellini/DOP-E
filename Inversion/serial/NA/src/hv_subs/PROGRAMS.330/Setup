@@ -1,0 +1,125 @@
+#!/bin/sh
+
+echo Checking for existence of bin and lib directories
+for i in bin lib
+do
+if [ -f $i ]
+then
+	echo Found the ordinary file $i which does not belong
+	echo Deleting this file to be able to create the $i directory
+	rm -f $i
+fi
+if [ -d  $i ]
+then
+	echo Directory $i exists
+else
+	echo Creating Directory $i ; mkdir $i
+fi
+done
+
+case $1 in
+	SOL)	  echo Solaris                 ; OSYS=SOL ;;
+	SOL-GNU)  echo Solaris gcc/g77         ; OSYS=SLE ;;
+	LINUX)	  echo Linux   gcc/g77         ; OSYS=LNX ;;
+	LINUX40)  echo Linux gcc4.? gfortran   ; OSYS=LNX40 ;;
+	LINUX64)  echo Linux AMD 64bit SUSE gcc/g77   ; OSYS=LNX64 ;;
+	LINUX6440)echo Linux AMD 64bit SUSE gcc4.?/gfortran   ; OSYS=LNX6440 ;;
+	CYGWIN)	  echo CYGWIN gcc/g77 for Windows ; OSYS=CYG ;;
+	CYGWIN40) echo CYGWIN gcc/gfrotran for Windows ; OSYS=CYG40 ;;
+	OSX40)	  echo OSX gcc4.? gfortran for Apple  ; OSYS=OSX40 ;;
+	OSX40-32) echo OSX force 32 bit gcc4.? gfortran for Apple  ; OSYS=OSX40-32 ;;
+	OSX)	  echo OSX gcc/g77 for Apple  ; OSYS=OSX ;;
+	OSF)	  echo OSF cc/f77 for DEC/Compaq ALPHA ; OSYS=OSF ;;
+	*)	echo Usage: Setup SOL WIN32 SOL-EGCS LINUX LINUX64 CYGWIN OSX
+		echo '   SOL        SUN Solaris Compilers'
+		echo '   SOL-GNU    SUN Solaris with gcc/g77 compilers'
+		echo '   CYGWIN     CYGWIN 98/NT/2K/XP gcc/g77 Compilers'
+		echo '   CYGWIN40   CYGWIN 98/NT/2K/XP gcc/gfortran Compilers'
+		echo '   LINUX40    Linux with gcc/gfortran compilers'
+		echo '   LINUX64    Linux 64 bit with gcc/g77 compilers'
+		echo '   LINUX6440  Linux 64 bit with gcc/gfortran compilers'
+		echo '   OSX40      Apple  with gcc/gfortran compilers'
+		echo '   OSX40-32   Apple  with 32-bit gcc/gfortran compilers'
+                echo ' Older systems - not modern'
+		echo '   LINUX      Linux with gcc/g77 compilers'
+		echo '   OSX        Apple  with gcc/g77 compilers'
+		exit ;;
+esac
+
+#####
+#	create the proper C for compile
+#####
+
+touch C
+chmod +x C
+cat > C << EOF
+#!/bin/sh
+#####
+#       establish the proper PATH to find the compilers
+#####
+PATH=$PATH
+export PATH
+
+EOF
+echo CTARGET=$1 >> C
+
+cat C.proto >> C
+
+
+for DIR in VOLI/src VOLII/src VOLIII/src VOLIV/src VOLV/src VOLVI/src VOLVII/src VOLVIII/src VOLVIII/gsac.src  VOLIX/src
+do
+if [ -d $DIR ]
+then
+	echo Copying ${DIR}/Makefile.${OSYS} ${DIR}/Makefile
+	cp ${DIR}/Makefile.${OSYS} ${DIR}/Makefile
+fi
+done
+
+for DIR in CALPLOT/src/cmd.unx CALPLOT/src/clib.unx CALPLOT/src/flib.unx CALPLOT/src/util
+do
+	echo Copying  ${DIR}/Makefile.${OSYS} ${DIR}/Makefile
+	cp ${DIR}/Makefile.${OSYS} ${DIR}/Makefile
+done
+
+#####
+#	special for IRIS routines 
+#####
+for DIR in IRIS/rdseedv5.2.slu
+do
+if [ -d $DIR ]
+then
+	echo Copying ${DIR}/Makefile.${OSYS} ${DIR}/Makefile
+	cp ${DIR}/Makefile.${OSYS} ${DIR}/Makefile
+fi
+done
+for DIR in IRIS
+do
+if [ -d $DIR ]
+then
+	echo Copying ${DIR}/DOCOMPILE.${OSYS} ${DIR}/DOCOMPILE
+	cp ${DIR}/DOCOMPILE.${OSYS} ${DIR}/DOCOMPILE
+fi
+done
+
+
+for DIR in CALPLOT/src/XVIG/src CALPLOT/testf CALPLOT/testc \
+		CALPLOT/Utility
+do
+	echo Copying ${DIR}/Makefile.${OSYS} ${DIR}/Makefile
+	cp ${DIR}/Makefile.${OSYS} ${DIR}/Makefile
+done
+
+
+
+echo The proper Makefiles have been installed for your Operating System
+echo Verify that these are correct with respect to compilers, flags
+echo     and libraries
+echo
+
+echo If everything is correct, enter the command
+echo ./C for the complete distribution or
+echo ./Ccal for just CALPLOT
+echo to make everything after you have GUARANTEED THE CORRECT PATH
+
+echo 
+echo Documentation is in the directory DOC in PDF format 

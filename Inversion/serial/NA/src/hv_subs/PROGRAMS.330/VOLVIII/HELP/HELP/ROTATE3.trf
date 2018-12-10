@@ -1,0 +1,76 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th ROTATE3
+.S2 SUMMARY:
+Rotate three components to form Z and horizontals or UVW
+
+
+ROTate3 [ TO GC | TO angle | TO UVWSTS2 | UVWTRIL | ZNE] [ Suffix suffix ]
+
+.S2 INPUT:
+TO GC         : Rotate to the great circle path. This requires that the
+BAZ and CMPAZ header variable be set. The KCMPNM headers
+are changed to replace the last character, usually N and E,
+to R and T. In addition the file name for default changes
+.BR
+TO angle      : Rotate to form the trace in the {angle} and {angle + 90}
+directions. this requires that the CMPAZ be set in the header
+The KCMPNM headers are changed as are the default write names.
+.BR
+TO UVWSTS2        : Rotate x (E) y (N) z (up) to UVW for STS-2 
+.BR
+TO UVWTRIL        : Rotate x (E) y (N) z (up) to UVW for Trillium
+.in +5n
+The difference between the two conversions to UVW is that 
+.br
+U(STS2) == U(TRIL) rotated horizontally 180 degrees
+.br
+V(STS2) == W(TRIL) rotated horizontally 180 degrees
+.br
+W(STS2) == V(TRIL) rotated horizontally 180 degrees
+.in -5n
+.BR
+TO ZNE             : Rotate to ZNE. This is useful if one as UVW or event ZRT and wants a nice clean naming of rht output.
+.BR
+Suffix suffix : Append the suffix to the constructed file name. 
+This is useful when the command is followed by WRITE without any arguments.
+.S2 DESCRIPTION: 
+This is an externsion of the ROTATE command that uses all three components
+to form the three rotated components. Although it may seem redundant to include the vertical component in a rotation, this is useful if the CMPINC of the vertical component in 180, meaning that the positive trace value is down rathern than the desired up. At the same time, the use of ROTATE3 (ROT3) ensures that the
+three component have the same default naming convention, e.g., SLMBHR, SLMBHT and SLMBHZ.
+.BR
+In both uses of the command, the filename and KCMPNM are 
+converted to upper case. Note that a write will be in the 
+current working  directory rather in the directory of the original
+traces.
+.BR
+As an added feature, ROTATE is smart enough to handle traces
+that do not have equal lengths or absolute start time. The 
+will consist of the overlapped trace window. This means that
+it should be possible to ROTATE without having to SYNCHRONIZE
+and CUT
+.sp
+.S2 "HEADER VALUES SET:"
+The CMPAZ  and CMPINC are properly set to each rotated component. If the components are rotated to the great circle (GC), then CMPAZ for the resulting radial component
+is BAZ+180 and for the transverse component is BAZ + 270.
+.sp
+If the angle is given, then the positive motion will be in the direction of the
+angle given in the file name.
+.sp
+The default order of the traces in memory is radial (R), transverse (T) and vertical (Z),
+AZ, AZ+90 and vertical (Z). Thus the default WRITE would  identical to the command
+.BR
+     w SLMBHR SLMBHT SLMBHZ
+.BR
+for example. When the conversion to UVW is requested, the default write would be the same as the command
+.BR
+     w SLMBHY SLMBHV SLMBHW
+.BR
+
+.S2 "SEE ALSO":
+ROTATE       
+

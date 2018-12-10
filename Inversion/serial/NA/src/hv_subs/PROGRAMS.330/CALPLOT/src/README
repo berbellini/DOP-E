@@ -1,0 +1,77 @@
+This is the source directory for CALPLOT libraries
+and executables.
+
+NOTE: All files here are in UNIX text format. This means that when
+the cmd cmd.ms cmd.tc flib flib.ms clib clib.tc clib.ms and include
+are moved to an MS-DOS machine, that the proper conversion routines be used to
+convert LF -> LF CR
+
+The reason that there is not a separate src directory structure in 
+CALPLOT.PC is that the sources are common to all architectures.
+
+XVIG/         - libraries for XviG X11 interface
+clib/         - sources for all libraries for C compilers
+clib.ms/      - just contains makefile for MS C5.1 and gets
+                  everything from clib include and cmd
+clib.tc/      - this is for Turbo C++ 3.0
+clib.unx/     - this is for Unix
+cmd/          - sources for all commands
+cmd.ms/       - Makefile for MSC5.1
+cmd.tc/       - Makefile for TC++ 3.0
+cmd.unx/      - Makefile for Unix
+flib/         - sources for all libraries for Fortran 77 Compilers
+flib.ms/      - makefile for MS Fortran 4.0
+flib.unx/     - makefile for f77
+include/
+
+Compile Procedure:
+
+1. cd XVIG/src
+   Edit Makefile.std
+
+   make -f Makefile.std  all
+
+   This will place the library xvig.a in NPROGRAMS/lib and the executable
+   xvig in NPROGRAMS/bin
+
+2. cd ../../
+   This returns you to NPROGRAMS/CALPLOT/src
+
+3. cd clib.unx  (for a UNIX machinee)
+   Edit Makefile
+
+   make docp    (this copies all sources to this current directory,
+		compiles and installs the fortran libraries)
+
+4. cd .. 
+   This returns you to NPROGRAMS/CALPLOT/src
+
+5. cd flib.unx  (for a UNIX machinee)
+   Edit Makefile
+
+   make docp    (this copies all sources to this current directory,
+		compiles and installs the fortran libraries)
+
+6. cd .. 
+   This returns you to NPROGRAMS/CALPLOT/src
+
+7. cd testf.unx
+   Edit Makefile
+
+   make all   - this creates the test programs to test X11 interactive graphics
+		from FORTRAN
+
+8. cd .. 
+   This returns you to NPROGRAMS/CALPLOT/src
+
+9. cd testc.unx
+   Edit Makefile
+
+   make all   - this creates the test programs to test X11 interactive graphics
+		from FORTRAN
+
+10. The test programs that create the CALPLOT plotfiles are in
+    NPROGRAMS/CALPLOT/ftest.unx and NPROGRAMS/CALPLOT/ctest.unx
+
+
+   

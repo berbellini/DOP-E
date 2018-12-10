@@ -1,0 +1,17 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                     DIF
+.S2 SUMMARY:
+Differentiate  all SAC data files in  memory.
+
+DIF 
+
+.S2 "SAC COMPATIBILITY:"
+SAC permits  a choice of TWO, THREE and FIVE point oeprators. A simple two\-point rule is used here. 
+
+.S2 "SEE ALSO":
+INT
+

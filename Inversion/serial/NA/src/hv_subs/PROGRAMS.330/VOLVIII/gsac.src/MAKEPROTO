@@ -1,0 +1,274 @@
+#!/bin/sh
+
+if [ $# -eq 0 ]
+then
+        echo 'Usage: MAKEPROTO  cmd SYNTAX Description'
+	echo '    as in '
+	echo '    MAKEPRROTO  bp BANDPASS "BandPass filter traces"'
+	echo '    which defines the function prototyptes  in gsac_cmd.c '
+	echo '    and sets the keyword for search as BANDPASS. Note use quotes'
+	exit 0
+fi
+
+
+# MAKEPROTO bp BP
+
+CMD=$1
+SYNTAX=$2
+DESCRIPTION=$3
+CMDUP=`echo $CMD | tr '[:lower:]' '[:upper:]' `
+
+
+#####
+#	create the prototype
+#####
+
+cat > gsac_${CMD}.c << EOF
+#include	<stdio.h>
+#include	"gsac_docommand.h"
+#include        "gsac.h"
+#include        "gsac_plot.h"
+#include        "gsac_sac.h"
+#include        "gsac_arg.h"
+#include        "gsac_sachdr.h"
+
+extern struct sacfile_ *sacdata;
+extern int *sortptr;
+
+
+#define	${CMDUP}_DFLT	0
+#define	${CMDUP}_X0		1
+#define	${CMDUP}_Y0		2
+#define	${CMDUP}_XLEN	3
+#define	${CMDUP}_YLEN	4
+#define	${CMDUP}_XLAB	5
+#define	${CMDUP}_YLAB	6
+
+
+struct arghdr ${CMD}arg[] = {
+	{${CMDUP}_DFLT, "DEFAULT", IHDR, NO, 0, NO, "", -1},
+	{${CMDUP}_X0  , "X0"  , RHDR, NO, 1, NO, "X0 x0", -1},
+	{${CMDUP}_Y0  , "Y0"  , RHDR, NO, 1, NO, "Y0 y0", -1},
+	{${CMDUP}_XLEN, "XLEN", RHDR, NO, 1, NO, "XLEN xlen", -1},
+	{${CMDUP}_YLEN, "YLEN", RHDR, NO, 1, NO, "YLEN ylen", -1},
+	{${CMDUP}_XLAB, "XLAB", CHDR, NO, 1, NO, "XLAB xlabel", -1},
+	{${CMDUP}_YLAB, "YLAB", CHDR, NO, 1, NO, "YLAB ylabel", -1},
+	{0,	""		, IHDR, NO, 0, NO, "", -1}
+};
+
+/* these are temporary variables only used here */
+float ${CMD}_real[10];
+int   ${CMD}_int [10];
+int   ${CMD}_yn;
+int   ${CMD}_num;
+
+/* these are prototypes for global variables to be used by the routine */
+
+void gsac_set_param_${CMD}(int ncmd, char **cmdstr)
+{
+	int i;
+	/* initial debug */
+	for(i=1; i < ncmd; i++)
+		printf("%s ",cmdstr[i]);
+	printf("\n");
+	/* parsing code here */
+	if(ncmd == 1)
+		return;
+	if(testarg(ncmd, cmdstr, ${CMD}arg, NO, YES))
+		return;
+	/* parse commands */
+	for(i=0 ; ${CMD}arg[i].key[0] != '\0' ; i++){
+		if(${CMD}arg[i].used > 0){
+			if(${CMD}arg[i].ricell == RHDR){
+				getargr(ncmd, cmdstr, ${CMD}arg[i].key, 
+					${CMD}arg[i].mfit,${CMD}arg[i].narg, ${CMD}_real);
+			} else if(${CMD}arg[i].ricell == IHDR){
+				getargi(ncmd, cmdstr, ${CMD}arg[i].key, 
+					${CMD}arg[i].mfit,${CMD}arg[i].narg, ${CMD}_int );
+			} else if(${CMD}arg[i].ricell == YHDR){
+				getargyn(ncmd, cmdstr, ${CMD}arg[i].key, 
+					${CMD}arg[i].mfit,${CMD}arg[i].narg, &${CMD}_yn );
+			} else if(${CMD}arg[i].ricell == NHDR){
+				getargn(ncmd, cmdstr, ${CMD}arg[i].key, 
+					${CMD}arg[i].mfit,${CMD}arg[i].narg, &${CMD}_num );
+			}
+/*
+			switch(${CMD}arg[i].id){
+				case ${CMDUP}_PERPLOT:
+					${CMD}perplot = ${CMD}_num;
+					break;
+				case ${CMDUP}_ABSOLUTE:
+					${CMD}absolute = YES;
+					break;
+				case ${CMDUP}_RELATIVE:
+					${CMD}absolute = NO;
+					break;
+				case ${CMDUP}_OVERLAY:
+					if(${CMD}_yn == NO)
+						${CMD}overlay = NO;
+					else if(${CMD}_yn == YES)
+						${CMD}overlay = YES;
+					break;
+
+			}
+*/
+		}
+	}
+			
+		
+}
+
+void gsac_exec_${CMD}(void)
+{
+}
+EOF
+
+#####
+#	backup the gsac_docommand.h and then update
+#####
+cp gsac_docommand.h ../NTEST/PRESERVE/gsac_docommand.h.${CMD}
+
+#####
+#	append new prototypes to gsac_docommand.h
+#####
+cat >> gsac_docommand.h << EOF
+void gsac_set_param_${CMD}(int ncmd, char **cmdstr);
+void gsac_exec_${CMD}(void);
+EOF
+
+
+#####
+#	backup the gsac_command.h and then update
+#####
+cp gsac_docommand.h ../NTEST/PRESERVE/gsac_command.h.${CMD}
+
+#####
+#	append new prototypte to gsac_command.h
+#####
+cp LASTCOMMAND ../NTEST/PRESERVE/LASTCOMMAND.${CMD}
+
+CMDNUM=`cat LASTCOMMAND | awk '{print $1 + 1 }'`
+echo $CMDNUM > LASTCOMMAND
+
+
+ed gsac_command.h << EOF
+?define?
+a
+#define $SYNTAX $CMDNUM
+.
+/{WH/-1
+a
+		{${SYNTAX}, "${SYNTAX}", &gsac_set_param_${CMD}, &gsac_exec_${CMD}, help_${CMD}},
+.
+w gsac_command.h
+q
+EOF
+
+#####
+#	create the prototype for the help command
+#####
+
+cat >> gsac_help.h << EOF
+
+char *help_${CMD} [] = {
+"GSAC Command Reference Manual                                    ${SYNTAX}\n",
+"\n",
+"SUMMARY:\n",
+"\n",
+"${SYNTAX} \n",
+"\n",
+"INPUT:\n",
+"\n",
+"DESCRIPTION:\n",
+"\n",
+"SEE ALSO:\n",
+"       \n",
+""
+};
+EOF
+
+#####
+#	create the prototype for the HELP trf which will generate the gsac_help
+#####
+cat > ../HELP/${SYNTAX}.trf << EOF
+.de BR
+.in 0
+.in +8n
+.ti -5n
+..
+
+
+.Th ${SYNTAX}
+.S2 SUMMARY:
+${DESCRIPTION}
+
+${SYNTAX} 
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+
+.S2 EXAMPLES:
+
+.S2 "SEE ALSO":
+EOF
+
+echo editing ../HELP/HELP.trf
+
+ed ../HELP/HELP.trf << EOF
+/WRITE/
+a
+ ${SYNTAX}	${DESCRIPTION}
+.
+w
+q
+EOF
+
+echo editing ../HELP/MAKEDOC
+ed ../HELP/MAKEDOC <<EOF
+/WRITE/
+a
+${SYNTAX}
+.
+w
+q
+EOF
+
+ed ../HELP/MAKEINC <<EOF
+/WRITE/
+a
+${SYNTAX}
+.
+/WRITE)/
+a
+	${SYNTAX}) TOP="char *help_${CMD}[] = {" ;BOT=${SYNTAX} ;;
+.
+w
+q
+EOF
+
+
+
+echo Work on makefile
+#####
+#	preserve Makefiles
+#####
+
+for i in Make*
+do
+cp $i ../NTEST/PRESERVE/$i.${CMD}
+ed $i << EOF
+?grphsubc.o?-1
+a
+	gsac_${CMD}.o \\
+.
+w
+q
+EOF
+done
+
+
+
+
+
+

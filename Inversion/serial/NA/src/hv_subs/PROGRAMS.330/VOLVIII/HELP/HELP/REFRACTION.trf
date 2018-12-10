@@ -1,0 +1,55 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th REFRACTION
+.S2 SUMMARY:
+Enter Refraction Processing Mode for Record Section
+
+REFRaction [ON|OFF] [Ex|Reg|Tel]
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+This places the PLOTRECORDSECTION (prs) display into an interactive mode for refraction studies.
+.sp
+Ultimately we will have data structure for the arrivals, and when
+gsac terminates these will be written to an ascii file. Also if REFRACTION
+is even invoked, then the picked refraction lines will be displayed on the screen using an XOR pen - this is useful if one leaves PRS -- or if reread then get rid of everything - think about all of this, perhaps we need a save button
+instead of a data structure
+.BR
+Ex - Exploration mode - Filter frequencies are 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 150, 200, 250, 500, 1000 Hz
+.BR
+Reg - Regional mode - Filter frequencies are 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 50, 100 Hz
+.BR
+Tel - Teleseism mode - Filter frequencies are 0.01, 0.02, 0.03, 0.04, 0.05, 0.06, 0.07, 0.08, 0.09, 0.10, 0.15, 0.2, 0.25, 0.5, 1 Hz
+.BR
+.S2 EXAMPLES:
+The terminal text output of the DoRefr command is the following if the value is accepted:
+.nf
+ S: Refr t0 -0.005536 p 6.474635 (sec/km) Vel 0.154449 (km/sec) Refractor 1
+ S: Refr t0 0.159714 p 0.513774 (sec/km) Vel 1.946381 (km/sec) Refractor 2
+.fi
+.sp
+which indicates that these are S-wave refraction measurements for the first two refraction arrivals. This information can be used in a simple program to compute layer thicknesses.
+.sp
+The terminal text output of the DoRefl command is the following if the value is accepted:
+.nf
+S: Refl t0 0.154164 p 6.384913 (sec/km) Vrms 0.156619 (km/sec) Reflector 1 Multiple 1
+S: Refl t0 0.308500 p 5.856309 (sec/km) Vrms 0.170756 (km/sec) Reflector 1 Multiple 2
+.fi 
+These values can be used to determine layer thickesses.
+.sp
+For each PRS001.PLT or REFR001.PLT file there is a corresponding PRS001.CTL or
+REFR001.CTL control file, which can be used to invoke the program refmod96 to make model predicted overlays.
+.sp
+In addition there is a refrpick.tmp file which will ultimately be
+used by an invrsion program.
+.S2 NOTE:
+On July 10, 2010 the interactive cursor will respond to the ~ (tilde) character by creating a screen dump with name DUMPxxx.PLT. This dump includes the menu and is introduced to assist documentation.
+
+
+
+.S2 "SEE ALSO":

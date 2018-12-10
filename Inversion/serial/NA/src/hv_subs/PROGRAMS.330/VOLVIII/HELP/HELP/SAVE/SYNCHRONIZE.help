@@ -1,0 +1,21 @@
+GSAC Command Reference Manual                               SYNCHRONIZE
+
+SUMMARY:
+Synchronize reference times
+
+SYNChronize 
+
+INPUT:
+
+DESCRIPTION:
+     The purpose of this command is to make the reference times the same
+for all traces in memory. It determines the earliest absolute starting time
+of all files, and sets the B time fo that file to 0.0. The B times of other
+files are then always >0 =. Although SAC used the latest start time, ours
+ensures that B is never set to the magic -12345.
+     As a result of this operation, any marked times, e.g., B, E, O, A, Tn are
+result so that the absolute time of these markers are not changed.
+
+SEE ALSO:
+       
+

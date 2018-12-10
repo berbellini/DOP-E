@@ -1,0 +1,82 @@
+#!/bin/sh
+#####
+#       establish the proper PATH to find the compilers
+#####
+PATH=:/usr/local/bin::/home/opt/irun/bin:/home/rbh/PROGRAMS.310t/PROGRAMS.330-40/bin::/home/opt/irun/bin:/home/rbh/PROGRAMS.310t/PROGRAMS.330-40/bin::.:/home/rbh/bin:/usr/local/bin:/usr/bin:/usr/X11R6/bin:/bin:/usr/games:/opt/gnome/bin:/opt/kde3/bin:/usr/lib/jvm/jre/bin:/usr/lib/mit/bin:/usr/lib/mit/sbin:/home/rbh/PROGRAMS.310t/PROGRAMS.331/bin:/home/opt/sac_v59.46/bin:/home/opt/bin:/home/opt/local/bin:/home/opt/GMT3.4/bin:/home/rbh/PROGRAMS.310t/JEVALRESP:/home/opt/TauP-1.1.5/bin:
+export PATH
+
+CTARGET=LINUX40
+
+
+echo Checking for existence of bin and lib directories
+for i in bin lib include include/readline
+do
+if [ -f $i ]
+then
+	echo Found the ordinary file $i which does not belong
+	echo Deleting this file to be able to create the $i directory
+	rm -f $i
+fi
+if [ -d  $i ]
+then
+	echo Directory $i exists
+else
+	echo Creating Directory $i ; mkdir $i
+fi
+done
+
+echo Building CALPLOT libraries and commands
+cd CALPLOT/src/XVIG/src ; make all clean ; cd ../../../..
+cd CALPLOT/src/cmd.unx ; make docp ; make all ; cd ../../..
+cd CALPLOT/src/clib.unx ; make docp ; make all ; cd ../../..
+#cd CALPLOT/src/flib.unx ; make docp ; make all ; cd ../../..
+#cd CALPLOT/src/util     ;             make all ; cd ../../..
+#cd CALPLOT/Utility      ;             make all ; cd ../..
+
+echo Building GNU Readline libraries
+mkdir include/readline
+cd  readline-5.0
+./configure
+
+#####
+#	make sure that SOL means use cc compiler, even if gcc is there
+#####
+if [ $CTARGET = "SOL" ]
+then
+ed Makefile << EOF
+/gcc/s//cc/p
+w
+q
+EOF
+ed examples/Makefile << EOF
+/gcc/s//cc/p
+w
+q
+EOF
+ed shlib/Makefile << EOF
+g/gcc/s//cc/p
+w
+q
+EOF
+fi
+#####
+#	end of SLU Solaris fix
+#####
+make static
+cp -p *.h ../include/readline
+cp -p *.a ../lib
+make clean
+cd ..
+
+echo Building Commands
+#cd VOLI/src ; make all ; cd ../..
+#cd VOLII/src ; make all ; cd ../..
+#cd VOLIII/src ; make all ; cd ../..
+#cd VOLIV/src ; make all ; cd ../..
+#cd VOLV/src ; make all ; cd ../..
+#cd VOLVI/src ; make all ; cd ../..
+#cd VOLVII/src ; make all ; cd ../..
+#cd VOLVIII/src ; make all ; cd ../..
+cd VOLVIII/gsac.src ; make all ; cd ../..
+#cd VOLIX/src ; make all ; cd ../..
+cd IRIS; DOCOMPILE ; cd ..

@@ -1,0 +1,40 @@
+
+This directory contains general purpose programs
+using the CALPLOT libraries.
+
+CALPLT.f is an interactive program providing much of the functionality
+of the CALPLOT libraries without the need to program.
+
+CALPLT -V
+invokes a more interactive version, in which each invocation of
+a command is accompanied by a one-line help syntax.
+
+For example
+
+ Enter command
+NEWPEN                         - define the pen color
+ NEWPEN:ipen
+2                              - pen color 2 is red
+ Enter command
+BOX
+ BOX:xl,yl,xu,yu,string,ht
+1.0 1.0 5.0 5.0 'hello' 0.10  - draw a box and place the string hello within
+ Enter command
+PEND                          - edn the plot
+
+The CALPLOT file CALPLT.PLT is created as well as the command
+summary CALPLT.cmd, which can be edited by hand and run
+as
+
+cp CALPLT.cmd C
+CALPLT < C
+
+Here is CALPLT.cmd
+
+NEWPEN              
+ 2
+BOX                 
+  1.  1.  5.  5. 'hello'   .100000001
+PEND                
+
+

@@ -1,0 +1,105 @@
+.Th FORMAT
+.S3 SUMMARY:
+Control use of big\-endian/little endian binary trace files
+
+FORMAT [PRESERVE|LOCAL]
+
+.S2 INPUT:
+KEEP	: Do not change the binary format of the trace file. Any WRITE or WRITEHEADER will preserve that format.
+.br
+LOCAL	: If not in the local machine format, reformat the original file for the local machine architecture.
+.S2 DESCRIPTION:
+The SAC binary file consists of the following: 70 4\-byte long real numbers, 40 4\-byte long integers, 24 8\-byte strings, followed by the 4\-byte long real numebrs representing the trace. To illustrate this, consider the output of the GSAC command: funcgen impulse npts 4096 delta 0.05
+.br
+If we use the LINUX command od \-a, on this file we will get the following
+if the file was created on an INTEL PC:
+
+.nf
+.na
+0000000   M   L   L   = nul nul nul nul nul nul  sp   A nul   d   @   F
+0000020 nul   d   @   F   M   L   L   B   M   L   L   B nul   d   @   F
+0000040 nul   d   @   F nul   d   @   F nul   d   @   F nul   d   @   F
+*
+0000340 nul nul  sp   ; nul   d   @   F nul   d   @   F nul   d   @   F
+0000360 nul   d   @   F nul   d   @   F nul   d   @   F nul   d   @   F
+*
+0000420 nul   d   @   F nul   d   @   F   2 bel nul nul soh nul nul nul
+0000440 nul nul nul nul nul nul nul nul nul nul nul nul nul nul nul nul
+0000460 ack nul nul nul   G   O del del   G   O del del nul dle nul nul
+0000500   G   O del del   G   O del del   G   O del del   G   O del del
+0000520   G   O del del soh nul nul nul   G   O del del   G   O del del
+0000540   G   O del del   G   O del del   G   O del del   G   O del del
+*
+0000640   G   O del del soh nul nul nul nul nul nul nul soh nul nul nul
+0000660 soh nul nul nul nul nul nul nul   \-   1   2   3   4   5  sp  sp
+0000700   \-   1   2   3   4   5  sp  sp   \-   1   2   3   4   5  sp  sp
+*
+0001160   \-   1   2   3   4   5  sp  sp nul nul nul nul nul nul nul nul
+0001200 nul nul nul nul nul nul nul nul nul nul nul nul nul nul nul nul
+*
+0021160 nul nul nul nul nul nul nul nul nul nul  sp   A nul nul nul nul
+0021200 nul nul nul nul nul nul nul nul nul nul nul nul nul nul nul nul
+*
+0041160 nul nul nul nul nul nul nul nul
+0041170
+.ad
+.fi
+.sp
+and the following if it was created on a SPARC or Mac:
+.nf
+.na
+0000000   =   L   L   M nul nul nul nul   A  sp nul nul   F   @   d nul
+0000020   F   @   d nul   B   L   L   M   B   L   L   M   F   @   d nul
+0000040   F   @   d nul   F   @   d nul   F   @   d nul   F   @   d nul
+*
+0000340   ;  sp nul nul   F   @   d nul   F   @   d nul   F   @   d nul
+0000360   F   @   d nul   F   @   d nul   F   @   d nul   F   @   d nul
+*
+0000420   F   @   d nul   F   @   d nul nul nul bel   2 nul nul nul soh
+0000440 nul nul nul nul nul nul nul nul nul nul nul nul nul nul nul nul
+0000460 nul nul nul ack del del   O   G del del   O   G nul nul dle nul
+0000500 del del   O   G del del   O   G del del   O   G del del   O   G
+0000520 del del   O   G nul nul nul soh del del   O   G del del   O   G
+0000540 del del   O   G del del   O   G del del   O   G del del   O   G
+*
+0000640 del del   O   G nul nul nul soh nul nul nul nul nul nul nul soh
+0000660 nul nul nul soh nul nul nul nul   \-   1   2   3   4   5  sp  sp
+0000700   \-   1   2   3   4   5  sp  sp   \-   1   2   3   4   5  sp  sp
+*
+0001160   \-   1   2   3   4   5  sp  sp nul nul nul nul nul nul nul nul
+0001200 nul nul nul nul nul nul nul nul nul nul nul nul nul nul nul nul
+*
+0021160 nul nul nul nul nul nul nul nul   A  sp nul nul nul nul nul nul
+0021200 nul nul nul nul nul nul nul nul nul nul nul nul nul nul nul nul
+*
+0041160 nul nul nul nul nul nul nul nul
+0041170
+.ad
+.fi
+.sp
+The point to note is that the 4\-byte patterns of the reals and integers are
+reversed in place, e.g.,   M   L   L   = becomes   =   L   L   M . The character strings   \-   1   2   3   4   5  sp  sp are not changed.
+.sp
+To traces created under one computer architecture and then read on another, there are several options. First one can manually convert all traces to the new format, using the Computer Programs in Seismology command saccvt. An alternative
+is to permit the program to read these different data files, either preserving the original byte order, or converting to the local architecture. The use of the
+separate conversion program, saccvt, would be the simplist. 
+.sp
+GSAC allows the user to decide upon a course of action. If the PRESERVE option is
+used, the original byte order is preserved. Subsequent WRITE or WRITEHEADER oeprations will maintain that order. If the LOCAL option is used, the file is converted to the local machine format upon opening, and subsequent oeprations are
+performed using the local format. This GSAC design choice means that the saccvt
+oepration can just be done by the following command
+
+	GSAC> r files
+	GSAC> q
+
+since conversion is performed upon opening.
+.sp
+Since there is no specific SAC flag defining the byte order of the SAC file, a
+forensic approach is applied. At least one or the real or integer header values must be \-12345. or \-12345, repswectively AND the SAC header version NVHDR must be 6.
+.sp
+This byte\-swapping technique works on Mac s and SPARC s and Intel PC s using the IEEE representation of 4 byte reals and integers. It will not work for much older traces created on DEC and IBM mainframes.
+
+.S2 DEFAULT:
+FORMAT LOCAL
+.S2 SEE ALSO
+saccvt

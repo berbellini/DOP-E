@@ -1,0 +1,41 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                      FFT
+.S2 SUMMARY:
+Obtain the discrete Fourier transform of traces in memory
+
+FFT  [Length 1|2|4|8] [Default]
+.S2 INPUT
+Length Nvalue - pad the time series with zeros to increase the FFT by a factor or 1, 2, 4 or 8. The purpose of this is to ensure greater frequency resolution.
+.sp
+.BR
+Default - resent Length to 1
+.sp
+Note that the use must ensure there is no offset between the time series and the appended zeros by some combination of RMEAN, RTR or TAPER. The default is Length = 1. 
+.sp
+Note also that zeros are always added since the FFT requires a power of 2 length.
+
+
+.S2 DESCRIPTION:
+This estimates the discrete Fourier transform of the traces in 
+by using a version of Brenner's original FOUR1 routine. The definition
+of the DFT is
+.nf
+.na
+                      N\-1       j {2 pi n k/N}
+      H( n DF ) = DT  SUM h(k) e              
+                      k=0                     
+.fi
+.ad
+where DF = 1/(N DT), DT = sampling interval, DELTA, and N is a power of
+2. Note that this is an extension to the definition  of a DFT in that
+physical dimension are introduced
+.S2 DEFAULT
+FFT L 1
+
+.S2 "SEE ALSO":
+PLOTSP, WRITESP, RMEAN, RTR, TAPER
+

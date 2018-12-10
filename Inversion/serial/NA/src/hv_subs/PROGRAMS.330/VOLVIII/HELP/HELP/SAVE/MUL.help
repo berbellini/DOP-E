@@ -1,0 +1,19 @@
+GSAC Command Reference Manual                                     MUL
+
+SUMMARY:
+Multiply  all SAC data files in  memory by a constant.
+
+MUL [v], 
+
+INPUT:
+       [v] : constant by which all  files are multiplied
+
+SAC COMPATIBILITY:
+       SAC permits an extended syntax that permits applying different constants
+       to respective files in memory. We have not implemented this complexity.
+DEFAULT
+       DIV 1
+
+SEE ALSO:
+	ADD, SUB, DIV
+

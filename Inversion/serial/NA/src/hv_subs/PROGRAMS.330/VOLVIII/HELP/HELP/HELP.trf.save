@@ -1,0 +1,54 @@
+.Th                                    HELP
+.S3 SUMMARY:
+List syntax for GSAC command
+
+Help [command]
+
+where command is one or more of the following:
+     ABS         Get absolute value of trace
+     ADD         Add constant to each trace
+     BD          Begin graphics [BEGINDEVICES]
+     BG          Begin graphics [BEGINGRAPHICS]
+     BP          Bandpass filter [BANDPASS]
+     BR          Bandreject filter [BANDREJECT]
+     CD          change working directory
+     CH          Change header [CHANGEHEADER]
+     COLOR       Control plotting colors
+     CUT         Cut trace as it is read
+     CUTERR      Control CUT
+     DIF         Differentiate traces numerically
+     DIV         Divide each trace by constant
+     ENV         Get trace envelope [ENVELOPE]
+     FFT         Take Fourier Transform
+     FG          Generate an impulse function [FUNCGEN]
+     FILTER      Apply or remove instrument response [FILT]
+     FORMAT      Controls binary file format
+     HELP        Print this help list [H]
+     HILBERT     Get Hilbert transform of a trace
+     HP          Highpass filter [HIGHPASS]
+     IN          Resample traces [INTERPOLATE]
+     INT         Integrate traces
+     LH          List header [LISTHEADER]
+     LP          Lowpass filter [LOWPASS]
+     MUL         multiply each trace by constant
+     PLOTPK      Interactive trace plot [PPK]
+     PLOT1       Plot trace [P1]
+     PLOTSP      Plot trace spectra [PSP]
+     PRS         Plot record section [PLOTRECORDSECTION]
+     QDP         Control decimate factor for screen plot
+     QUIT        Exit GSAC [Q]
+     READ        Read SAC files [R]
+     RMEAN       Remove mean
+     ROTATE      Rotate horizontal components 
+     RTR         Remove trend [RTREND]
+     SORT        Sort traces
+     SQR         Square traces
+     SQRT        Square root of  traces
+     SUB         Subtract constant from each trace
+     SYNC        Synchronize trace timing [SYNCHRONIZE]
+     TRANSFER    Apply&remove instrument response
+     WH          Write header
+     WRITE       Read SAC files [W]
+     YLIM	 Set y-axis scaling for plot1
+     Default help message
+

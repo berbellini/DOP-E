@@ -1,0 +1,2 @@
+cc -g -O -I../include -I/usr/X11R6/include -c xvig.c
+cc -g -L/usr/X11R6/lib -lgen -o /rg/g/NPROGRAMS/bin/xvig xvig.o -lX11 -lm -lsocket -lnsl

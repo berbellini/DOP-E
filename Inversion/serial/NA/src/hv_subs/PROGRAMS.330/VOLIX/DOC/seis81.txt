@@ -1,0 +1,1155 @@
+c     ****************************************************************
+c
+c     A guide to the program seis81
+c     *****************************
+c
+c     The program seis81 is designed for a two-point ray tracing, travel-
+c     time, ray amplitude and synthetic seismogram computation at a
+c     specified system of receivers distributed regularly or irregularly
+c     along the earths surface. The model is 2-D laterally inhomogeneous,
+c     with curved interfaces, block structures, isolated bodies, fractures,
+c     vanishing interfaces, etc. The velocity in any layer may change
+c     both in vertical and horizontal direction. The source may be situated
+c     at any point of the model.
+c
+c     The program seis81 is supplemented by three other programs:
+c     rayplot, syntpl and seisplot.
+c
+c     Program           Description          Data
+c     *******           ***********          ****
+c     seis81            seis81.text          sdata
+c     rayplot           rayplot.text         splot
+c     syntpl            syntpl.text          dtsyn
+c     seisplot          seisplot.text        syntd
+c
+c     All these files are in subdirectory /sep/slava/seis/, the file
+c     rayplot.text is in subdirectory /sep/slava/ray/.
+c
+c     The program seis81 performs all the computations. It works with a
+c     large system of other routines which are filed in ray2. It returns
+c     two files, fort.3 for plotting of ray diagrams, travel times
+c     and ray amplitudes, and file fort.4 with the impulse synthetic
+c     seismograms.
+c
+c     The program rayplot performs the plotting of results stored on
+c     fort.3, i.e. ray diagrams, travel times and ray amplitudes.
+c
+c     The program syntpl computes synthetic seismograms from the
+c     impulse synthetic seismograms stored at fort.4 for various types
+c     of source time functions. It generates two files: file fort.jun
+c     can be immediately used to plot the synthetic seismogram
+c     using teplot. The file fort.7 contains the synthetic seismograms
+c     for other applications or for plotting by other programs.
+c
+c     The program seisplot can be used to plot the synthetic seismograms
+c     stored at fort.7 in a way more common in seismology (each
+c     synthetic seismogram is plotted as a line).
+c
+c         To make the work with seis81 easier, two makefiles can be used.
+c     The first makefile can be used to perform computations and
+c     plottings with seis81 and rayplot (ray diagrams, travel times and
+c     ray amplitudes). The second, seisfile, uses fort.4, computes
+c     synthetic seismograms and performs plottings with syntpl and
+c     seisplot. The input data files in these makefiles are sdata$(MODEL),
+c     splot$(MODEL), dtsyn$(MODEL) and syntd$(MODEL), where $(MODEL)
+c     stands for some integer, which is specified in the heading
+c     of makefiles (e.g., for MODEL=8, we have sdata8, splot8, dtsyn8,
+c     and syntd8).
+c
+c        The outputs on lpr from the programs are stored in the following
+c     files: seis81 : printray, rayplot: printplot, syntpl: printsynt,
+c     seisplot: printseis.
+c
+c         The plot output from both makefiles is stored in plotfile.
+c
+c     ****************************************************************
+c
+c     P a r t   I I  -   P r o g r a m   s e i s 8 1
+c
+c     ******************************************************************
+c
+c
+c       Program seis81 is designed for a two-point ray tracing and
+c     synthetic seismogram computations in a 2-D laterally inhomo-
+c     geneous media with curved interfaces, block structures, vanishing
+c     layers and isolated bodies. The source may be situated at any
+c     point of the medium. The radiation patterns of the source may
+c     be specified independently for P and S waves.
+c
+c
+c     Written by V.Cerveny, Prague 1980.
+c     Modified at Stanford, 1981.
+c     The routines for initial value ray tracing written by I.Psencik
+c     (see the program ray81) are used.
+c
+c
+c     ******************************************************************
+c
+c     Short description of the program.
+c     *********************************
+c
+c
+c       In the program, the numerical codes of certain most important
+c     seismic body waves are successively generated. For each wave,
+c     the seismic rays are determined which arrive at a specified
+c     system of receivers along the earths surface. At the receivers,
+c     travel times are automatically determined and amplitudes optio-
+c     nally. All the results are stored and may be optionally plotted
+c     (ray diagrams, travel times, amplitudes) or used in some other way.
+c     The plotting can be done by the program rayplot, as in program
+c     ray81. Similarly, the impulse synthetic seismograms can be optio-
+c     nally stored  at other logical unit and can be used to evaluate
+c     the synthetic seismograms. For this purpose, the programs
+c     syntpl and seisplot can be used. The description of programs
+c     rayplot, syntpl and seisplot is given elsewhere.
+c       The source may be situated at any point of the medium, the
+c     radiation patterns of the source may be specified independently
+c     for P and S waves.
+c       The two-point ray tracing (i.e. the determination of rays which
+c     arrive at specified receiver positions along the earths surface),
+c     is performed by the shooting method. A special care is devoted to
+c     certain singular situations in the ray field, e.g. to the neigh-
+c     bourhood of a critical ray (with the aim to find the possible
+c     refracted waves which have rays similar to head waves), to the
+c     boundaries of shadow zones, etc. Program works in a single
+c     arithmetics, so that determination of all waves is impossible
+c     in certain situations.
+c       The amplitudes are evaluated by standard ray formulae. No modi-
+c     fications are applied in singular regions. The pure head waves
+c     generally do not exist in laterally inhomogeneous media with
+c     curved interfaces and are not considered in seis81. They might
+c     be, of course,simulated by slightly refracted waves.
+c       Geometrical spreading is determined by solving a system of two
+c     linear ordinary differential equations of first order (so called
+c     dynamic ray tracing system) by a modified Euler's method.
+c       Interfaces are specified by points read in in input data. They
+c     are approximated by a cubic spline interpolation. Each interface
+c     crosses the whole model from its left border to the right border.
+c     The interfaces may have corner points and may be fictitious in
+c     certain parts. Various interfaces may also partially coincide. Thus,
+c     models with vanishing layers, block structures, fractures, iso-
+c     lated bodies can be handled by the program.
+c       All the direct and primary reflected waves P and S, including
+c     the converted waves at the point of reflection, can be generated
+c     automatically. Multiple reflections of arbitrary type are
+c     optionally generated manually (by input data). The refracted
+c     waves are considered as special cases of reflected waves with
+c     compound ray elements, see a more detailed description later.
+c       The program seis81 uses all the routines from program ray81
+c     (only "main" is removed). In addition, it contains a new routine
+c     "gener" for the semiautomatic generation of numerical codes of
+c     elementary waves, and the routine "tramp" for the two-point ray
+c     tracing.
+c       For the computation and plotting of ray synthetic seismograms
+c     from impulse synthetic seismograms computed in "tramp", the pro-
+c     grams "syntpl" and "seisplot" can be used. To plot the ray diagrams
+c     travel-time curves and amplitude curves, the same program
+c     "rayplot" as in the program "ray81" can be used. The description
+c     of all these programs can be found elsewhere.
+c
+c
+c     I n p u t   d a t a
+c     *******************
+c
+c     Input data for the model
+c     ************************
+c     The model is specified in the Cartesian coordinate system x,z,
+c     where z is the depth, increasing downwards, x is the horizontal
+c     coordinate, increasing from left to right. The model is
+c     bounded by two vertical boundaries on its left-hand and
+c     right-hand side  and by the first and the last interface at the
+c     top and the bottom of the model. The top interface corresponds
+c     to the earth's surface.
+c     Note: The input data sub 2 - 8 are exactly the same as in the
+c     program ray81.
+c
+c     1)one card
+c        lu1,lu2,mprint,mtext              format(3i2,17a4)
+c           lu1...    the number of the logical unit at which ray
+c                     diagrams,travel times and amplitudes are stored.
+c                     For lu1=0,these quantities are not stored.
+c           lu2...    the number of the logical unit, at which impulse
+c                     synthetic seismograms are stored. For lu2=0,
+c                     the impulse synthetic seismograms are not stored.
+c           mprint... controls the printing of the description of the
+c                     model on the line printer.
+c                     mprint=0... only input data are reproduced on a
+c                     line printer, no other description of the model
+c                     is printed.
+c                     mprint=1... only a simple printer plot of the
+c                     velocity distribution in the model.
+c                     mprint=2... more detailed description of the
+c                     model.
+c           mtext...   arbitrary alphanumeric text describing the model.
+c                     This text will appear in the plots of synthetic
+c                     seismograms.
+c
+c     2) One card, description of interfaces.
+c        nint,npnt(1),npnt(2),...,npnt(nint)        format(16i5)
+c           nint...   Number of interfaces,including the top and the
+c                     bottom boundaries of the model (nint.ge.2,
+c                     nint.le.20). The top boundary of the model
+c                     (free surface)  and the bottom boundary may
+c                     also be curved.
+c                     Note that the number of layers in the model is
+c                     nint-1.
+c           npnt(i)...Number of points specifying the i-th interface.
+c                     (npnt(i).ge.2,npnt(i).le.30).
+c
+c     3) nint systems of cards, descriptions of individual interfaces.
+c        For each interface one system of cards. Interfaces are taken
+c        from the top to the bottom.
+c        Each interface crosses the whole model, from the left verti-
+c        cal boundary to the right vertical boundary.
+c        The first (top) interface represents the upper boundary of the
+c        model (the Earth's surface).
+c        The last (bottom) interface represents the lower boundary of
+c        the model.
+c        The system of cards for the i-th interface consists
+c        of npnt(i) triplets of numbers; each triplet corresponds to
+c        one point of the interface (points are taken from the left
+c        to the right). Each triplet contains the following three
+c        numbers: 
+c        a) the x coordinate of the point, 
+c        b) the z coordinate of the point, 
+c        c) a special index iii, see below. The
+c        triplets are read in independently for each interface, using
+c        format(3(2f10.5,i5)).
+c        The first points of all interfaces must lie on one
+c        vertical line, which is called the left boundary of the model.
+c        The last points of all interfaces must lie on another verti-
+c        cal line, which is called the right boundary of the model.
+c        The part of the interface between two successive points on
+c        the interface is called the element of the interface.
+c
+c        The quantity iii controls the character of the interface in
+c        the neighbourhood of the corresponding point:
+c           iii=0     the interface itself, as well as its first and
+c                     second derivatives, are smooth at the correspon-
+c                     ding point.
+c           iii=-1    the corner point in the interface (discontinuous
+c                     first derivative).
+c           iii=-2    the corner point of the interface. Moreover, the
+c                     interface to the right side of the point is
+c                     fictitious.
+c           iii=k,k.gt.0   the element of the interface to the right
+c                     of the corresponding point coincides
+c                     with the k-th element of the adjoining upper
+c                     interface, starting from the k-th point of the
+c                     upper interface. The coordinates of the corres-
+c                     ponding points at both interfaces must be the
+c                     same.
+c
+c     4) (nint-1) systems of cards, descriptions of velocity distribu-
+c        tion in individual layers. Layers are taken from the top to
+c        the bottom. The velocity is specified at grid points of a
+c        rectangular network. The network may be different in diffe-
+c        rent layers.
+c        The system of cards for each layer consists of the following
+c        cards:
+c
+c     4a) One card,number of network lines.
+c         mx,my                                format(2i5)
+c           mx...     number of vertical lines in the network.
+c           my...     number of horizontal lines in the network.
+c
+c     4b) One card (or group of cards), x coordinates of vertical net-
+c         work lines.
+c         sx(1),sx(2),...,sx(mx)               format(8f10.5)
+c           sx(i)...  x coordinate of the i-th vertical line.
+c                     sx(1) must coincide with the left-hand boundary
+c                     of the model.
+c                     sx(mx) must coincide with the right-hand boundary
+c                     of the model.
+c
+c     4c) One card (or group of cards), z coordinates of horizontal
+c         network lines.
+c         sy(1),sy(2),...,sy(my)               format(8f10.5)
+c           sy(i)...  z coordinate of the i-th horizontal line.
+c                     sy(1) and sy(my) must be chosen in such a way
+c                     that the network covers the whole layer. They
+c                     may be completely outside the layer.
+c
+c     4d) A group of cards, velocity values at grid points along the
+c         vertical network lines. For each vertical network line,"my"
+c         velocity values are read in, independently for each line,
+c         format(8f10.5). The grid points along the vertical network
+c         line are taken from the top to the bottom. The vertical net-
+c         work lines are taken from left to right.
+c
+c         Notes on maximum permitted dimensions:
+c         The sum of all vertical lines in all layers may not exceed
+c         350.
+c         The sum of all horizontal lines in all layers may not exceed
+c         350.
+c         The total number of all grid points in all layers (i.e., the
+c         total number of all velocity values read in) may not exceed
+c         1000.
+c
+c
+c     5) One card, specification of densities and S velocities.
+c        nro, nvs(1), nvs(2),...,nvs(nint-1)     format(16i5))
+c           nro...    nro=0... the density at any point of the medium
+c                     is determined automatically from the relation
+c                     density=1.7+0.2*vp (where vp is the P velocity).
+c                     The following card no.6 is not read in in this case.
+c                     nro=1... the density in the i-th layer is deter-
+c                     mined from the relation
+c                     density=rho1(i)+rho2(i)*vp,
+c                     where rho1(i) and rho2(i) are read in in the input
+c                     data card no.6
+c                     For a liquid layer, density=1 automatically.
+c           nvs(i)... nvs(i)=0...the velocity values read in in the card
+c                     no. 4d correspond to P wave velocity distribution
+c                     in the i-th layer. S wave velocities in the i-th
+c                     layer are determined from the relation
+c   	   	      vs=vp*ptos(i). The values of ptos(i) are read in
+c                     in the input card no.7
+c                     nvs(i)=1... the velocity values read in in the
+c                     card no. 4d correspond to the S wave velocity
+c                     distribution in the i-th layer. P wave velocities
+c                     in this layer are determined from the relation
+c                     vs=vp/ptos(i), where ptos(i) are read in in the
+c                     card no.7.
+c           Note that the first layer may be also liquid (e.g. ocean).
+c           In this case, only nvs(1)=0 is allowed, nvs(1)=1 is not
+c           permitted. Put ptos(1).ge.100 in this case, then the S
+c           wave velocity in the first layer is automatically zero.
+c
+c
+c     6) One card, specification of densities.
+c        Note: this card is included only when nro=1|
+c           rho1(1),rho2(1),rho1(2),rho2(2),..,rho1(nint-1),rho2(nint-1)
+c                                               format(8f10.5)
+c              rho1(i),rho2(i)... parameters of the relation for the
+c                     determination of the density from P wave velo-
+c            	      cities in the i-th layer,	
+c                     density=rho1(i)+rho2(i)*vp.
+c
+c
+c     7) One card, specification of the ratios between S and P velo-
+c        cities in individual layers
+c        ptos(1),ptos(2),...,ptos(nint-1)          format(8f10.5)
+c           ptos(i)...ratio of the P wave velocity to the S wave velo-
+c                     city in the i-th layer,vs=vp/ptos(i).
+c                     Note that ptos(i) must be always greater than
+c                     sqrt(2.). For ptos(i).lt.sqrt(2.), e.g. when
+c                     ptos(i) is not specified, ptos(i)=1.732 auto-
+c                     matically.
+c                     For ptos(i).ge.100., vs velocity in the i-th
+c                     layer is zero automatically (liquid layer).
+c
+c
+c     8) One card, controls the printer plot of the P velocity distri-
+c        bution in the model, which is printed on a line printer when
+c        mprint.ge.1 (see card no.1). The printer plot consists of a
+c        system of digits from 0 to 9 and asterisks. The digits are
+c        determined from the computed velocity distribution using
+c        the relation i=ifix((v-vmin)/(vmax-vmin)). Outside the range
+c        vmin, vmax, the asterisks are printed.
+c        vmin,vmax,bmin,bmax                     format(8f10.5)
+c           vmin,vmax... minimum and maximum p velocity shown in the
+c                     printer plot
+c           bmin,bmax... z coordinates of the top and the bottom hori-
+c                     zontal boundaries of the printer plot.
+c                     When bmin and bmax are not specified,z-coordinates
+c                     of the first points of the top and the bottom
+c                     interfaces are taken as bmin and bmax.
+c
+c
+c     Specification of ray diagrams,travel-time curves, amplitude-
+c     distance curves and impulse synthetic seismograms to be
+c     computed
+c
+c     *****************************************************************
+c
+c     9) One card, various switches.
+c        icont,mep,mout,mdim,method,ibp,ibs,idp,ids,iread,mreg,mpsour,
+c        mssour,itmax,nlay                            format(26i3)
+c           icont...  controls the continuation of the computation.
+c                     icont=0... termination of computation. This is
+c                     the last card in the input data card set.
+c                     icont=1... the computations continue, the next card
+c                     should be card no.10.
+c                     icont=-1... the computations continue for a new
+c                     model of medium.The next card should be the card
+c                     no.1.
+c                     In case of icont=0 or icont=-1, the remaining
+c                     quantities in this card may be arbitrary.
+c           mep...    abs(mep)... number of receiver positions along
+c                     the surface of the Earth.
+c                     The sign of mep controls the way in which the
+c                     system of receiver positions is specified (see
+c                     card no.10).
+c                     If(mep.gt.0),receivers are distributed regularly
+c                     along the Earth's surface. Only the positions of
+c                     the first receiver and the step in the x-coordi-
+c                     nate are read in, see card no. 10.
+c                     If (mep.lt.0), the receivers are distributed irre-
+c                     gularly along the profile. The x-coordinates of
+c                     all receiver positions are read in, see card no.10.
+c           mout...   controls the printing of the output on a line
+c                     printer.
+c                     mout=0... only input data are reproduced on a
+c                     line printer, no other print.
+c                     mout=1... only the table of the termination points
+c                     of rays which were succesfully iterated and ter-
+c                     minate at specified receivers.
+c                     mout=2... the table of termination points of all
+c                     rays computed in the process of iterations.
+c           mdim...   controls on which level and with which type of
+c                     source the program should work.
+c                     mdim=0... only the rays and travel times are com-
+c                     puted, no amplitudes and phase shifts and no
+c                     impulse synthetic seismograms.
+c                     for mdim.gt.0, the amplitudes, phase shifts and
+c                     impulse synthetic seismograms are computed.
+c                     The spreading may be optionally computed in two
+c                     different ways:
+c                     mdim=2... line source approximation
+c                     mdim=3... point source approximation.
+c                     For mdim=1, the geometrical spreading is not con-
+c                     sidered in the evaluation of ray amplitudes.
+c           method... to find the rays which have termination points
+c                     at a specified system of receivers, the shooting
+c                     method is used. To perform iterations, various
+c                     methods can be applied:
+c                     method=0... regula falsi
+c                     method=1... halving of intervals
+c                     method=2... combination of both methods
+c           ibp,ibs,idp,ids... switches which control the automatic ge-
+c                     neration of numerical codes of elementary waves.
+c                     Only direct waves and primary reflected reflected
+c                     (possibly converted at the deepest point of reflection)
+c                     can be generated automatically.
+c           ibp...    controls the automatic generation of primary ref-
+c                     lected waves (for a P wave source).
+c                     ibp=0... no primary reflected waves are generated.
+c                     ibp=1... PP primary reflected waves are generated.
+c                     ibp=2... PS primary reflected waves are also gene-
+c                     rated (together with PP primary reflected waves).
+c           ibs...    controls the automatic generation of primary ref-
+c                     lected waves (for an S wave source).
+c                     ibs=0... no primary reflected waves are generated.
+c                     ibs=1... SS primary reflected waves are generated.
+c                     ibs=2... SP primary reflected waves are also gene-
+c                     rated (together with SS primary reflected waves).
+c           idp...    controls the automatic generation of the direct
+c                     P wave.
+c                     idp=0... no direct P wave is generated.
+c                     ids=1... direct P wave is generated.
+c           ids...    controls the automatic generation of the direct
+c                     S wave.
+c                     ids=0... no direct S wave is generated
+c                     ids=1... direct S wave is generated.
+c           iread...  controls the manual generation of numerical codes
+c                     of elementary waves.
+c                     iread=0... no numerical codes are manually generated.
+c                     iread=1... numerical codes of certain elementary
+c                     waves are manually generated, see card no. 14.
+c           mreg...   controls the evaluation of amplitudes at the
+c                     termination point of the ray.
+c                     mreg=0.. at the earths surface, the coefficients
+c                     of conversion are applied (they take into account
+c                     the effects of the earths surface).
+c                     mreg=1... at the earths surface, the coefficients
+c                     of conversion are not applied, the horizontal
+c                     and vertical components of the displacement are
+c                     calculated as if within an infinite halfspace.
+c                     Note: When the termination point of the ray is
+c                     situated inside the medium (i.e. when  ind.ne.3),
+c                     the horizontal and vertical components of the dis-
+c                     placement are always computed as if within an
+c                     infinite halfspace (even if the receiver is situ-
+c                     ated at an interface).
+c                     Similarly, when the first layer is liquid (ocean),
+c                     the coefficients of conversion are not used.
+c           mpsour... controls the radiation pattern of P waves gene-
+c                     rated by the source.
+c                     mpsour=0... the radiation pattern of P wave does
+c                     not depend on the ray parameter (i.e. on the ini-
+c                     tial angle of the ray from the source).
+c                     mpsour=-1... the radiation pattern of P waves
+c                     remain the same as in preceding example.
+c                     mpsour=1... the radiation pattern of P waves
+c                     generated by the source is described by input
+c                     data read in in cards no.13a, 13b and 13c.
+c           mssour... controls the radiation pattern of S waves gene-
+c                     rated by the source.
+c                     mssour=0...the radiation pattern of S wave does
+c                     not depend on the ray parameter (i.e.on the ini-
+c                     tial angle of the ray at the source).
+c                     msour=-1... the radiation pattern of S waves
+c                     remain the same as in the previous example.
+c                     mssour=1.. the  radiation pattern of S waves
+c                     generated by the source is described by input
+c                     data read in in cards no. 13d, 13e and 13f.
+c           itmax...  number of iterations permitted in a 2-point ray
+c                     tracing. If itmax=0, then itmax=20.
+c           nlay...   controls the generation of the numerical code
+c                     of primary reflected waves from the last interface.
+c                     nlay=0... the primary reflected waves from the last
+c                     interface are generated (when ibp.ne.0 or ibs.ne.0)
+c                     nlay=1... they are not generated.
+c
+c     10) One card or group of cards, specification of receiver positions
+c         along the earths surface.
+c
+c         When mep.lt.0: (denote ndst=-mep)
+c         dst(1),dst(2),...,dst(ndst)                 format(8f10.5)
+c                     The receivers may be distributed irregularly along
+c                     the earths surface. dst(i) denotes the x-coordinate
+c                     of the i-th receiver. Take the receiver positions
+c                     from the left to the right, so that dst(i).gt.
+c                     dst(i-1) for all i.
+c
+c         When mep.gt.0:
+c         rmin,rstep                                  format(8f10.5)
+c                     The receivers are distributed regularly along
+c                     the profile at the earts surface. The x-coor-
+c                     dinate of the i-th receiver is given by the
+c                     formula dst(i)=rmin+rstep*(i-1). Take rstep.gt.0.
+c
+c     11) One card, position of the  source,etc.
+c         xsour,zsour,tsour,reps,asp                  format(8f10.5)
+c           xsour...  the x-coordinate of the source
+c           zsour...  the z-coordinate of the source
+c           tsour...  initial (hypocentral) time
+c           reps...   the required accuracy in the computation of the
+c                     x-coordinates of receivers in a 2-point ray tra-
+c                     cing. If reps=0, then reps=0.05.
+c           asp...    ratio of amplitudes of s waves to amplitudes of p
+c                     waves at the source. Used only when mpsour=0
+c                     and mssour=0. In opposite case,asp may be arbi-
+c                     trary and does not influence the results.
+c                     If asp.lt.0.0001,then asp=2.
+c
+c     12) One card, quantities that control the basic system of initial
+c         angles in the two-point ray tracing,etc.
+c         dt,amin1,astep1,amax1,amin2,astep2,amax2,ac    format(8f10.5)
+c           dt...     time step in the integration of the ray-tracing
+c                     system. dt should be greater than zero.
+c                     If dt.lt.0.00001, then dt=1.
+c           amin1,astep1,amax1... determine the system of initial
+c                     angles for primary reflected waves (and possibly
+c                     for other manually generated elementary waves,the
+c                     first element of which strikes the interface situ-
+c                     ated below the source)
+c           amin2,astep2,amax2... determine the system of initial angles
+c                     for the direct waves (and possibly for other manually
+c                     generated elementary waves,the first element of
+c                     which strikes the interface above the source).
+c           ac...     required accuracy of integration of the ray tracing
+c                     system. Reccomended values: 0.0001 - 0.001.
+c
+c     13) A system of cards, descriptions of radiation patterns of P
+c         and S waves generated by the source. The system of cards
+c         13a,13b and 13c corresponds to P waves, the system 13d,13e
+c         and 13f to S waves.
+c         In the present version, it is assumed that the radiation
+c         patterns either do not depend on the ray parameter
+c         (in case of the source mpsour=0 and mssour=0) or that
+c         their angle dependence is given by a table (mpsour=1,mssour=1).
+c         Linear interpolation is then used in the program to obtain
+c         the radiation pattern for arbitrary angle.
+c         No analytic formulae for special types of radiation patterns
+c         are included, but the user is free to add any radiation
+c         pattern he likes (read the description of the routine
+c         source. There you will also find the more precise definition
+c         of radiation patterns.).
+c
+c
+c     13a) One card, the parameters of the radiation pattern of
+c         P waves.
+c         Note: this card is included only mhen mpsour.gt.0.
+c         ippar(1),...,ippar(4),ppar(1),...,ppar(4)  format(4i5,6f10.5)
+c                    In the version specified by mpsour=1, these pa-
+c                    rameters have the following meaning:
+c           ippar(1)... for ippar(1)=0,only amplitude radiation pattern
+c                    of P wave is specified by a table. The phase ra-
+c                    diation pattern is zero automatically.
+c                    for ippar(1)=1,both amplitude and phase radiation
+c                    patterns of P waves are specified by tables.
+c           ippar(2)... number of points in tables of radiation patterns.
+c           ippar(3),ippar(4)...free.
+c           ppar(1),ppar(2)...first initial angle and the step in the
+c                    initial angle in tables of radiation pattern for
+c                    P waves (in degrees|).
+c           ppar(3)-ppar(6)... free.
+c
+c     13b) One card or group of cards, amplitude radiation pattern of
+c         of P waves.
+c         Note: this card is included only when mpsour=1.
+c         apsour(1),apsour(2),...,apsour(ippar(2))     format(8f10.5)
+c                    The table of amplitude radiation pattern of P wa-
+c                    ves. The quantity apsour(i) corresponds to the
+c                    ray parameter (initial angle) ppar(1)+ppar(2)*
+c                    float(i-1).
+c
+c     13c) One card or group of cards, the phase radiation pattern of
+c         P waves.
+c         Note: This card is included only when mpsour=1 and ippar(1)=1.
+c         ppsour(1),ppsour(2),...,ppsour(ippar(2))     format(8f10.5)
+c                   The table of the phase radiation pattern of S wa-
+c                   ves. The quantity ppsour(i) corresponds to the
+c                   initial angle ppar(1)+ppar(2)*float(i-1).
+c
+c     13d) One card, the parameters of the radiation patterns of S
+c         waves.
+c         Note: This card is included only when mssour.gt.0.
+c         ispar(1),...,ispar(4),spar(1),...,spar(4)   format(4i5,6f10.5)
+c                   The parameters of the radiation pattern of P wave.
+c                   They have the same meaning as the quantities in
+c                   input card no. 13a for P waves.
+c
+c     13e) One card or group of cards, amplitude radiation pattern of
+c         S waves.
+c         Note: This card is included only when mssour=1.
+c         assour(1), assour(2),...,assour(ispar(2))    format(8f10.5)
+c                   The table of the amplitude distance pattern for
+c                   S waves. the same meaning as for P waves in card
+c                   no.13.b
+c
+c     13f) One card or group of cards, phase radiation pattern of
+c         S waves.
+c         Note: This card is included only when mssour=1 and ispar(1)=1.
+c         pssour(1),pssour(2),...,pssour(ispar(2))      format(8f10.5)
+c                  The table of the phase radiation pattern of S
+c                  waves. The same meaning as for P waves in card
+c                  no.13c.
+c
+c     14) Arbitrary number of cards, ending by a blank card.
+c         Manual generation of numerical codes of elementary waves.
+c         The cards are included only when iread.ne.0, see card no.9
+c         for iread. The last card of the system is a blank card.
+c         kc,kref,code(1),code(2),...,code(kref)    format(16i5)
+c           kc,kref,code(1),code(2),...,code(kref)   the numerical code
+c                     of the wave. The whole ray is divided into ele-
+c                     ments, each of which lies between two successive
+c                     points at which the ray strikes the interface.
+c                     When the end points of an element lie on diffe-
+c                     rent interfaces, we call it a simple element,
+c                     when the end points lie on the same interface,
+c                     it is called a compound element. Any compound
+c                     element is formally regarded as two simple ele-
+c                     ments. For the purpose of the numerical code, the
+c                     receiver is formally considered to be situated on
+c                     the upper interface of the corresponding layer.
+c           kref...   kref.gt.1... the code corresponds to a reflected,or
+c                     multiply reflected, possibly converted wave. kref
+c                     gives the number of simple elements of the ray.
+c                     kref=1... direct wave (no reflections and no
+c                     conversions at the interfaces, only pure trans-
+c                     missions).
+c           kc...     kc=1...  after leaving the source the ray
+c                     should strike the interface below the source.
+c                     kc=-1...  after leaving the source the ray
+c                     should strike the interface above the source.
+c                     kc=0...   both cases are accepted
+c           code(i)...abs(code(i))... the number of the layer in which
+c                     the i-th simple element of the ray is situated.
+c                     code(i).gt.0 for a P-wave element,
+c                     code(i).lt.0 for a S-wave element.
+c                     Compound elements are regarded as two simple
+c                     elements and are denoted by two equal numbers.
+c                     Note: code(i) is an integer.
+c
+c
+c     ******************************************************************
+c
+c
+c     The termination of computations.
+c     ********************************
+c
+c     The system of cards no. 9 - 14 can be repeated any number of times
+c     to perform various computations for the same model.
+c     To terminate the computations, we put kray=0 in the card no.9.
+c     When we put kray=-1, the computations continue, but for a new
+c     model. The cards are then read in starting from the card no. 1.
+c
+c     ******************************************************************
+c
+c
+c     Most important output information.
+c     **********************************
+c
+c
+c     The parameter ind.
+c     ******************
+c     The parameter ind specifies the reason for the termination of
+c     the computed ray. Parameter ind is stored in common/ray/, see
+c     below.
+c
+c     ind=1   termination of the ray at the left border of the model.
+c     ind=2   termination of the ray at the right border of the model.
+c     ind=3   termination of the ray at the upper border of the model
+c             (i.e., on the free surface).
+c     ind=4   termination of the ray at the bottom border of the model.
+c     ind=5   in the Runge-Kutta method, the basic time step dt is
+c             halved more than ten times, without reaching the required
+c             accuracy ac, see card no. 12. There is perhaps something
+c             wrong with your velocity distribution in the model.
+c     ind=6   in card no. 12, dt=0  (not allowed). The computation
+c             of the ray diagram does not start.
+c     ind=7   in card no. 12, dt.lt.0  (not allowed). The computation
+c             of the ray diagram does not start.
+c     ind=8   the ray strikes a different interface than indicated in
+c             the numerical code of the wave.
+c     ind=9   overcritical incidence at an interface where the
+c             numerical code requires a transmission.
+c     ind=10  the source is situated outside the model, the computation
+c             of the ray diagram does not start.
+c     ind=12  travel time along the ray is greater than tmax. In the
+c             program seis81, tmax=10000 automatically.
+c     ind=13  the number of points along the ray is larger than 400.
+c             The computation of the ray terminates due to the allowed
+c             dimensions.
+c     ind=14  the position of the source does not correspond to the
+c             numerical code of the wave, i.e.  abs(code(1)) is diffe-
+c             rent from the number of the layer within which the source
+c             is situated.
+c     ind=15  in the case where the computation of the amplitudes
+c             is required (mdim.ne.0, see card no. 9 for mdim), and the
+c             numerical code of the wave requires the computation of a
+c             wave reflected from the bottom boundary of the model, the
+c             computation of the ray is terminated, as the velocities
+c             and the density below this boundary are not known.
+c     ind=16  the numerical code requires a computation of a wave
+c             reflected from a fictitious interface (iii=-2). The
+c             amplitude of such a wave equals zero, therefore the
+c             computation of the ray is terminated.
+c     ind=17  the numerical code requires a reflection from the second
+c             interface of two coinciding interfaces. The computation
+c             of the ray is terminated. The same applies to other in-
+c             terfaces,when the number of coinciding interfaces is
+c             larger than two.
+c     ind.gt.100   when the numerical code of the wave requires the ter-
+c             mination of the computation at some inner interface, and
+c             the computation of the ray is successfully finished, then
+c             (ind-100) gives the number of the interface at which the
+c             computation of the ray is terminated.
+c
+c
+c     The history of the ray.
+c     ***********************
+c
+c
+c     All the important information about any computed ray is stored in
+c     common/ray/ay(10,400),ds(9,50) kint(50),ros,mreg,n,iref,ind,ind1.
+c     This information is lost as soon as a new ray beginns to be
+c     computed. The maximum number of 400 points along the ray
+c     is allowed.
+c
+c     The meaning of the above quantities is the following:
+c
+c           n...      number of points along the ray.
+c           iref...   number of reflections/transmissions, including
+c                     reflections/transmissions at fictitious interfa-
+c                     ces.
+c           ind...    explained above.
+c           ind1...   iabs(ind1)... the number of the last interface
+c                     reached by the ray before the computation of the
+c                     ray was terminated (or the interface at which
+c                     the computation was terminated).
+c                     ind1.lt.0...  there is at least one compund ele-
+c                     ment along the ray.
+c           mreg...   controls the computation of amplitudes at the ter-
+c                     mination point of the ray,see input card no. 9.
+c           ros...    the value of density at the source.
+c
+c     The quantities ay(j,i) give some information about the i-th com-
+c     puted point of the ray. i=1 corresponds to the source.
+c           ay(1,i)...the time corresponding to the point.
+c           ay(2,i)...x-coordinate of the point.
+c           ay(3,i)...z-coordinate of the point.
+c           ay(4,i)...the direction of the ray, specified by an angle
+c                     fi. the angle is determined in the same way as
+c                     fi0. See input data card no.12.
+c           ay(5,i)...velocity v at the point.
+c           ay(6,i)...dv/dx
+c           ay(7,i)...dv/dz.
+c           ay(8,1)...second derivative of v with respect to x.
+c           ay(9,i)...second derivative of v with respect to x and z.
+c           ay(10,i)..second derivative of v with respect to z.
+c
+c
+c     The quantities ds(j,k) and kint(k) give some information on the
+c     k-th point of reflection/transmission. The case k=1 corresponds
+c     to the interface which was first struck by the ray.
+c
+c           ds(1,k)...the radius of the curvature of the interface.
+c           ds(2,k)...the angle of incidence.
+c           ds(3,k)...the angle of reflection/transmission.
+c           ds(4,k)...vp at the point of incidence.
+c           ds(5,k)...vs at the point of incidence.
+c           ds(6,k)...vp at other side of interface.
+c           ds(7,k)...vs at other side of interface.
+c           ds(8,k)...density at the point of incidence.
+c           ds(9,k)...density at the other side of interface.
+c
+c           kint(k)...kint(k).gt.0... gives the sequential num-
+c                     ber of the point of the ray which corresponds to
+c                     the k-th point of reflection/transmission.
+c                     kint(k)=0...    the k-th point of reflection/
+c                     transmission has a formal meaning, as it corres-
+c                     ponds to a compound  element of the ray, with
+c                     both end points of the element at the same inter-
+c                     face.
+c                     kint(k)=-1...   the k-th point of reflection/
+c                     transmission corresponds to a point on the inter-
+c                     face which coincides with the interface situated
+c                     above it.
+c
+c
+c     Description of interfaces.
+c     **************************
+c
+c
+c     The information about the interfaces is stored in
+c     common/intrf/a1(30,20),b1(29,20),c1(30,20),d1(29,20),x1(30,20),
+c     brd(2),iii(30,20),npnt(20),nint.
+c
+c           nint...   specified in input data card no.2.
+c           npnt(i)...specified in input data card no.2.
+c           brd(1)... x-coordinate of the left vertical boundary
+c                     of the model.
+c           brd(2)... x-coordinate of the right vertical boundary
+c                     of the model.
+c
+c     Between two successive points of the interface, with the x-coor-
+c     dinate of the left-hand point denoted by x1, the parabola
+c     is as follows:
+c     z = a+b*(x-x1)+c*(x-x1)**2+d*(x-x1)**3
+c
+c           x1(k,i)...the x-coordinate of the k-th point of the i-th
+c                     interface.
+c           a1(k,i)...the z-coordinate of the k-th point of the i-th
+c                     interface (corresponds to a in the above formula).
+c           b1(k,i),c1(k,i),d1(k,i)...  the coefficients of the cubic
+c                     parabola in the k-th element of the i-th inter-
+c                     face. They correspond to b,c,d in the above for-
+c                     mula. The k-th element is between the k-th and
+c                     (k+1)th point.
+c           iii(k,i)..has the same meaning as iii read in in the input
+c                     card no.3.
+c
+c
+c     Description of velocity and density distributions.
+c     **************************************************
+c
+c
+c     The information about the velocity and density distribution
+c     is stored in the following three commons:
+c     common/medim/v(1000),sx(350),sy(350),nx(20),ny(20),nvs(19),
+c     ptos(19),
+c     common/vcoef/a02(1000),a20(1000),a22(1000),
+c     common/den/rho1(19),rho2(19),nrho.
+c
+c          v...      velocity values specified in input data card no.4d.
+c          sx,sy...  coordinates of vertical and horizontal lines in the
+c                    velocity network, specified in input data cards
+c                    no.4b and 4c.
+c          nx,ny...  number of vertical and horizontal lines in the
+c                    velocity network, specified in input data cards
+c                    no.4a (see mx,my).
+c          nvs...    see a detailed description in data card no.5.
+c          ptos...   ratios of P and S velocities in individual layers,
+c                    see details in card no. 7.
+c          a02,a20,a22.. basic coefficients of the bicubic spline inter-
+c                    polation at grid points specified in the same way
+c                    as for v (see description under the input data card
+c                    no.4d). a02 corresponds to the second derivatives
+c                    of velocity with respect to z,a20 with respect to x
+c                    and a22 to the fourth derivative with respect to
+c                    x and z.
+c          rho1,rho2... quantities that specify the relation between
+c                    the densities and p wave velocities in indivi-
+c                    dual layers, density=rho1(i)+rho2(i)*vp in the
+c                    i-th layer, see card no.6. For nro=1 (see card
+c                    no 5 for nro) rho1(i)=1.7, rho2(i)=0.2 in all
+c                    layers. For ptos(1).ge.100 (see card no. 7 for
+c                    ptos(1)), rho1(1)=1,rho2(1)=0 (a liquid layer).
+c          nrho...   for nrho=0, the uppermost layer is solid, for
+c                    nrho=1, the uppermost layer is liquid. It the
+c                    latter case, the S velocity=0 and the density=1
+c                    in the layer. Also mreg=1 in this case.
+c          Note: The information about velocity distribution in one
+c          layer is stored in the above variables in the same way as
+c          described in input data cards no.4. The data for individual
+c          layers are stored successively from the top to the bottom,
+c          one after another.
+c
+c     Decsription of certain auxiliary quantities
+c     *******************************************
+c
+c
+C     Auxiliary quantities which are used in various parts of the pro-
+c     gram are stored in commons /auxi/ and common /auxx/.
+c
+c     common/auxi/intr,int1,iout,irefr,lay,itype,nder,iprint,mprint
+c
+c         intr...  number of the interface just struck by the ray.
+c         int1...  number of the interface investigated before intr.
+c         iout...  index used when the point of incidence of a ray
+c                  at an interface is looked for in an iterative way
+c                  (not used in this version).
+c         irefr... index specifying if there is at least one compound
+c                  element of the ray (irefr=1) or not (irefr=0).
+c         lay...   number of layer just passed through the ray.
+c         itype... index specifying the type of the wave along the
+c                  investigated element of the ray. itype=1 for P
+c                  wave, itype=-1 for S wave.
+c         nder...  index specifying whether the second derivatives of
+c                  velocity should be evaluated (nder=1 - for mdim.gt.0)
+c                  or not (nder=0 - for mdim=0).
+c         iprint...controls the printing of rays, travel times and ampli-
+c                  tudes on a line printer. Equals zero in this version.
+c                  The print of results on a line printer is controled
+c                  in some other way, directly in routine tramp.
+c         mprint...controls the printing of the description of the
+c                  model on the line printer, see input data card no.1.
+c         ntr...   serves for the purpose of a more detailed deter-
+c                  mination of the reason of the termination of the ray.
+c                  It shows the place in the routine outp where the compu-
+c                  tation of the ray was terminated (see the listing of
+c                  the routine outp).
+c
+c
+c     common/auxx/mmx(20),mmy(20),mmxy(20),maux
+c
+c         mmx(i)...specifies the number of the first component of the
+c                  vector sx (see /medim/) corresponding to the i-th
+c                  layer.
+c         mmy(i)...specifies the number of the first component of the
+c                  vector sy (see /medim/) corresponding to the i-th
+c                  layer.
+c         mmxy(i)...specifies the number of the first components of
+c                  the vectors v (see /medim/) and ao2,a20,a22 (see
+c                  /vcoef/) corresponding to i-th layer.
+c         maux...  index specifying if it is necessary to evaluate
+c                  the coefficients of bicubic spline interpolation
+c                  or whether it is possible to use the coefficient
+c                  determined in the previous step.
+c
+c
+c     ******************************************************************
+c
+c     Output tables.
+c     **************
+c
+c     All the input data are reproduced on the line printer. The
+c     other output is controlled by the parameters mprint and
+c     mout, see input cards no.1 and 9.
+c
+c
+c     the index mprint:
+c     ****************
+c     The index mprint controls the printing of the description of the
+c     model on the line printer.
+c     For mprint=0:
+c     *************
+c     No print.
+c     For mprint=1:
+c     ************
+c     Printer plot of the velocity distribution within the model,see
+c     details in the description of the input card no.8. The printer
+c     plot shows approximately the position of interfaces and/or
+c     the position of velocity isolines in the model.
+c     For mprint=2:
+c     ************
+c     The same printout as in the case of mprint=1, but with a detailed
+c     description of individual interfaces. For each interface, the
+c     following quantities are printed:
+c     a) coefficients of cubic parabolas corresponding to individual
+c     elements of the interface (from the left to the right),
+c     b) coordinates of 26 points along each interface, with regular
+c     step in the x-coordinate, from the left boundary to the right
+c     boundary.
+c
+c
+c     The index mout:
+c     **************
+c
+c     The index mout controls the printing of a description of the whole
+c     process of iterations (two-point ray tracing) and of its results
+c     on a line printer.
+c     For mout=0:
+c     **********
+c     No print of results, only the listing of elementary waves, for
+c     which the computations are performed ,is given. The "external
+c     code" (full code) corresponds to the numerical code of the wave
+c     described in input data card no.14. The "internal code" is the
+c     successive number of the elementary wave generated by the routine
+c     gener. For larger details, see description of the routine gener.
+c     For mout=1 or mout=2:
+c     ********************
+c     In addition to the numerical codes of individual elementary waves,
+c     certain results of iterations are printed at the line printer.
+c     The printing is different for mout=1 (only basic print) and
+c     mout=2 (heavy printing).
+c     The following quantities are printed in various situations:
+c       ind, ind1...   see explanation in the table "the parameter
+c                      ind") and in "the history of ray".
+c       iter...        the successive number of the iteration. In the
+c                      print of the final result of iterations, it
+c                      gives the full number of iterations.
+c       ii...          the successive number of the receiver position
+c                      corresponding to the termination point of the
+c                      ray. The receivers are numbered from the left
+c                      to the right.
+c       index...       the number of successfully iterated rays for a
+c                      given elementary wave.
+c       x,z...         coordinates of the termination point of the ray.
+c       t...           travel time at the termination point of the ray
+c       aa...          parameter of the ray (initial angle) in the basic
+c                      system of initial angles in the ray shooting, see
+c                      data card no.12.
+c       pnew...        the parameter of the ray (initial angle) in iterations.
+c       dd...          the difference between the x-coordinate of the termi-
+c                      nation point and the receiver.
+c
+c      All tables are printed without headings, but certain lines are
+c      supplemented by the additional text: "iterations", "successful
+c      iteration", "boundary ray", "critical ray".
+c         Generally, for each ray one line is printed. The exception is
+c      the successfully iterated ray, which may be supplemented by some
+c      additional information on amplitudes (when mdim.gt.1,see later).
+c
+c     In the basic system of shooting, the following quantities
+c     are printed when mout=2:
+c              ind,ind1,x,t,aa.
+c     In iterations, for mout=2:
+c              "iterations", ind,ind1,iter,dd,x,t,pnew.
+c     In successful iterations, when mout=2:
+c              "successful iteration",ind,ind1,iter,ii,index,dd,x,t,pnew
+c     In successful iterations, when mout=1:
+c              dd,x,z,t,pnew,ind.
+c     In case of boundary rays, all iterations are printed when mout=2:
+c              "boundary ray",ind,ind1,iter,x,t,pnew.
+c     In case of boundary rays, only the final iteration is printed when
+c     mout=1:
+c              x,z,t,pnew,ind,ind1,iter.
+c     In case of critical rays, all iterations are printed when mout=2:
+c              "critical ray", ind,ind1,iter,x,t,pnew.
+c     In case of critical rays, anly the final iteration is printed
+c     when mout=1:
+c              x,z,t,pnew,ind,ind1,iter.
+c
+c     When the amplitudes are computed (mdim.gt.1), then the successfull
+c     iterations are supplemented by the printing of the horizontal and
+c     vertical amplitudes, the phase shifts and the geometrical spreading.
+c
+c
+c     Output on a logical unit lu1.
+c     ****************************
+c
+c
+c     In the case that lu1.ne.0, certain information about the
+c     model, and the most important results of computation are
+c     stored at a logical unit lu1 for possible further applica-
+c     tions in other programs, plottings,etc.
+c     The data are stored in binary form.
+c     To perform plottings using the data filed at lu1, the program
+c     rayplot, described elsewhere, may be used. The program is
+c     exactly the same as in ray81.
+c
+c     When lu1=0, no data are stored.
+c
+c     The data consist of the following parts:
+c
+c     a) Information about possible termination of computation and
+c        about interfaces:
+c     1) icont.
+c        For icont=0, computations terminate. in this case, this
+c        is the last quantity on the logical unit lu1.
+c        For icont=1, a new data for a new ray diagram follow.
+c     2) nint,(npnt(i),i=1,nint).
+c        For the meaning of these symbols see input data card no.2.
+c     3) For i=1,2,...,nint:
+c        (a1(j,i),b1(j,i),c1(j,i),d1(j,i),x1(j,i),iii(j,i),j=1,nc),
+c        where nc=npnt(i)-1.
+c        For the meaning of these symbols see input data card no.3
+c        and the description of interfaces.
+c
+c     b) Information about source:
+c     4) x0,z0.
+c        Coordinates of the source.
+c
+c     c) Information about rays:
+c        For each successfully iterated ray, with the termination
+c        point at some receiver at the earths surface,the quan-
+c        tities shown sub 5 and 6 are stored. The data shown
+c        in 5 and 6 are stored successively for all rays within
+c        one ray diagram, arbitrary number of times. After the
+c        last ray, the parameter n is put zero in the main
+c        program. Then the quantities described sub d are stored.
+c     5) n,ind
+c        if(n.ne.0)... number of points along the ray.
+c        if n=0... indication of the end of the ray diagram.
+c        ind... the index specifying the reason of the termination
+c        of the ray. See detailed explanation elsewhere. In the
+c        program seis81,only the rays with ind=3 are stored at lu1.
+c     6) (ay(2,i),ay(3,i),i=1,n).
+c        For the meaning of these symbols see the description of
+c        common/ray/in the history of the ray.
+c
+c     d) Information about travel-times and amplitudes
+c     7) ns.
+c        number of rays which terminate at the earths surface
+c        at a specified system of receivers.
+c     8) (indi(i),epic(i),depth(i),tim(i),ampx(i),ampz(i),i=1,ns).
+c        indi(i) is the special parameter ind which specifies
+c        the reason of the termination of the ray,epic(i) and
+c        depth(i) are the x- and z-coordinates of the termination point
+c        of the ray, tim(i)...the corresponding travel time,
+c        ampx(i),ampz(i)... amplitudes of horizontal and vertical
+c        component, successively for all rays which reached the
+c        earths surface (i=1,2,..., ns).
+c
+c
+c
+c     Output on a logical unit lu2.
+c     *****************************
+c
+c     On the logical unit lu2, computed impulse synthetic seismograms
+c     at individual receiver positions are stored, together with some
+c     other relevant important information. At the present time,the data
+c     are stored in a formatted form to have a possibility to
+c     inspect the computations. To increase the speed of computations,
+c     the user can change the formatted form to the unformatted form.
+c     To perform the computation of synthetic sismograms and their
+c     plotting, the programs syntpl and seisplot described elsewhere
+c     may be used.
+c
+c     The data are stored in the following succession:
+c
+c     1) mtext                                 format(17a4)
+c        arbitrary alphanumeric text describing the model.
+c     2) ndst                                  format(26i3)
+c        number of receiver positions
+c     3) xsour,zsour,tsour,rstep               format(8f10.5)
+c        xsour,zsour... x-coordinates and z-coordinate of the source
+c        tsour... initial (hypocentral) time.
+c        rstep... (average) difference between the x-coordinates
+c        of two neighbourhood receiver positions.
+c     4) dst(i),i=1,ndst                        format(8f10.5)
+c        x-coordinates of receiver positions.
+c     5) ncode,ii,t,ax,az,phx,phz      format(2i5,1f10.5,2e15.9,2f10.5)
+c        ncode... internal code of the wave (ncode=1,2,..).
+c                 See detailed description of the internal code in the
+c                 description of the routine gener.
+c        ii...    successive number of the receiver position
+c                 (from the left to the right).
+c        t...     arrival time
+c        ax...    amplitude of the horizontal component
+c        az...    amplitude of the vertical component
+c        phx...   phase shift of the horizontal component
+c        phz...   phase shift of the vertical component.
+c
+c       The data 5 are repeated at lu2 many times, depending
+c       on the number of elementary waves and on a number of
+c       receiver positions. The last data set 5 has ncode=0,
+c       ii=0.
+c
+c
+c     *****************************************************************

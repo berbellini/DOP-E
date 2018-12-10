@@ -1,0 +1,32 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    QDP
+.S2 SUMMARY:
+Control decimation for screen plots. 
+
+QDP [ON|OFF|n]
+
+.S2 INPUT:
+ON       : Turn on automatic decimation
+.BR
+OFF      : Turn off automatic decimation
+.BR
+n        : Define the exact decimation
+.S2 DESCRIPTION:
+This controls the decimation factor used for screen plots. The purpose is to speed screen displays. When OFF, all points are plotted in the current window. When ON, the increment is automatically determined to permit no more than 4000 display points. The exact number used in the decimation can be controlled by the QDP n.
+.BR
+To permit rapid screening of the trace and yet to be able to consider the traces at its maximum resolution, decimation is turned off if the number of points to be plotted in the current window is <= 4000. This is very useful within PLOTPK when one wishes to focus on arrival exact arrival time picks, after quickly moving the trace.
+.BR
+The plots resulting from a BG PLT command which creates the Pnnn.PLT CALPLOT files are not decimated.
+.BR
+This command was introduced since the CYGWIN plots under WINDOWS can be
+slower that the corresponding plot under LINUX on the same computer.
+.S2 DEFAULT:
+QDP OFF
+.S2 "SEE ALSO":
+PLOT1, PLOTPK
+       
+

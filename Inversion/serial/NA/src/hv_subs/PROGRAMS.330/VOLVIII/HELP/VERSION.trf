@@ -1,0 +1,20 @@
+.de BR
+.in 0
+.in +8n
+.ti -5n
+..
+
+
+.Th VERSION
+.S2 SUMMARY:
+Print GSAC version number
+
+Version 
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+
+.S2 EXAMPLES:
+
+.S2 "SEE ALSO":

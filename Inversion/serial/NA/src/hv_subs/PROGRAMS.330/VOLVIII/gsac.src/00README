@@ -1,0 +1,728 @@
+27 MAR 2004 - start
+
+-------
+
+11 APR 2004  -- implemented single pole LP and HP
+	Note for the CCM of the Mar 17 earthquake
+	both CLM and CCM are noise
+
+	We need a taper
+
+12 APR 2004  - LP and HP implemented - now put in
+	BP and BR
+
+	start to work on LH subset
+
+	Then start CH
+
+	Finally WH
+
+	WSAC
+
+****************PUT IN FOOLPROOF CHECKS FOR FORNER FREQUENCIES only
+	known when actually filter when trace is known
+
+16 APR 2004 lh is ok except must identify columns 1 or 2 can do this
+	in mode of the DEFAULT e.g. negative id but expects integer
+	simple
+
+	ch started - works with real and integer
+	must add in character enumerated logical
+	to set ch boeaftn gmt .....  we must permit something special
+	or just have a gmt command - but we do not know O
+	KEVNM  is 16 characters long so this is a special command??
+		to be added
+
+	SETFHV  - float
+	SETIHV  - enumerated
+	SETKHV  - string
+	SETLHV  - logical
+	SETNHV  - integer
+       C:              void setfhv( kname, fvalue, nerr, kname_s )
+       C:              void setihv( kname, kvalue, nerr, kname_s, kvalue_s )
+       C:              void setkhv(kname, kvalue, nerr, kname_s, kvalue_s)
+       C:              void setlhv(kname, lvalue, nerr, kname_s)
+       C:              void setnhv(kname, nvalue, nerr, kname_s)
+
+
+---------------
+22 APR for perplot if we are at the last one and cannot draw a comple page, 
+test and put in the scale else we have
+
+
+-------------
+|           |
+
+
+
+-------------
+
+03 MAY 2004  - MUST STILL DO ANALOG -> DIGITAL TRANSFORMATION
+
+	ALSO CALPLOT DRIVER must 
+	a) output nothing for initialization
+	b) must eliminate buttons
+
+	FOR CH is any of the coordinates change, recompute the
+	distance 
+
+-----
+08 MAY 2004 LHDR done  must fill in error help Beijing
+
+	WRITE HEADER DONE
+
+	WRITE DONE for overwrite but not for a rename
+------
+11 MAY 2004 COLOR implemented Beijing
+
+------
+12 MAY 2004 FUNCGEN implemented for an impulse only Beijing
+
+------
+14 MAY 2004 Seoul
+	BESSEL filters now work as well as BUTTERWORTH
+
+-----
+16 MAY 2004 - Incheon Airport
+	CUTERR implemented
+	CUT works and sets up the arrays
+
+	gsac_control.cutint[2] and gsac_control.cutoff[2]
+
+	In the routine read, we will do the following:
+
+* start = MIN(sacdata[k].sachdr.rhdr[CUT_INT1] + offset1,
+ *              sacdata[k].sachdr.rhdr[CUT_INT2] + offset2)
+ *  end  = MAX(sacdata[k].sachdr.rhdr[CUT_INT1] + offset1,
+ *              sacdata[k].sachdr.rhdr[CUT_INT2] + offset2)
+
+	this will permit something like
+		o 20 o -10 to be the same as o -10 o 20
+
+	put this in the documentation
+
+	The read routine must now be constructed to 
+		read the data, then to either cut or fill Z after the
+		read, e.g., the time at which we know the header
+		values
+
+	TODO finalize
+		INTERPOLATE
+		TRANSFER
+			also upgrade sacevelr and sacfilt to handle
+			freqlimits
+		PPK
+
+	In the headers
+		USER1 = low cut corner
+		USER2 = high cut corner for any filter operation, e.g.,
+			LP BP HP (reject is a problem) TRANSFER
+			This is for use with other programs, such as
+			sacmft96 sacpom96 
+
+		ROTATE - make this smarter than SAC - actually cut and
+			synchronize internally and also rename output
+			KCMPNM to either replace Nn by R Ee by T,
+			or Az Az + 90, and change the name fo the
+			output file accordingly
+
+	1300: - more fixes == if we reread then we should reset the plot
+		limits if the default was -- done
+	1400: last stretch for 11 hours - cut almost done just need logic
+		to fill the data array, e.g., &(*data)[0] ??
+
+-----
+18 MAY 2004
+	ROT and CUT done - however if we do a read, we must reset the
+	write for the default output otherwise we remember the previous
+	write arguments
+
+	NOTE if the epoch times are way off - do not plot absolute time
+	since we will actually plot 10**11 sec or so
+
+	Keith wanted a DELETE which was too hard to implement because I do
+	not used linked lists for the trace data structures but rather an
+	array. The idea here is not to use this trace for anything else even
+	for output - this is roughed in - must be applied to all
+	for(k) loops
+	
+	Chuck - wanted LOCK/UNLOCK pair - for example read in a trace twice
+	LOCK the first, now filter, then the PLOT1 will show the
+	original and filtered trace - we can do this with SAC2000 by
+	read filter, write, reread
+
+------
+
+20 MAY 2004
+	change gsac_plotsp to plot in sort order
+	or perhaps the color mapping is not by the sort order - the display
+	seems to be by sort order
+
+	OK for trans test to see if the files exists - if it does not
+	then set do_tr = NO
+
+-----
+
+22 MAY 2004  - more work on transfer - yuck with builtin
+	NOTE CHECK ALL ISARGR ISARGI GETARGR GETARGI for correct return
+
+-----
+23 MAY 2004 - transfer done for the time being -- now to work on PLOTPK
+	also I need a WRITESP AM and WRITESP PH
+	For PLOTSP putin a PLOTSP PH
+
+	also start to plan on plot limits
+
+	put FREQLIMITS into SACFILT and SACEVALR
+
+	for FREQLIMITS - beware if the limits extend beyond the NYQUIST
+
+	FOR USER1 and USER2 if there are values, check before writing in
+	case these are changed, e.g.,
+	permin = max(newpermin,oldpermin)
+	permax = min(newpermax,oldpermax)
+
+-----
+24 MAY 2004
+	PUT IN FILLZ!
+
+	FOR CD use GLOB to EXPAND
+	LOGIC KLUDGED FOR IMPLEMENTING CUT IN GSAC_SAC.C  - also force
+	reset to zero
+
+25 MAY 2004 - problem with real data if I do a transfer from to vel
+	with a last point of WUAZ time series - not if
+	I do the dif numerically instead of through FFT
+
+	so why
+-----
+27 MAY 2004 - CD can I use glob and then do a test if the entry is a
+	directory?
+
+	ENOTDIR if chdir = -1, errvalue is set
+	#include <errno.h>
+	extern int errno;
+
+-----
+30 MAY 2004  - ppk going
+	L I actually grab the trace point = sac goes from screen cursor
+	coordinate - do this
+
+	for ppk but in XX , also setup markall!!
+
+	MARKALL set up but bury header change in a subroutine
+-----
+31 MAY 2004
+	STILL MUST DO XX -- which requires a display of the X pick
+		so need a low level widget that show_pick uses too
+	NEED NON-UNIFORM SYNTAX  SAC has MARKALL {ON} [OFF]
+
+	IMPLEMENT NON-STANDARD for CUT B B n or CUT B n B
+-----
+06 JUN 2004 - for many commands, e.g., plot plotpk but in a DEFAULT to reset
+	FOR QDP make the increment dependent upon the number of points in
+	the plot window.
+
+-----
+09 JUN 2004 - Crikvenica -- put in absolute/relative time in prs
+	put in a background command concerning byte order.
+	E.g., if we are to convert the binary format to native, then
+	on first read, it not in native format, read, swap and then
+	write out -- else read and carefully rewrite to preserv e the original
+	order
+
+	Problem with ray parameter plot - either need more digits or need
+	to invoke the scientific
+
+	Changed grphsubc.c in dolnx to at least the correct thing for ray 
+	parameter this has to be really thought out, especially in terms of the
+	
+	Still have to do desacify for ch and the read/write BIG/Little
+	
+	
+---------------------
+RECAP 2004 07 12
+	DO WARP ON FILTER COEFFICIENTS
+
+-----------------------
+
+
+2004 07 16
+
+	GSAC does not SET GCARC AT ALL  -- rethink!!
+------
+
+2004 07 20
+	Corrected gsac_filt (HP LP BP BR) and gsac_trans.c to properly 
+	set USER1 and USER2
+
+-----
+2004 07 21 - modified funcgen to give a trinangle - also modified hilbert
+	for zero frequency
+
+	FIXED  the env gives crap - why
+	Add sort ASCEND DESCEND
+-----
+2004 07 22
+		first cut on merge
+	some problems with arrays
+	becareful of non-equal data test since this may use end of array
+
+	also rething max number of traces in the DOMORE part where
+	we redefine max_nume br_traces which should never be made zero
+
+-----
+2004 0723
+	If I do a rotate and write - a subsequest read cannot read
+	Have I lost my memory
+
+	This also occurs with merge that does not distinguish between
+	the newly created files and the old read in list
+
+	so rethink
+
+-----
+2004 07 25
+	Implemented a distinction between the read files and the write files
+	This is to permit the following - so that a subsequent read
+	get us there
+
+GSAC - Computer Programs in Seismology [V0.1 12 APR 2004]
+   Copyright 2004 R. B. Herrmann
+GSAC> r  *10.BHZ.Q.SAC
+2004.144.09.19.45.2605.IU.ANMO.10.BHZ.Q.SAC 2004.144.09.20.41.0355.IU.ANMO.10.BHZ.Q.SAC 2004.144.09.23.25.3354.IU.ANMO.10.BHZ.Q.SAC 2004.144.09.23.41.2604.IU.ANMO.10.BHZ.Q.SAC
+GSAC> merge
+May 23 (144), 2004 09:19:45.259 May 23 (144), 2004 09:23:41.235 (0)
+May 23 (144), 2004 09:20:41.035 May 23 (144), 2004 09:23:25.309 (1)
+May 23 (144), 2004 09:23:25.335 May 23 (144), 2004 09:27:59.710 (2)
+May 23 (144), 2004 09:23:41.259 May 23 (144), 2004 09:27:15.560 (3)
+
+May 23 (144), 2004 09:19:45.259 May 23 (144), 2004 09:27:59.710 (Merge window)
+New time series length:  19779
+k 0 j 0 - 9439  npts 9440
+k 1 j 2231 - 8802  npts 6572
+k 2 j 8803 - 19778  npts 10976
+k 3 j 9440 - 18012  npts 8573
+GSAC> r
+2004.144.09.19.45.2605.IU.ANMO.10.BHZ.Q.SAC 2004.144.09.20.41.0355.IU.ANMO.10.BHZ.Q.SAC 2004.144.09.23.25.3354.IU.ANMO.10.BHZ.Q.SAC 2004.144.09.23.41.2604.IU.ANMO.10.BHZ.Q.SAC
+GSAC>
+
+NOTE - potential problems - what will a WH do in this case -
+	If I create a new file, e.g., if
+	number.otraces != number.itraces then a WH means to write the file?
+	Of course it would be stupid to expect to be able to WH for a new file
+	if we do not do a W first ---
+
+	Think!!
+
+Also rethink the maxtraces - if properly set in read?
+
+------------
+CREATE A SEPARATE ROUTINE for reading in aTEMP FILE for CONVOLVE CORRELATE
+MULF etc
+
+Result of gcc -O -Wall -g -c gsac_lh.c
+ WHAT IS THIS */
+if(lharg[i].key,sacdata[k].sachdr.ihdr[ipos]==0)
+               ^
+            printf("     %8s                FALSE",lharg[i].
+
+--------------
+26 JUL 2004
+	keywords such as in the sort [key]
+
+	TODO prs
+	PLOT controls
+	PPK phases and document
+	TRANSFER document
+	P2 implement
+	CONVOLVE and CORRELATE perhaps
+		CONVOLVE MASTER n 
+		CONVOLVE FILE file
+
+	STACK  but stack on header value? header value to time shift
+		note can do this by cut too
+
+-----
+02 AUG 2004
+	L works
+	However the display of picks for the relative ppk with a time shift
+	is wrong?
+
+	Note: to implement the * / just modify the depmax and depmin
+	perhaps have a working set? beware thea gsac_show_plotpk is
+	also used by p1
+
+-----
+03 AUG 2004 
+	ylim implemented
+	still have to get showpick l etc to work with the ppk relative
+
+	ppk time pick works with relative - just the display of arrivals
+	does not work
+
+	FIXED QDP nwind in show_plotpk
+-----
+04 AUG 2004
+	Fixed ppk for relative
+
+	Now p1 perplot 2 for a three traces requires a y/n for terminal
+	but for bg plt we should assume a y/n  - set a flag
+
+-----
+06 AUG 2004 
+
+-----
+
+12 AUG 2004
+	Note that a wh after a cut will rewrite the entire header
+	This is because the header was changed on the read and the 
+	number of data points, smaller is saved ---  put in a warning
+	or perhaps only overwrite the header
+
+	Note that SAC avoids this by the command
+
+	SAC> wh
+ ERROR 1341: Can't write headers because CUT is ON.
+
+	If we try to write in sac we get
+	SAC> w
+ ERROR 1311: No list of filenames to write. 
+which forces a new name
+or a write over !!!!
+FIXED - ERROR MESSAGE
+
+
+
+
+-----
+
+DONE - In HELP put in a column to indicate the shorthand
+
+PRS put shade off plus minus
+
+-----
+14 AUG 2004 - implemented PSP OVERLAY ON | OFF
+	noted that the rainbow must be reset by the number of traces
+	if traces are reread
+
+	kolor = 1000 + 100*(k%ntrc)/ntrc ;
+	to permit a 1000 1100 for ntrc = 2 we must do a
+	kolor = 1000 + 100*(k%ntrc)/(ntrc-1) ;
+		except when ntrc = 1
+	ntrc	 k	color
+	1	0	1000
+	2	0	1000
+		1	1100
+	3	0	1000
+		1	1050
+		2	1100
+	4	0	1000
+		1	1033
+		2	1066
+		3	1100
+
+	FIXED!
+
+	TODO - x0 y0 xlen ylen are in not set them in plotctl
+
+	Done in PCTL - now we should borrow an idea from MATLAB and
+	have PCTL OVERLAY WHICH MENAS DO NOT DO AN ERASE?  PCTL ENDPAGE
+
+	
+-----
+
+15 AUG 2004 - for the hold we must first check to see if we are in the plot mode
+	otherwise we have a problem with graphics
+
+	We are getting too many flags when implementing the hold
+	originally we had that plt would do one and only one frame
+
+	This means that we need more discipline 
+	For example if you are in PLT mode and get a BG X11 then
+	we must FIRST do a PEND
+
+	If we are in a PLT or X11 mode and program stops
+	we must do a PEND
+
+	We need a state that graphics initialized for the gsac end
+	This is build in as gsac_control.plotinit == YES
+
+	So this is important to set termination correctly
+
+	NAMING SHIFTED AND ADDED TO PSP
+
+	Concerning xlim use mechanisms of  CUT 
+	also add two more parameters to the gsac_sac.h header
+	either as a double to indicate the absolute times of
+	the current window or the corresponding integers
+		double tzbegx
+		double tzendx - end of xlim window
+
+		in gsac_sac
+
+		tzbegx = tzbeg
+		tzendx = tzend
+
+	In xlim
+		if default
+
+                tzbegx = tzbeg
+                tzendx = tzend
+
+		else
+		reset as in cut
+
+		Then in the plot routines use the
+		tzbegx instead of tzbeg
+
+------
+18 AUG 2004
+	Added PAUSE ECHO for DEMO scripts
+
+	FOR XLIM
+		Check to see if possible
+		sachdr.rhdr[gsac_control.cutint[0]]!= -12345.
+
+		PERHAPS have a flag to see if this is possible for all
+		traces in memory
+-----
+22 AUG 2004
+	PRS done for scaling
+
+	REGIONAL and TELESEISMIC
+	when go next page or to redraw - do not do a hole reframe
+	after implemented.  
+
+-----
+TODO
+
+	IMPLEMENT plotpk [REGIONAL | TELESEISMIC ]
+
+
+	for PRS put in an option for SHOWPICK
+	Put in color support for PRS
+
+1. xlim works but be careful of the syntax, e.g.,
+        sac permits xlim 0 100 or xlim b b 100 for the more precise
+        xlim b 0 b 100
+
+2. Unless you say ylim all or ylim vmin vmax, ylim will autoscale within the
+        window, even in plotpk or ppk
+
+3. I modified prs (plot record section) to add extra white space so
+        that the traces are not clipped at the axes
+        If you wish to look at many traces from different earthquakes, you
+        can do a prs relative if you have been careful with the read, e.g.,
+        everything is PKP -10 to PKP +100  where PKP is really some Tn header
+        value
+
+
+6. I have prototyped a pctrl that sets lower left corner of plot and
+        axis lengths - the purpose is to permit a MATLAB like subplot
+        my HOLD command works with the X11 but my logic for the external
+        file is still perturbed
+
+7. I am contemplating a few more commands,  flim alim flog alog flin alin
+        for controlling the spectral plot - of course the phase spectra must
+        always be linear
+
+8	FILTER is documented but not implemented
+	CHECK documentation for TRANSFER
+
+------------------------
+PRS when I did the 20040804 event - the prs started about 10 sec late - 
+this is because 
+
+PRS needs PLMN shading
+
+FIX HOLD
+
+note for DOITROT  xlim a -10 t0 100
+	basically does a 100 second window starting at
+	begmin for absolute plot and does ok for relative
+	sac2000 plots both the same - time and reference odd for absolute
+	but relative also outputs the offset
+
+	xlim for p1 absolute with xlim b 40 b 60 messes all up
+	p1 relative is ok
+
+XLIM continued - plot nice now put L A etc does not work
+	                                     } else {
+    ttime = uv*twin + sacdata[pmap[k].k].sachdr.rhdr[H_B]+sacdata[pmap[k].k].tzref;
+                                     }
+line 354
+
+                                     tp = uv*twin + sacdata[pmap[k].k].sachdr.rhdr[H_B]+sacdata[pmap[k].k].tzref;
+                                     }
+line 391
+P1 XLIM not work for o -40 o 100 e.g., before the befinning of the one trace
+so in determining the limits we must also see if it is before the beginning or the end of trace
+
+PERHAPS XLIM IS OK!
+25 AUG 2004
+----------------------------------
+-----
+30 AUG 2004
+
+
+-----
+2 SEP 2004
+
+put in a flag in PRS so that we can reset everything, e.g., DEFAULT
+reason - I need a way to say do not use the external title. or
+not that if the  plot quantity changes to eliminate the current title
+
+OK I have that fixed but what if the do the order
+	TITLE title dist and not  dist TITLE title  - in the first case I
+	turn off the title
+
+------
+
+3 SEP 04  - added the shortened recognition ala Keith -- also
+	cleaned documentation
+
+	HOWEVER not document for FILTER
+	CHECK documentation for TRANSFER
+
+	MERGE now checks KCMPNM KSTNM
+
+-----
+
+06 SEP 2004
+	xlim and cut accept the abbreviated SAC sequence of 
+		cut 10 20
+		cut a t0
+		cut 10 t0 20
+	ch accepts the original sac sequence
+		ch o gmt 2001 123 11 22 33 444
+		which is converted to the internal sequence
+		ch ogmt 2001 123 11 22 33 444
+
+		Note that this also works for the calendar date
+		ch o cal 2001 03 01  11 22 33 444
+		which is converted to the internal sequence
+		ch ocal 2001 03 01  11 22 33 444
+	bg can be used to set the graphics environment BEFORE the
+		first X window is displayed - this can be use
+		in place of or to override the PLOTXVIG environment 
+		parameter
+
+		bg x geom 400 1000 reverse gray
+		p1
+-----
+
+TODO 06 SEP 2004 
+
+***	IMPLEMENT WARPED digital filters
+	I must put in bi-linear warping in the digital bandpass/low/high filters
+
+	for PRS put in an option for SHOWPICK
+	Put in color support for PRS
+
+7. I am contemplating a few more commands,  flim alim flog alog flin alin
+        for controlling the spectral plot - of course the phase spectra must
+        always be linear
+
+*****	FILTER is documented but not implemented
+	CHECK documentation for TRANSFER
+
+----
+
+08 SEP 2004
+	worked on PRS have trace shading OK
+
+------
+11 SEP 2004
+	Bilinear warping is done
+
+
+--------
+24 SEP 2004
+	OK Violate idea of separate routines for each command
+	This permits SQRT SQR EXP and LOG to be implemented in just one
+	routine  - math
+-----
+14 OCT 2004
+	ROT and ROT3 support SUFFIX
+-----
+16 OCT 2004
+	PLOTSP supports XLOG XLIN YLOG YLIN FMIN FMAX AMIN AMAX
+-----
+19 OCT 2004
+	Did a hack on grphsubc.c to get better tic intervals - just guessed
+	did not think  - so check
+
+	Only worked on dolnx - did nothing on the Y axis
+	OK now after select tic mark look at the size of the numbers and
+	the available space - if not enough, then make dxx larger
+-----
+20 OCT 2004
+	More work on grphsubc.c and grphsubf.f in the dolnx routine
+	this is now better - needs more work, though for neatness
+
+TODO
+	for PRS output an ASCII file P???.CTL which gives details on
+	XLABEL
+	YLABEL
+	x0 xlen
+	y0 ylen
+	XLIN XLOG
+	YLIN YLOG
+	PORTRAIT REVERSE LANDSCAPE SEASCAPE
+	xmin xmax  (for independent variable
+	ymin ymax
+
+	THIS IS TO PERMIT A PLOT OVERLAY
+-----
+25 OCT 2004
+	SHD must be done under a clip
+	also the plot should be repeated for color
+
+	Note plotfile plotted using xvig shows problem
+	plotfile plotted using plotnps has no problem
+
+	Note also that
+
+	NPSOBJS  = plotdriv.o plotgen.o lineclip.o  zzpoint.o txtlbl.o symvec.o \
+        rline.o rlinevec.o plotnps.o
+
+	XVIGOBJS = plotdriv.o plotgen.o lineclip.o                      symvec.o \
+        rline.o rlinevec.o plotxvig.o            
+
+	is is zzpoint?
+
+	O K where do I check clipping?
+-----
+26 DEC 2004
+	try to fix QDp
+	note QDP should be adjusted per actual window
+	also for log plots rethink
+
+-----
+05 JAN 2005
+	NOTE ppk L does not work? for a largenumber of data points?
+	perhaps use doubles instead of floats for computations?
+	CUT works correctly
+	beware of the segments breaking in corr
+
+-----
+06 JAN 2005
+	ppk fixed for the time being - was only plottng of long time series
+	now focus on why corr fails at times
+-----
+07 JAN 2005
+	Fixed OCAL in gsac_ch
+	Added TAPER
+	Added Markt (almost)
+
+-----
+14 FEB 2005 - begin fixing xlim -- not makje sure that o -10 of o is -12345 done nothing
+	FIXED
+
+-----
+17 FEB 2005 - ofile name was not reset on a read. Also in rotate the ofile name must be
+	redefined on the basis of the ifile name. Inntroduced another string, ocmpnm in
+	gsac_sac.h to preserve the original component name that was read in. This entailed
+	changes to gsac_read.c, gsac_rot.c and gsac_rot3.c
+

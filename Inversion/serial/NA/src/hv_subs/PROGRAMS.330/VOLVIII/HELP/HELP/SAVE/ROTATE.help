@@ -1,0 +1,54 @@
+GSAC Command Reference Manual                                    ROTATE
+SUMMARY:
+Rotates horizontal components through and angle
+
+ROTate [ TO GC | TO angle ]
+
+INPUT:
+     TO GC	Rotate to the great circle path. This requires that the
+               BAZ and CMPAZ header variable be set. The KCMPNM headers
+		are changed to replace the last character, usually N and E,
+		to R and T. In addition the file name for default changes
+     TO angle	Rotate to form the trace in the {angle} and {angle + 90}
+		directions. this requires tha thte CMPAZ be set in the header
+		The KCMPNM headers are changed as are the default write names.
+
+DESCRIPTION: 
+		In both uses of the command, the filename and KCMPNM are 
+		converted to upper case. Note that a write will be in the 
+		current directory rather in the directory of the original
+		traces
+		As an added feature, ROTATE is smart enough to handle traces
+		that do not have equal lengths or absolute start time. The 
+		will consist of the overlapped trace window. This means that
+		it should be possible to ROTATE without having to SYNCHRONIZE
+		and CUT
+The following dialog illustrates the naming, Recall that the
+LISTHEADER gives the filename for the default write.
+    GSAC> ../020618/BLOLHE.sac ../020618/BLOLHN.sac
+    GSAC> lh
+    ../020618/BLOLHE.sac (0):
+            KSTNM             BLO            KCMPNM             lhe
+    ../020618/BLOLHN.sac (1):
+            KSTNM             BLO            KCMPNM             lhn
+    GSAC> rot to gc
+    Rotating to great circle to form R and T
+    GSAC> lh
+    BLOLHR (0):
+            KSTNM             BLO            KCMPNM             LHR
+    BLOLHT (1):
+            KSTNM             BLO            KCMPNM             LHT
+    GSAC> r
+    ../020618/BLOLHE.sac ../020618/BLOLHN.sac
+    GSAC> rot to 90
+    Rotating to angle 90.000000 to form 090 and 180
+    GSAC> lh
+    BLOLH090 (0):
+            KSTNM             BLO            KCMPNM             LH090
+    BLOLH180 (1):
+            KSTNM             BLO            KCMPNM             LH180
+    GSAC>
+
+SEE ALSO:
+       
+

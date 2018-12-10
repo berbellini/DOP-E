@@ -1,0 +1,21 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    EXP
+.S2 SUMMARY:
+Exponentiate trace.
+
+.S2 EXP 
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+This exponentiates a trace. However NOTHING will be done if the
+trace value is greater than 85 since this would yield a real number > 1.0E+37.
+
+.S2 "SEE ALSO":
+SQRT, SQR, LOG, ABS
+       
+

@@ -1,0 +1,15 @@
+GSAC Command Reference Manual                                    CD
+Change the current working directory
+
+SUMMARY:
+
+CD path 
+
+INPUT:
+      path	path to the next directory 
+
+DESCRIPTION:
+
+SEE ALSO:
+       
+

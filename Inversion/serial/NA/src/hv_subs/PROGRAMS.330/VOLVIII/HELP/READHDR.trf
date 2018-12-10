@@ -1,0 +1,35 @@
+.de BR
+.in 0
+.in +8n
+.ti -5n
+..
+
+
+.Th READHDR
+.S2 SUMMARY:
+Reads headers from SAC data files into memory.
+
+ReadHdr [options] [filelist]
+
+where options is one or more of the following: MORE
+
+.S2 INPUT:
+MORE     : Place the new files after the old ones. If this is
+omitted, new data replaces the old ones. ALL HEADERS ARE READ IN AGAIN
+.BR
+filelist] : name of SAC data files. The files in the list
+are tested to determine if they are a binary file
+in either IEEE  Little Endian  (INTEL architecture)
+or  Big Endian  (SPARC, for example). Files are SAC
+files if the version number of the SAC file (NVHDR)
+is 6 AND at least ONE of the real header values is
+\-12345.0 or integer header values is \-12345
+.S2 "SAC COMPATIBILITY:"
+The MORE option differs in that a subsequent READHDR will read
+in all files is the aggregate list.
+.S2 DESCRIPTION:
+The purpose of this command is to speed making changes in the header
+by note reading in the complete timeseries.
+
+.S2 "SEE ALSO":
+READ

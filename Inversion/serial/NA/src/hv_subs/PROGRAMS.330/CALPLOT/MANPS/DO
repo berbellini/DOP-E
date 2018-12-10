@@ -1,0 +1,12 @@
+#!/bin/sh
+reframe -N1 -O -XL0000 -XH10000 -YL0000 -YH8000 < LINE.PLT > p1
+reframe -N1 -O -X0+500 -Y0+500 -Mp1 < TEMPLATE.PLT > p2
+plotnps -EPS -S0.7 < p2 > p2.eps
+plotnps -EPS -S0.7 -R < p2 > pr2.eps
+rm p1 p2
+cat > p.ms << EOF
+.ND
+.PSPIC p2.eps 6.0i 
+.PSPIC pr2.eps 6.0i 
+EOF
+groff -ms p.ms > p.ps

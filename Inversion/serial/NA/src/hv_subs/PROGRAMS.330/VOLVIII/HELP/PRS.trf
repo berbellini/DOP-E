@@ -1,0 +1,90 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th PLOTRECORDSECTION
+.S2 SUMMARY:
+Creates a record section of traces plotted as a function of a header value.
+
+PlotRecordSection hv [LANDSCAPE|PORTRAIT|SEASCAPE|REVERSE] and others
+
+.S2 INPUT:
+hv             : Use this header value. The default is DIST. One may select from the following: EVDP, STEL, GCARC, DIST, AZ, BAZ, GCARC, USER0, ..., USER9, and MAG
+.BR
+PORtrait: Time increases to the right. The header value increases upward.
+.BR
+REVerse        : Time increases to the right. The header value increases downward.
+.BR
+Landscape      : Time increases upward. The header value increases to the right. This is a seismic refraction convention.
+.BR
+Seascape       : Time increases downward. The header value increases to the right. This is a seismic reflection convention.
+.BR
+Absolute       : Plot in absolute time
+.BR
+Relative       : Plot with all traces  starting at the first sample
+.BR 
+TItle string   : Title for axis. The Default titles are Dist (km/sec), Azimuth (deg), Back Azimuthy (deg, Distance (deg), USER0, ..., USER9, Depth (km), Receiver depth, and Magnitude. This option is best used to substitute for USER0, ..., USER9
+.BR
+P p            : Make p-tau plot by plotting T - p DIST where p =sec/km.
+.BR
+PX p
+.BR
+DTDX p
+.BR
+PDEL dtdd      : Make p-tau plot by plotting T - dtdd GCARC
+.BR
+DTDD dtdd
+.BR
+AMP amp        : Change maximum amplitude of trace from 0.5 to amp units. Recall that the screen in 10 plot units wide and 8 plotunits high
+.BR
+SHade [POS|NEG|OFF|ALL] : Shaded area plot of trace for positive and negative amplitudes.
+.BR
+Color color    : color for shading; Default = black (1). Red = 2, Blue = 4, 1000 (red/lt gray), 1100 (blue/dk gray).
+.BR
+KF  first_trace_shade : shade color for first trace read usinc Color convention
+.BR
+KL  last_trace_shade  : shade color for last trace read usinc Color convention
+.BR
+DEfault        : Reset all parameters
+.BR 
+VLimit vl vh   :
+.BR
+TLimit tl th   :
+.BR 
+ANnotate string : Annotate trace. Use string = STA to annotate with station name, = OFF to turn off
+.BR 
+ScaleRelative  :  Each trace is plotted such that the maximum amplitude is always 'amp'
+.BR
+ScaleAbsolute 0.0 : 
+.BR
+ScaleAbsolute 0.5 : 
+.BR
+ScaleAbsolute 1.0 : 
+.BR
+ScaleAbsolute 1.5 : 
+.BR
+ScaleAbsolute 2.0 : 
+.BR
+ScaleAbsolute 2.5 : Traces are scaled according as hv^power, where power
+can only be one of 0.5, 1.0, 1.5, 2.0, 2.5. The purpose
+is to present the difference in true amplitudes between
+traces
+
+.S2 DESCRIPTION:
+The purpose of this is to create a plot that goes beyond simple trace view. It is often desirable to plot traces in terms of true distance to properly understand arrivals through their moveout. In other cases one may wish to look at the variation of receiver functions.
+.sp
+If one uses the program saciterd to create a receiver function, the ray parameter is stored in the header variable USER4. To look a the change in the receiver function with ray parameter, one would just enter
+             PRS USER4                                                    
+To see the variation with backazimuth from the station, enter
+             PRS BAZ                                                 
+.sp
+Note that if the Origin time is set and the Absolute mode is used, then the time axis will actually correspond to to the travel time instead of the time from the earliest time value. 
+.sp
+Note also that if you wish to overlay observed and synthetics traces which have different reference times that you MUST use the PRS RELATIVE command.
+The PRS RELATIVE axis scaling is based on the B value of the first trace in memory. PRS RELATIVE may do strange things when using the P or PX commands, especially of the B value is no consistently set, which it is, for example, using the
+iterative deconvolution program, saciterd.
+.S2 DEFAULT:
+PRS DIST LANDSCAPE ABSOLUTE ScaleRelative                                              
+.S2 SEE ALSO
+PLOT1, PLOTPK, SORT                                                         

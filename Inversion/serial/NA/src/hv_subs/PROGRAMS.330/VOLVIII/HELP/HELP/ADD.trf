@@ -1,0 +1,23 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                     ADD
+.S2 SUMMARY:
+Add a constant to  all SAC data files in  memory.
+
+ADD [v] 
+
+.S2 INPUT:
+[v]      : constant to be added to all files
+
+.S2 "SAC COMPATIBILITY:"
+SAC permits an extended syntax that permits applying different constants
+to respective files in memory. We have not implemented this complexity.
+.S2 DEFAULT
+ADD 0
+
+.S2 "SEE ALSO":
+SUB, MUL, DIV
+

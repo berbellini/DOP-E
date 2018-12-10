@@ -1,0 +1,31 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th HISTORY
+.S2 SUMMARY:
+Display readline command history
+
+HISTORY 
+[Default | List n ]
+
+.S2 INPUT:
+List n   : List the last n commands
+.BR
+Default  : List all commands since GSAC started.
+
+.S2 DESCRIPTION:
+When compiled with the GNU readline library, a history of the commands entered 
+is saved. One can use a combbination of the arrow keys and the users editor commands to move around the current command line and previous command lines.  When the ENTER key is hit, the command line will be interpreted by GSAC.
+.sp
+Often it may be useful to review the history, and then cut and paste to repeat
+previous commands. 
+.sp
+Unlike the history mechanism of the CSH or BASH shells, one cannot use the
+!n  sequence to edit previous lines.
+
+.S2 DEFAULT:
+HISTORY DEFAULT
+.S2 "SEE ALSO":

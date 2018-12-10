@@ -1,0 +1,33 @@
+GSAC Command Reference Manual                                HIGHPASS
+
+SUMMARY:
+HighPass filter traces
+
+HighPass [options] 
+
+where options is one or more of the following:
+
+[Butter ] [ Corner fc ] [ NPoles npoles ] [ Passes npass] 
+
+INPUT:
+       Butter  : Butterworth filter
+
+       Corner  : Corner frequency (R) range 0 - Nyquist
+
+       NPoles  : Number of poles  (I) range 1 - 10
+
+       Passes  : Number of passes (I) range 1 - 2
+
+DESCRIPTION:
+     Highpass filter using a BI-LINEAR Z-transformation implementation of
+a highpass filter. A bi-linear method is chosen since this is easily
+implemented algebraically. Passes = 1 gives a causal filter while 
+Passes = 2 gives a zero-phase filter with a 6db point at the corner 
+frequency.
+
+HEADER VALUES SET
+	USER1 = permin, USER2=permax, where permin=1.0/(2*dt), and
+	permax= 1.0/(filt_fl) for use by sacmft96 adn sacpom96
+SEE ALSO:
+	LOWPASS, BANDPASS
+

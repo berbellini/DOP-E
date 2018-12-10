@@ -1,0 +1,21 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    DELETE
+.S2 SUMMARY:
+Delete a file in memory from any trace processing
+
+DELETE trace_number 
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+This is useful if one finds a bad trace in a large input and
+does not appear in any trace processing. It still stays in memory
+but will never be output.
+
+.S2 "SEE ALSO":
+UNDELETE
+

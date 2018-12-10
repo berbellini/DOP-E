@@ -1,0 +1,13 @@
+GSAC Command Reference Manual                                    SQRT
+
+SUMMARY:
+Take tha square root of each data point in the trace.
+SQRT 
+
+INPUT:
+
+DESCRIPTION:
+	For implementation, this actually gives +sqrt(abs(trace))
+SEE ALSO:
+       SQR
+

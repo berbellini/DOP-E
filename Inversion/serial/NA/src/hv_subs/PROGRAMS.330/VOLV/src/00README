@@ -1,0 +1,36 @@
+TODO
+
+17 JUL 2000 - ffilt96 and sacfilt
+	modify readin to be more SAC like, e.g., a * in column 1 is
+	a comment
+
+	if the number of read in do not = poles zeros then
+	assume zero
+
+	so logic should be
+		read a line
+		parse keyword
+			if in pole continue until next keyword
+		e.g. the pole zero is a keywork
+
+		POLES
+		ZEROS
+		*
+		CONSTANT
+		blank - ignote
+		number pair -- pz
+
+13 SEP 2000 - fmech96
+	either have a FILE4 for pressure in fluid due to mechanism
+	or force mech output of pressure only - ACTUALLY USABLE OPTION
+	in FILE1 FORMAT
+fplot96g had a nice pattern of 16 now must have 21??
+
+Genray - build in first arrival irrespective of actual rays
+	simple to do with fstarr -- put in convlv
+
+	pressure field can be build in easily?
+
+20 SEP 2000 sactof96 make sure it works for 21!!
+
+22 JAN 2002 saciterd changed to permit entry of ray parameter on command line

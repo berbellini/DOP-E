@@ -1,0 +1,36 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                              LISTHEADER
+.S2 SUMMARY:
+List trace header values 
+
+ListHeader [options] 
+where options is one or more of the following:
+
+[Default ] [ list] 
+
+.S2 INPUT:
+Default  : Output all defined header fields 
+.BR
+list     : a listing of header fields to output
+.BR
+Columns 1 : 1 column output
+.BR
+Columns 2 : 2 column output
+
+.S2 DESCRIPTION:
+Output header values. See the documentation for ChangeHeader to learn the header values. However one cannot use OGMT or OCAL since these are used only in ChangeHeader.
+No unset header value, incidated by the -12345 sequence, will be displayed.
+
+EXAMPLES:
+List distance, azimuth and P and S picks
+.BR
+     LH DIST AZ A T0
+.S2 "SAC COMPATIBILITY"
+SAC defaults to a single column listing and has a built in more command.
+
+.S2 "SEE ALSO":
+

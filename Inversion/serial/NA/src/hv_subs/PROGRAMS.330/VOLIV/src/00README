@@ -1,0 +1,31 @@
+TODO
+
+put in a alpha based window taper
+
+joint96 in ddupdt and wcupdt  I set both m and m+mmax e.g., V and Q?
+
+08 DEC 2002 ----- get rid of gaussalp weighting in jramat
+	also test new version of joint96 currently bombs 
+	because of tmpsrfi.00 format
+
+	CHECK how vars varr are computed, especially vars
+	when use/not use observed std error
+
+10 JAN 2003 - added option 50 to change the RFTN trace weight
+	also gid rid of the two sources with different ssytem/system
+	calls
+
+	Instead I make put this into the makefile
+	Note Makefile.SLE actually used the system and not the ssytem
+	so I will continue this but check on the SPARC
+
+16 JAN 2003 - seems OK Now joint96 with jamat is the prototype of
+	the rftn96 and surf96 since these are actually subsets of the
+	joint96 program. This means that I plae the complexity in
+	jamat ramat samat and but all use jsaqmat and jramat unchanged
+
+	surf96 is joint96 but with a call to ramat or samat instead of
+	jamat
+
+FOR A WATER LAYER - IF P = 1.45 WHY DOES THE WATER DENSITY CHANGE
+FROM THE INITIAL 1.45 1.234 to 1.45 to 1.00?

@@ -1,0 +1,297 @@
+#####
+# Makefile for Volume V - Computer Programs in Seismology
+#
+# To move this to another machine, the following variables must be
+# defined:
+#
+#	#Machine Type  - Inform -fative Comment
+#	FCMP	- name of FORTRAN Compiler with appropriate flags
+#	CCMP	- name of C Compiler with appropriage flags
+#	MCHDEP	- Name of object file for machine dependent initialization
+#	MCHCMD	- Name of object file for getting number of command 
+#			line arguments
+#	CALPLTF - Name of CALPLOT graphics library or absolute path,
+#		e.g., CALPLTF=-lcalpltf if it in /lib /usr/.lib or
+#			/usr/local/lib
+#		or CALPLTF=../../lib/libcalpltf.a
+#	DEST	- Destination for the final execuable
+#####
+#	If one of the following models is appropriate, just uncomment
+#	it by removing the first # sign
+#
+#	Otherwise, use the existing machine models as guides
+#####
+
+#####
+#	LINUX Compilers
+#####
+FCMP=gfortran -frecord-marker=4 -O
+CCMP=gcc -O
+MCHDEP=mchdep.o 
+MCHCMD=mnmarg.o mgtarg.o
+CALPLTF=../../lib/libcalpltf.a
+GETMOD=igetmod.o
+GSUBSF=grphsubf.o
+GSUBS=lgstr.o mnmarg.o mgtarg.o sacsubf.o mchdep.o
+
+DEST=../../bin
+
+.f.o:
+	$(FCMP) -c $<
+
+.c.o:
+	$(CCMP) -c $<
+
+f96subf.o:
+	cp ../../SUBS/f96subf.f .
+	$(FCMP) -c f96subf.f
+
+sacsubf.o:
+	cp ../../SUBS/sacsubf.f .
+	$(FCMP) -c sacsubf.f
+
+grphsubf.o:	
+	cp ../../SUBS/grphsubf.f .
+	$(FCMP) -c grphsubf.f
+
+f2csub.o:
+	cp ../../SUBS/f2csub.f .
+	$(FCMP) -c f2csub.f
+
+igetmod.o:
+	cp ../../SUBS/igetmod.f .
+	$(FCMP) -c igetmod.f
+
+mnmarg.o:
+	cp ../../SUBS/mnmarg.f .
+	$(FCMP) -c mnmarg.f
+
+mgtarg.o:
+	cp ../../SUBS/mgtarg.f .
+	$(FCMP) -c mgtarg.f
+
+mchdep.o:
+	cp ../../SUBS/mchdep.f .
+	$(FCMP) -c mchdep.f
+
+lgstr.o:
+	cp ../../SUBS/lgstr.f .
+	$(FCMP) -c lgstr.f
+
+tgetmod.o:
+	cp ../../SUBS/tgetmod.f .
+	$(FCMP) -c tgetmod.f
+
+tputmod.o:
+	cp ../../SUBS/tputmod.f .
+	$(FCMP) -c tputmod.f
+
+all: genray96 gprep96 gpulse96 fplotg96 fprof96 fmech96 \
+	fbutt96 finteg96 fderiv96 ffilt96 fspec96 \
+	fplot96 fplot396 fplotg96 \
+	f96tosac sactof96 fsel96 \
+	shwmod96 mkmod96 timmod96 time96 ttime96 refmod96 prfmod96 \
+	ttimmod96  tshwmod96 tmkmod96 tfmech96 ti2ismod is2timod \
+	fmplot fmdfit fmmfit fmtp \
+	fmlpr \
+	clean
+
+#####
+#	Generalized ray
+#####
+
+
+genray96:	genray96.o f96subf.o $(GETMOD) lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) genray96.o f96subf.o $(GETMOD) lgstr.o $(MCHDEP) $(MCHCMD) -o genray96
+	mv genray96 $(DEST)
+
+gprep96:	gprep96.o $(GETMOD) lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) gprep96.o $(GETMOD) lgstr.o $(MCHDEP) $(MCHCMD) $(CALPLTF) -o gprep96
+	mv gprep96 $(DEST)
+
+gpulse96:	gpulse96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) gpulse96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)  -o gpulse96
+	mv gpulse96 $(DEST)
+
+#####
+#	File96 filters
+#####
+
+fmech96:	fmech96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) fmech96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)  -o fmech96
+	mv fmech96 $(DEST)
+
+fbutt96:	fbutt96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) fbutt96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)  -o fbutt96
+	mv fbutt96 $(DEST)
+
+finteg96:	finteg96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) finteg96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)  -o finteg96
+	mv finteg96 $(DEST)
+
+fderiv96:	fderiv96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) fderiv96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)  -o fderiv96
+	mv fderiv96 $(DEST)
+
+ffilt96:	ffilt96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) ffilt96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)  -o ffilt96
+	mv ffilt96 $(DEST)
+
+fsel96:	fsel96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) fsel96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)  -o fsel96
+	mv fsel96 $(DEST)
+
+#####
+#	File96 plot programs
+#####
+
+fprof96:	fprof96.o f96subf.o grphsubf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) fprof96.o f96subf.o grphsubf.o lgstr.o $(MCHDEP) $(MCHCMD) $(CALPLTF) -o fprof96
+	mv fprof96 $(DEST)
+
+fplotg96:	fplotg96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) fplotg96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD) $(CALPLTF) -o fplotg96
+	mv fplotg96 $(DEST)
+
+fplot396:	fplot396.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) fplot396.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD) $(CALPLTF) -o fplot396
+	mv fplot396 $(DEST)
+
+fplot96:	fplot96.o f96subf.o grphsubf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) fplot96.o f96subf.o grphsubf.o lgstr.o $(MCHDEP) $(MCHCMD) $(CALPLTF) -o fplot96
+	mv fplot96 $(DEST)
+
+fspec96:	fspec96.o f96subf.o grphsubf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) fspec96.o f96subf.o grphsubf.o lgstr.o $(MCHDEP) $(MCHCMD) $(CALPLTF) -o fspec96
+	mv fspec96 $(DEST)
+
+fdecon96:	fdecon96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) fdecon96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD) $(CALPLTF) -o fdecon96
+	mv fdecon96 $(DEST)
+
+#####
+#	SAC manipulation programs
+#####
+
+f96tosac:	f96tosac.o f96subf.o sacsubf.o $(MCHCMD) lgstr.o $(MCHDEP)
+	$(FCMP) f96tosac.o f96subf.o sacsubf.o $(MCHCMD) lgstr.o $(MCHDEP) -o f96tosac
+	mv f96tosac $(DEST)
+
+sactof96:	sactof96.o f96subf.o sacsubf.o $(MCHCMD) lgstr.o $(MCHDEP)
+	$(FCMP) sactof96.o f96subf.o sacsubf.o $(MCHCMD) lgstr.o $(MCHDEP) -o sactof96
+	mv sactof96 $(DEST)
+
+#####
+#	model96 programs
+#####
+
+iputmod.o: iputmod.f
+iputmod.f:
+	cp ../../SUBS/iputmod.f .
+	$(FCMP) -c iputmod.f
+
+tputmod.o: tputmod.f
+tputmod.f:
+	cp ../../SUBS/tputmod.f .
+	$(FCMP) -c tputmod.f
+
+timmod96:	timmod96.o ${GETMOD} lgstr.o grphsubf.o $(MCHDEP) $(MCHCMD) 
+	$(FCMP) timmod96.o ${GETMOD} lgstr.o grphsubf.o $(MCHDEP) $(MCHCMD) $(CALPLTF) -o timmod96
+	mv timmod96 $(DEST)
+
+mkmod96:	mkmod96.o  iputmod.o lgstr.o $(MCHDEP) $(MCHCMD) 
+	$(FCMP) mkmod96.o  iputmod.o lgstr.o $(MCHDEP) $(MCHCMD)  -o mkmod96
+	mv mkmod96 $(DEST)
+
+shwmod96:	shwmod96.o ${GETMOD} lgstr.o grphsubf.o $(MCHDEP) $(MCHCMD) 
+	$(FCMP) shwmod96.o ${GETMOD} lgstr.o grphsubf.o $(MCHDEP) $(MCHCMD) $(CALPLTF) -o shwmod96
+	mv shwmod96 $(DEST)
+
+time96:	time96.o  lgstr.o ${GETMOD}  $(MCHDEP) $(MCHCMD)
+	$(FCMP) time96.o  lgstr.o ${GETMOD}  $(MCHDEP) $(MCHCMD) -o time96
+	mv time96 ${DEST}
+
+refmod96:	refmod96.o  lgstr.o grphsubf.o ${GETMOD}  $(MCHDEP) $(MCHCMD)
+	$(FCMP) refmod96.o  lgstr.o grphsubf.o ${GETMOD}  $(MCHDEP) $(MCHCMD) $(CALPLTF) -o refmod96
+	mv refmod96 ${DEST}
+
+prfmod96:	prfmod96.o  lgstr.o grphsubf.o ${GETMOD}  $(MCHDEP) $(MCHCMD)
+	$(FCMP) prfmod96.o  lgstr.o grphsubf.o ${GETMOD}  $(MCHDEP) $(MCHCMD) $(CALPLTF) -o prfmod96
+	mv prfmod96 ${DEST}
+
+#####
+#	Transverse Isotropy Specific
+#####
+
+tfmech96:	tfmech96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) tfmech96.o f96subf.o lgstr.o $(MCHDEP) $(MCHCMD)  -o tfmech96
+	mv tfmech96 $(DEST)
+
+ttime96:	ttime96.o  lgstr.o ${GETMOD}  $(MCHDEP) $(MCHCMD)
+	$(FCMP) ttime96.o  lgstr.o ${GETMOD}  $(MCHDEP) $(MCHCMD) -o ttime96
+	mv ttime96 ${DEST}
+
+tmkmod96:	tmkmod96.o  tputmod.o lgstr.o $(MCHDEP) $(MCHCMD) 
+	$(FCMP) tmkmod96.o  tputmod.o lgstr.o $(MCHDEP) $(MCHCMD)  -o tmkmod96
+	mv tmkmod96 $(DEST)
+
+ttimmod96:	ttimmod96.o tgetmod.o lgstr.o grphsubf.o $(MCHDEP) $(MCHCMD) 
+	$(FCMP) ttimmod96.o tgetmod.o lgstr.o grphsubf.o $(MCHDEP) $(MCHCMD) $(CALPLTF) -o ttimmod96
+	mv ttimmod96 $(DEST)
+
+tshwmod96:	tshwmod96.o tgetmod.o lgstr.o grphsubf.o $(MCHDEP) $(MCHCMD) 
+	$(FCMP) tshwmod96.o tgetmod.o lgstr.o grphsubf.o $(MCHDEP) $(MCHCMD) $(CALPLTF) -o tshwmod96
+	mv tshwmod96 $(DEST)
+
+#####
+#	convert TI to best ISO
+#####
+
+ti2ismod:	ti2ismod.o tgetmod.o iputmod.o $(MCHDEP) lgstr.o $(MCHCMD)
+	$(FCMP) ti2ismod.o tgetmod.o iputmod.o $(MCHDEP) lgstr.o $(MCHCMD) -o ti2ismod
+	mv ti2ismod $(DEST)
+
+is2timod:	is2timod.o tgetmod.o tputmod.o $(MCHDEP) lgstr.o $(MCHCMD)
+	$(FCMP) is2timod.o tgetmod.o tputmod.o $(MCHDEP) lgstr.o $(MCHCMD) -o is2timod
+	mv is2timod $(DEST)
+
+#####
+#	focal mechanism programs
+#####
+
+fmplot:	fmplot.o mrs.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) fmplot.o mrs.o $(MCHDEP) $(MCHCMD) $(CALPLTF) -o fmplot
+	mv fmplot $(DEST)
+
+fmdfit: fmdfit.o lgstr.o grphsubf.o $(MCHDEP) $(MCHCMD) 
+	$(FCMP) fmdfit.o lgstr.o grphsubf.o $(MCHDEP) $(MCHCMD) $(CALPLTF) -o fmdfit
+	mv fmdfit $(DEST)
+
+fmmfit: fmmfit.o lgstr.o grphsubf.o $(MCHDEP) $(MCHCMD) 
+	$(FCMP) fmmfit.o lgstr.o grphsubf.o $(MCHDEP) $(MCHCMD) $(CALPLTF) -o fmmfit
+	mv fmmfit $(DEST)
+
+fmtp:	fmtp.o	$(MCHDEP) $(MCHCMD)
+	$(FCMP) fmtp.o  $(MCHDEP) $(MCHCMD)  -o fmtp
+	mv fmtp $(DEST)
+
+fmlpr:	fmlpr.o pradiation_lpr.o sdr_to_mij.o ndk.h msg.h
+	$(CCMP) fmlpr.o pradiation_lpr.o sdr_to_mij.o -lm -o fmlpr
+	mv fmlpr $(DEST)
+
+#####
+#	clean up
+#####
+
+clean:
+	rm -f $(MCHCMD) $(MCHDEP)
+	rm -f f96subf.f sacsubf.f 
+	rm -f lgstr.f
+	rm -f igetmod.f
+	rm -f iputmod.f
+	rm -f tgetmod.f
+	rm -f tputmod.f
+	rm -f mnmarg.f mgtarg.f mchdep.f
+	rm -f f2csub.f
+	rm -f grphsubf.f
+	rm -f *.o

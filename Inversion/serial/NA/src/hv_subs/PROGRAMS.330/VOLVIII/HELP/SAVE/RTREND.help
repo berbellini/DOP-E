@@ -1,0 +1,14 @@
+GSAC Command Reference Manual                                   RTREND
+
+SUMMARY:
+Remove linear trend from waveform
+
+RTRend  
+
+DESCRIPTION:
+      This fits a straight line through the data and removes the trend
+by a simple least squares algorithm. 
+
+SEE ALSO:
+RMEAN
+

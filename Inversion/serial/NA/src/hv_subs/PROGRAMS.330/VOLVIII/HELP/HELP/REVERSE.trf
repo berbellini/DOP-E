@@ -1,0 +1,23 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th REVERSE
+.S2 SUMMARY:
+Reverse Time Series
+
+REVERSE 
+[Suffix suffix]
+
+.S2 INPUT:
+.BR
+Suffix   : suffix for the files names. The default is .rev
+.S2 DESCRIPTION:
+This routine reverses the time sequence in place. The time header values with respect to timing are changed to reflect the absolute reversal in time:
+.sp
+.S2 "EXAMPLE
+.S2 "HEADER VALUES SET:"
+B,E, A, O, T0, T1, ..., T9, NZYEAR, NZJDAY, NZHOUR, MZMIN, NZMSEC
+.S2 "SEE ALSO":

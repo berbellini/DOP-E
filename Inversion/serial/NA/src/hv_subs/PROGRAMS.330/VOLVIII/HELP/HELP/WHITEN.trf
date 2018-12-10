@@ -1,0 +1,49 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th WHITEN
+.S2 SUMMARY:
+Whiten signal 
+
+WHITEN 
+[DEFAULT]
+[FREQlimits f1 f2 f3 f4]
+[Absolute]
+
+
+.S2 INPUT:
+DEFAULT  : initialize frequency limits
+.BR
+FREQlimits f1 f2 f3 f4  : Apply a cubic taper to the response such
+the response is 0 for f < f1 and for f > f4,
+the response is 1 for f > f2 and for f < f3,
+and tapers cubically from 0 to 1 for f1 < f < f2 and
+f4 > f > f3.  Note the only way to turn this off is to
+reset the limits as in FREQLIMITS \-2 \-1 1.0e5 1.0e6
+This may eliminate the need for a bandpass following the whitening.
+.BR
+Absolute : make spectrum absolute flat.
+
+.S2 DESCRIPTION:
+This routine determines a smooth amplitude spectrum of the signal,
+and then normalizes the signal by the spectrum. Because of the
+possibility of zeros in the amplitude spectrum, a water-level deconvolution is
+used. The purpose of this routine is to use it prior to bandpass and correlation.
+.sp
+If Absolute, the spectrum is not smoothed, which leads to a nominally flat amplitude spectrum with some character. Instead the signal has an absolutely flat
+amplitude spectrum.
+.S2 EXAMPLES:
+
+.S2 "HEADER VALUES SET:"
+USER1 = permin, USER2=permax, where
+permin=MAX[1.0/filt_f3,old permin] and
+permax=MIN[1./filt_f2,old permax]. This feature is used
+by sacmft96 and sacpom96
+.S2 "DEFAULT:"
+WHITEN FREQlimits \-2 \-1 1.0e5 1.0e6
+
+
+.S2 "SEE ALSO":

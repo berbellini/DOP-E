@@ -1,0 +1,35 @@
+GSAC Command Reference Manual                            BEGINGRAPHICS
+
+SUMMARY:
+Initialize the graphics device 
+
+BeginGraphics [options] 
+BeginDevices [options] 
+
+where options is one or more of the following:
+
+[X or W] [ PLT] 
+
+INPUT:
+       X or W     : Interactive windows display
+
+       PLT        : Calplot PLT file
+
+
+DESCRIPTION:
+     This initializes the graphics. For an interactive display under
+X11 or Windows, the graphics display is initialized at the time of the
+first plot command (Plot Plot1 PlotPK). 
+     Invocation of the PLT option causes the creation of a CALPLOT plot 
+file of the form Pxxxx.PLT, where the xxxx is a unique number incremented
+each time the BG PLT is invoked
+
+SAC COMPATIBILITY:
+     SUNWINDOWS SGF and Tektronix are not supported. A separate Pnnn.PLT
+CALPLOT binary file is created for each plot made. P0001.PLT is always the
+first plot file. To convert to PostScript use plotnps < Pxxxx.PLT ; 
+to convert to an EPS file, use 
+cat Pxxxx.PLT | reframe -Npage_number -O | plotnps -EPS -F7 -W10 > epsfile
+
+SEE ALSO:
+

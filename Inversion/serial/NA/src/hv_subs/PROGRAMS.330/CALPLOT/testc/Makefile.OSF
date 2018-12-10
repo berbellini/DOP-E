@@ -1,0 +1,138 @@
+
+#####
+#	DEC ALPHA 
+#####
+CCMP		= cc   -g
+#### 
+# this creates a PLOT file
+#CALPLOT	=../../lib/libcalpltc.a 
+#LDFLAGS	= -lm
+####
+# this creates tektronix output
+#CALPLOT	=../../lib/libcaltekc.a -lbsd
+#LDFLAGS	= -lm
+####
+# this creates interactive X11 output
+CALPLOT		=../../lib/libcalxvigc.a  ../../lib/calxvig.a
+LDFLAGS		=  -L/usr/X11R6/lib  -lX11 -lm
+#####
+
+
+###############################################################
+#	All this should not have to be changed
+###############################################################
+
+RM = rm -f
+
+
+.c.o:
+	$(CCMP) -c $<
+
+calplot.h:
+	cp ../include/calplot.h .
+
+all: button cdraw clip dtest gphtxt graysc gread \
+	grid grytst new nseitst plttst stars \
+	tabl testl testld \
+	tstcur wid width xor \
+	clean
+
+button:	button.o calplot.h
+	$(CCMP) button.o $(CALPLOT) $(LDFLAGS)
+	mv a.out button
+
+clip :	clip.o calplot.h
+	$(CCMP) clip.o $(CALPLOT) $(LDFLAGS)
+	mv a.out clip
+
+cdraw:	cdraw.o calplot.h
+	$(CCMP) cdraw.o $(CALPLOT) $(LDFLAGS)
+	mv a.out cdraw
+
+dtest: dtest.o calplot.h
+	$(CCMP) dtest.o $(CALPLOT) $(LDFLAGS)  
+	mv a.out  dtest
+	rm dtest.o
+
+gphtxt: gphtxt.o calplot.h
+	$(CCMP) gphtxt.o $(CALPLOT) $(LDFLAGS)  
+	mv a.out  gphtxt
+	rm gphtxt.o
+
+graysc: graysc.o calplot.h
+	$(CCMP) graysc.o $(CALPLOT) $(LDFLAGS)  
+	mv a.out  graysc
+	rm graysc.o
+
+grid:	grid.o calplot.h
+	$(CCMP) grid.o $(CALPLOT) $(LDFLAGS)
+	mv a.out grid
+
+grytst: grytst.o calplot.h
+	$(CCMP) grytst.o $(CALPLOT) $(LDFLAGS)  
+	mv a.out  grytst
+	rm grytst.o
+
+new:	new.o calplot.h
+	$(CCMP) new.o $(CALPLOT) $(LDFLAGS)
+	mv a.out new
+
+nseitst: nseitst.o calplot.h
+	$(CCMP) nseitst.o $(CALPLOT) $(LDFLAGS)  
+	mv a.out  nseitst
+	rm nseitst.o
+
+plttst: plttst.o calplot.h
+	$(CCMP) plttst.o $(CALPLOT) $(LDFLAGS)  
+	mv a.out  plttst
+	rm plttst.o
+	plttst
+	reframe -N1 -O < PLTTST.PLT > PLTTST.1
+	reframe -N2 -O < PLTTST.PLT > PLTTST.2
+
+stars:	stars.o calplot.h
+	$(CCMP) stars.o $(CALPLOT) $(LDFLAGS)
+	mv a.out stars
+
+gread:	gread.o calplot.h
+	$(CCMP) gread.o $(CALPLOT) $(LDFLAGS)
+	mv a.out gread
+
+tabl: tabl.o calplot.h
+	$(CCMP) tabl.o $(CALPLOT) $(LDFLAGS)  
+	mv a.out  tabl
+	rm tabl.o
+
+testl: testl.o calplot.h
+	$(CCMP) testl.o $(CALPLOT) $(LDFLAGS)  
+	mv a.out  testl
+	rm testl.o
+
+testld: testld.o calplot.h
+	$(CCMP) testld.o $(CALPLOT) $(LDFLAGS)  
+	mv a.out  testld
+	rm testld.o
+
+tstcur: tstcur.o calplot.h
+	$(CCMP) tstcur.o $(CALPLOT) $(LDFLAGS)  
+	mv a.out  tstcur
+	rm tstcur.o
+
+wid: wid.o calplot.h
+	$(CCMP) wid.o $(CALPLOT) $(LDFLAGS)  
+	mv a.out  wid
+	rm wid.o
+
+width: width.o calplot.h
+	$(CCMP) width.o $(CALPLOT) $(LDFLAGS)  
+	mv a.out  width
+	rm width.o
+
+xor:	xor.o calplot.h
+	$(CCMP) xor.o $(CALPLOT) $(LDFLAGS)
+	mv a.out xor
+
+clean:
+	rm -f *.o
+
+

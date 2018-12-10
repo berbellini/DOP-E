@@ -1,0 +1,16 @@
+
+To convert between a nad file and a formatted ascii rfi file (similar to
+that produced by the receiver function NA program)
+
+nad2rfi na.nad rfi_file
+
+where na.nad is the name of the input nad file and rfi_file is the
+formatted ascii file produced
+
+rfi2nad rfi_file na.nad
+
+where rfi_file is the formatted ascii file input and na.nad is the 
+nad file output.
+
+
+The source of these programs are examples of how to read and write nad files.

@@ -1,0 +1,7 @@
+Since you use "scale" for the overall plot scaling, perhaps you could add something like "gain-adjust exponent" where exponent is whatever they want to use. I presume that you can do hyphens unless you also do math and interpret it as a minus sign.
+
+        amp -> amp * (dist^exponent)
+
+GSAC> SCALE ABSOLUTE GAIN-ADJUST 0.5
+
+GAIN-ADJUST is vague enough that it could apply to any variable (such as gcarc). That's not perfect, but I'll email another if something comes to mind.

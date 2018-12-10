@@ -1,0 +1,16 @@
+GSAC Command Reference Manual                                    SORT
+
+SUMMARY:
+Sort all displays by the key 
+
+SORT [DIST|AZ|BAZ|A|DEFAULT|DEPMAX|DEPMIN] REVERSE [ON|OFF] 
+
+INPUT:
+
+DESCRIPTION:
+     This sorts the trace display according to the value of key.  
+Currently one can sort on distance, azimuth, A.
+
+SEE ALSO:
+       
+

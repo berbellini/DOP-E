@@ -1,0 +1,144 @@
+#####
+# Makefile for Volume V - Computer Programs in Seismology
+#
+# To move this to another machine, the following variables must be
+# defined:
+#
+#	#Machine Type  - Inform -fative Comment
+#	FCMP	- name of FORTRAN Compiler with appropriate flags
+#	CCMP	- name of C Compiler with appropriage flags
+#	MCHDEP	- Name of object file for machine dependent initialization
+#	MCHCMD	- Name of object file for getting number of command 
+#			line arguments
+#	CALFLAG - Name of CALPLOT graphics library or absolute path,
+#		e.g., CALFLAG=-lcalpltf if it in /lib /usr/.lib or
+#			/usr/local/lib
+#		or CALFLAG=../../lib/libcalpltf.a
+#	DEST	- Destination for the final execuable
+#####
+#	If one of the following models is appropriate, just uncomment
+#	it by removing the first # sign
+#
+#	Otherwise, use the existing machine models as guides
+#####
+
+
+#####
+#	LINUX Compilers
+#####
+FCMP=g77 -O3 
+#FCMP=g77 -pg
+CCMP=gcc -O3
+MCHDEP=mchdep.o 
+MCHCMD=mnmarg.o mgtarg.o
+CALFLAG=../../lib/libcalpltf.a
+GETMOD=igetmod.o
+
+
+
+DEST=../../bin
+
+.f.o:
+	$(FCMP) -c $<
+
+.c.o:
+	$(CCMP) -c $<
+
+f2csub.o:
+	cp ../../SUBS/f2csub.f .
+	$(FCMP) -c f2csub.f
+
+f96subf.o:
+	cp ../../SUBS/f96subf.f .
+	$(FCMP) -c f96subf.f
+
+igetmod.o:
+	cp ../../SUBS/igetmod.f .
+	$(FCMP) -c igetmod.f
+
+iputmod.o:
+	cp ../../SUBS/iputmod.f .
+	$(FCMP) -c iputmod.f
+
+mnmarg.o:
+	cp ../../SUBS/mnmarg.f .
+	$(FCMP) -c mnmarg.f
+
+mgtarg.o:
+	cp ../../SUBS/mgtarg.f .
+	$(FCMP) -c mgtarg.f
+
+mchdep.o:
+	cp ../../SUBS/mchdep.f .
+	$(FCMP) -c mchdep.f
+
+lgstr.o:
+	cp ../../SUBS/lgstr.f .
+	$(FCMP) -c lgstr.f
+
+sacsubf.o:
+	cp ../../SUBS/sacsubf.f .
+	$(FCMP) -c sacsubf.f
+
+tgetmod.o:
+	cp ../../SUBS/tgetmod.f .
+	$(FCMP) -c tgetmod.f
+
+all: hprep96 hspec96 hpulse96 hwhole96 hprep96p hspec96p hrftn96 \
+	tspec96 tspec96p trftn96  hudson96 clean
+
+hprep96:	hprep96.o tgetmod.o $(MCHDEP) lgstr.o $(MCHCMD)
+	$(FCMP) hprep96.o tgetmod.o $(MCHDEP) lgstr.o $(MCHCMD) -o hprep96.exe
+	mv hprep96.exe $(DEST)
+
+hspec96:	hspec96.o $(GETMOD) $(MCHDEP) lgstr.o $(MCHCMD)
+	$(FCMP) hspec96.o $(GETMOD) $(MCHDEP) lgstr.o $(MCHCMD) -o hspec96.exe
+	mv hspec96.exe $(DEST)
+
+hpulse96:	hpulse96.o f96subf.o $(MCHDEP) lgstr.o $(MCHCMD)
+	$(FCMP) hpulse96.o f96subf.o $(MCHDEP) lgstr.o $(MCHCMD) -o hpulse96.exe
+	mv hpulse96.exe $(DEST)
+
+hwhole96:	hwhole96.o $(GETMOD) $(MCHDEP) lgstr.o $(MCHCMD)
+	$(FCMP) hwhole96.o $(GETMOD) $(MCHDEP) lgstr.o $(MCHCMD) -o hwhole96.exe
+	mv hwhole96.exe $(DEST)
+
+hprep96p:	hprep96p.o tgetmod.o $(MCHDEP) lgstr.o $(MCHCMD)
+	$(FCMP) hprep96p.o tgetmod.o $(MCHDEP) lgstr.o $(MCHCMD) -o hprep96p.exe
+	mv hprep96p.exe $(DEST)
+
+hspec96p:	hspec96p.o $(GETMOD) $(MCHDEP) lgstr.o $(MCHCMD)
+	$(FCMP) hspec96p.o $(GETMOD) $(MCHDEP) lgstr.o $(MCHCMD) -o hspec96p.exe
+	mv hspec96p.exe $(DEST)
+
+hrftn96:	hrftn96.o $(GETMOD) sacsubf.o $(MCHDEP) lgstr.o $(MCHCMD)
+	$(FCMP) hrftn96.o sacsubf.o $(GETMOD) $(MCHDEP) lgstr.o $(MCHCMD) -o hrftn96.exe
+	mv hrftn96.exe $(DEST)
+
+hudson96: hudson96.o ${GETMOD} iputmod.o lgstr.o ${MCHCMD}
+	$(FCMP) hudson96.o ${GETMOD} iputmod.o lgstr.o ${MCHCMD} -o hudson96.exe
+	mv hudson96.exe $(DEST)
+
+#####
+#	TI Media
+#####
+
+tspec96:	tspec96.o tgetmod.o $(MCHDEP) lgstr.o $(MCHCMD)
+	$(FCMP) tspec96.o tgetmod.o $(MCHDEP) lgstr.o $(MCHCMD) -o tspec96.exe
+	mv tspec96.exe $(DEST)
+
+tspec96p:	tspec96p.o tgetmod.o $(MCHDEP) lgstr.o $(MCHCMD)
+	$(FCMP) tspec96p.o tgetmod.o $(MCHDEP) lgstr.o $(MCHCMD) -o tspec96p.exe
+	mv tspec96p.exe $(DEST)
+
+trftn96:        trftn96.o tgetmod.o sacsubf.o $(MCHDEP) lgstr.o $(MCHCMD)
+	$(FCMP) trftn96.o tgetmod.o sacsubf.o $(MCHDEP) lgstr.o $(MCHCMD) -o trftn96.exe
+	mv trftn96.exe $(DEST)
+
+
+clean:
+	rm -f f96subf.f 
+	rm -f lgstr.f mchdep.f mnmarg.f mgtarg.f f2csub.f igetmod.f
+	rm -f tgetmod.f 
+	rm -f sacsubf.f
+	rm -f *.o

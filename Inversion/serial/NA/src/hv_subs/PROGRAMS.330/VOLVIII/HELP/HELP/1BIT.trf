@@ -1,0 +1,26 @@
+
+.Th 1BIT
+.S2 SUMMARY:
+1BIT
+
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+This implements a 1-bit digitization according to the rule
+.br
+.ti +5n
+b(t) = +1 for s (t) >=0
+.br
+.ti +5n
+b(t) = -1 for s (t) < 0
+.sp
+The DEPMAX and DEPMIN are reset. Note for this to work one should perform a
+rmean prior to invocation.
+.S2 "References"
+Derode, A., A. Tourin and M. Fink (1999). Ultrasonic pulse compression
+with one-bit time reversal through multiple scattering, J. Appl. Phys. 85, No 9, 6343-6352.
+
+.S2 EXAMPLES:
+
+.S2 "SEE ALSO":

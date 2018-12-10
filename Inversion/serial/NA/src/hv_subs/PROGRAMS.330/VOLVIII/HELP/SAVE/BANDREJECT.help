@@ -1,0 +1,34 @@
+GSAC Command Reference Manual                              BANDREJECT
+
+SUMMARY:
+BandReject filter traces
+
+BandReject [options] 
+
+where options is one or more of the following:
+
+[Butter ] [ Corner fl  fh] [ NPoles npoles ] [ Passes npass] 
+
+INPUT:
+       Butter  : Butterworth filter
+
+       Corner  : Corner frequencies (R) range 0 - Nyquist
+
+       NPoles  : Number of poles  (I) range 1 - 10
+
+       Passes  : Number of passes (I) range 1 - 2
+
+DESCRIPTION:
+     Highpass filter using a BI-LINEAR Z-transformation implementation of
+a highpass filter. A bi-linear method is chosen since this is easily
+implemented algebraically. Passes = 1 gives a causal filter while 
+Passes = 2 gives a zero-phase filter with a 6db point at the corner 
+frequency.
+
+EXAMPLES:
+Bandreject with corner frequencies at 1 and 10 Hz, zero phase, 2-pole
+     BR C 1 10 P 2 NP 2
+
+SEE ALSO:
+	LOWPASS, HIGHPASS, BANDPASS
+

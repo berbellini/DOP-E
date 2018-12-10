@@ -1,0 +1,22 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    LOG
+.S2 SUMMARY:
+Take natural logarithm of trace
+
+.S2 LOG 
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+This takes the natural logarithm of a trace.
+However NOTHING will be done if the
+trace value is negative or zero. 
+
+.S2 "SEE ALSO":
+SQRT, SQR, EXP, ABS
+       
+

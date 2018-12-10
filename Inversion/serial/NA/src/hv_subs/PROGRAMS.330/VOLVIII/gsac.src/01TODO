@@ -1,0 +1,4 @@
+28 AUG 2007 - implemented prs scaleabsolute
+	fool proof this
+	carefully do the 2.0 as was done for the 0.0 and 1.0
+	carefully check the arguments

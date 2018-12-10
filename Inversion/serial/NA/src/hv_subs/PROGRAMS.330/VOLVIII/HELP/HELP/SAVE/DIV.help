@@ -1,0 +1,19 @@
+GSAC Command Reference Manual                                     DIV
+
+SUMMARY:
+Divide  all SAC data files in  memory by a constant.
+
+DIV [v], 
+
+INPUT:
+       [v] : constant which all  files are divided
+
+SAC COMPATIBILITY:
+       SAC permits an extended syntax that permits applying different constants
+       to respective files in memory. We have not implemented this complexity.
+DEFAULT
+       DIV 1
+
+SEE ALSO:
+	ADD, SUB, MUL
+

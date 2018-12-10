@@ -1,0 +1,36 @@
+.de BR
+.in 0
+.in +8n
+.ti -5n
+..
+
+
+.Th XGRID
+.S2 SUMMARY:
+Control x-axis grid
+
+XGRID [ ON | OFF ] [ Solid | Dotted ]  [ Color int_value ] [ Minor ON | OFF ]
+
+.S2 INPUT:
+ON         : turn grid on
+.BR
+OFF        : turn grid off
+.BR
+Solid      : Use solid line
+.BR
+Dashed     : Use dotted line
+.BR 
+Minor      : connect minor tics too if ON
+.BR
+Color int_value : Define the color for the grid. The figure frame will continue to be in black. Be careful to select a color not used for the trace.
+.S2 DESCRIPTION:
+This annotates the plots with a grid. Note that the Dotted option is takes more time to plot.
+
+.S2 EXAMPLES:
+.S2 DEFAULT
+	GRID OFF DOTTED COLOR 1030 MINOR OFF
+.BR
+[Note COLOR 1 is black, 2 red, 3 green, 4 blue, 1030 pale yellow ]
+
+.S2 "SEE ALSO":
+GRID, YGRID, COLOR

@@ -1,0 +1,23 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    YLOG
+.S2 SUMMARY:
+Logarithmic y-axis for plot, plotpk
+
+.S2 YLOG 
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+
+.S2 "DEFAULT:"
+Linear y-axis
+
+.S2 "SEE ALSO":
+XLIN, YLIN, XLOG, LINLIN
+
+       
+

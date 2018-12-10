@@ -1,0 +1,25 @@
+CCMP=gcc
+DEST=../../../bin
+
+.c.o:
+	$(CCMP) -c $<
+
+all: cltek tgotek trttek xgotek xrttek clean
+
+cltek: cltek.o
+	$(CCMP) cltek.o -o $(DEST)/cltek
+
+tgotek: tgotek.o
+	$(CCMP) tgotek.o -o $(DEST)/tgotek
+
+trttek: trttek.o
+	$(CCMP) trttek.o -o $(DEST)/trttek
+
+xgotek: xgotek.o
+	$(CCMP) xgotek.o -o $(DEST)/xgotek
+
+xrttek: xrttek.o
+	$(CCMP) xrttek.o -o $(DEST)/xrttek
+
+clean:
+	rm -f *.o

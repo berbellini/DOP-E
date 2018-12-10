@@ -1,0 +1,7 @@
+  6 0				   n layers, 0 = no scaling of variables
+  0.0     1.5    0  0.2 3.5     0  thickness and vs ranges for the 1st layer of ice
+  0.0     1.5    0  0.2 3.5     0  thickness and vs ranges for the 2nd layer of ice
+  0.0     0.5    0  0.0 2.0     0  thickness and vs ranges for the water layer
+  11.73  11.73   0  1.5 4.2     0  thickness and vs ranges for 1st layer of rock (thickness fixed to LITHO1.0 layers)
+  11.38  11.38   0  1.5 4.2     0  thickness and vs ranges for 2nd layer of rock (thickness fixed to LITHO1.0 layers)
+  11.39  11.39   0  1.5 4.2     0  thickness and vs ranges for 3rd layer of rock (thickness fixed to LITHO1.0 layers)

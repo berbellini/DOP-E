@@ -1,0 +1,113 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    HELP
+.S2 SUMMARY:
+.ta 9m 28m 
+List syntax for GSAC command
+
+Help [command]
+
+where command is one or more of the following:
+.TS
+l l l.
+ ABS		Get absolute value of trace
+ AGC		AGC traces
+ ADD		Add constant to each trace
+ ADDF		Add Files in memory
+ BACKGROUND		Set trace background color
+ BD 	BEGINDEVICES	Begin graphics 
+ BG	BEGINGRAPHICS	Begin graphics 
+ BOXCAR		Convolve with unit area boxcar
+ BP	BANDPASS	Bandpass filter 
+ BR	BANDREJ	Bandreject filter 
+ CD		change working directory
+ CH	CHNHDR	Change header 
+ COLOR		Control plotting colors
+ CON	CONVOLVE	Convolve traces
+ COR	CORRELATE	Correlate traces
+ CUT		Cut trace as it is read
+ CUTERR		Control CUT
+ DEC	DECIMATE	Decimate trace
+ DIF		Differentiate traces numerically
+ DIV		Divide each trace by constant
+ DIVF		Divide Files in memory
+ ECHO		Echo a line of text to the terminal
+ ENV	ENVELOPE	Get trace envelope 
+ EXP		Exponentiate traces
+ EXP10		Raise traces to power of 10 
+ FFT	DFT	Take Fourier Transform
+ FG	FUNCGEN	Generate an impulse function 
+ FILEID		Controls the plot legend
+ FILT	FILTER	Apply or remove instrument response 
+ GRID		Control plot grid for x- and y-axes
+ H	HELP	Print this help list 
+ HILBERT		Get Hilbert transform of a trace
+ HIS	HISTORY	Display readline command history
+ HOLD		Permit plot overlay in current frame
+ HP	HIGHPASS	Highpass filter 
+ INTERP	INTERPOLATE	Resample traces 
+ INT		Integrate traces
+ LH	LISTHDR	List header 
+ LINLIN		lin-lin plot for plot, plotpk
+ LINLOG		lin-log plot for plot, plotpk
+ LOG		Take natural logarithm of trace
+ LOG10		Take base 10 logarithm of trace
+ LP	LOWPASS	Lowpass filter 
+ MAP		Produce GMT map
+ MARKT	MARKTIMES	Marks velocity times in plot
+ MT	MOMENTTENSOR	Generate seismogram for moment tensor
+ MUL		Multiply each trace by constant
+ MULF		Multiply Files in memory
+ OUTCSV		Output timeseries as spreadsheet CSV
+ P1	PLOT1	Plot trace (all part of PLOT) 
+ P 	PLOT 	Plot trace 
+ P2 	PLOT2 	Plot trace 
+ PAUSE		Pause a specified number of seconds
+ PCTL		Control time-domain plots
+ PPK	PLOTPK	Interactive trace plot 
+ PSP	PLOTSP	Plot trace spectra 
+ PRS	PLOTRECORDSECTION	Plot record section 
+ QDP		Decimate factor for screen plot
+ Q	QUIT	Exit GSAC 
+ R	READ	Read SAC files 
+ REFR	REFRACTION	Enter Refraction Mode 
+ REV	REVERSE	Reverse Time Series
+ RH	READHDR	Read header
+ RMEAN		Remove mean
+ ROT	ROTATE	Rotate horizontal components 
+ ROT3	ROTATE3	Rotate three components to form R T Z
+ RTR	RTREND	Remove trend 
+ SGN		1BIT digitization
+ SHIFT	 	Shift trace in time
+ SM	SMOOTH	Apply a smoothing operator
+ SORT		Sort traces
+ SQR		Square traces
+ SQRT		Square root of  traces
+ STACK		Stack traces
+ SUB		Subtract constant from each trace
+ SUBF		Subtract Files in memory
+ SYNC	SYNCHRONIZE	Synchronize trace timing 
+ TAPER	 	Apply a symmetric taper to  traces
+ TITLE		Plot title
+ TRANS	TRANSFER	Apply or remove instrument response
+ TRAPEZOID		Convolve with unit area trapezoid
+ TRIANGLE		Convolve with unit area triangle
+ VERSION		Print version number
+ W	WRITE	Read SAC files 
+ WSP	WRITESPEC	Write spectra
+ WH	WRITEHDR	Write header
+ WHITEN		Whiten signal 
+ XGRID		Control x-axis grid
+ XLIM		Set time axis limits for trace plot
+ XLIN		Linear x-axis for plot, plotpk
+ XLOG		Logarithmic x-axis for plot, plotpk
+ YGRID		Control y-axis grid
+ YLIM		Set y\-axis scaling for plot1
+ YLIN		Linear y-axis for plot, plotpk
+ YLOG		Logarithmic y-axis for plot, plotpk
+.TE
+.BR
+

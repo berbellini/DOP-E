@@ -1,0 +1,22 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    HILBERT
+.S2 SUMMARY:
+Obtain the Hilbert transform of a trace
+
+HILBERT 
+
+.S2 DESCRIPTION:
+The Hilbert transform of each trace is obtained. This is implemented
+using Discrete Fourier Transforms. Since the Hilbert transform of an
+impulse is infinately long, there may be a wrap around problem, which can 
+be alleviated by using a longer tome series. By definition the Hilbert
+transform does not change the amplitude spectrum but does change the
+spectrum by pi/2 radians. A double invocation of Hilbert will yield an
+inverted version of the original trace.
+.S2 "SEE ALSO":
+       
+

@@ -1,0 +1,74 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    PLOTPK
+.S2 SUMMARY:
+Interactively work with traces 
+
+.S2 PlotPK  [options]
+.sp
+The options are
+.sp
+Perplot [n | off]  : Plot n traces per frame or plot all on one frame (off)
+.BR
+MARKALL            : Change headers for all traces within the plot frame. This is convenient for assigiing the same P\-pick time to all 3\-components recorded at a station
+.BR
+MARKALLOFF         : Turn off Markall \- this is because we do not require a MARKALL ON
+.BR
+Relative           : Plot traces accroding to time from the first sample
+.BR
+Absolute           : Plot all traces in absolute time
+.BR 
+REGional           : Put up a simple regional phase menu
+.BR 
+Teleseism          : Put up a simple teleseism phase menu
+.BR 
+Quality            : Put up a simple quality control  menu
+.BR 
+PQuality           : Put up a simple quality control  menu and repick P
+.BR 
+Default            : Do not put up a phase menu, turn off marking
+.S2 DESCRIPTION:
+The cursor responds to the following commands:
+.br
+.nf
+-	: compress time scale by factor of 2, recenter trace 
+_	: compress time scale by factor of 2, recenter trace
++	: expand time scale by factor of 2, recenter trace
+=	: expand time scale by factor of 2, recenter trace
+(space) : recenter trace
+*	: increase trace amplitude by factor of 2
+m	: increase trace amplitude by factor of 2
+/	: decrease trace amplitude by factor of 2
+A	: accept (put +1 in IHDR20 for trace)
+R	: reject (put  0 in IHDR20 for trace)
+B	: move to the previous page of traces
+F       : insert a FINI marker (end of useful signal)
+L	: give time and amplitude of point beneath cursor
+N	: move to next set of traces
+O 	: return to original trace scaling
+P	: mark P time
+S	: mark S time
+Q	: end interactive trace picking
+Tn	: set Tn header where n is a value from 0-9
+	  Note that S sets T0. (Just enter T and then an integer)
+X	: Define trace window by entering X two times
+.fi
+.BR
+If the REGIONAL or TELESEISM are flagged, a small phase menu appears:
+P S Pg Lg for regional phases and P S and PKP for teleseismic phases.
+To use these menus, choose the phase from the menu, then select the
+time value from the trace, and classify the quality of the arrival. If the P phase is selected, then the first motion polarity must be indicated.
+.BR
+The Quality menu permits the use of the 'a' and 'r' keys to mark a trace for further use. In addition, the default action of any mouse press is to indicate accept, unless the Reject Menu button is pressed. Normally IHDR20 is set to -12345. An accept sets this to +1 and a reject to -1. If a WriteHeader is executed, then the trace headers are set to the new values, and a shell script can then select traces for further processing. The purpose this command is to use gsac graphics
+to speedily judge trace quality for other processing.
+.BR 
+The Pquality menu works slightly differently from the Quality menu in that the objective is to select good traces and also to repick the P arrival. Just place the crosshair on the P arrival, click any mouse button and the P is repicked and  the trace is selected (IHDR20 is set ot 1) with one click.
+.S2 NOTE:
+On July 10, 2010 the interactive cursor will respond to the ~ (tilde) character by creating a screen dump with name DUMPxxx.PLT. This dump includes the menu and is introduced to assist documentation.
+
+.S2 "SEE ALSO":
+PLOT1
+

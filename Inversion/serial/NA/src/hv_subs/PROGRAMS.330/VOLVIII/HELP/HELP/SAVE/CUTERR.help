@@ -1,0 +1,38 @@
+GSAC Command Reference Manual                                    CUTERR
+
+SUMMARY:
+Rotates a pair of horizontal component traces through an angle
+
+ROTate [to GC] [TO ang]
+
+INPUT:
+     TO GC	Rotate to form radial and transverse components 
+               Rename KCMPNM to have  the replace the last character
+     TO ang    Rotate to form components on motion in the ANG and
+               and ANG+90 degrees. Rename the components
+
+DESCRIPTION:
+	Two horizontal components are rotated to form two new horizontal
+       components. For this to occur the components must have CMPINC=90
+       and the CMPAZ different, but not necessarily 90 degrees apart.
+
+	In distinction with SAC, the component names are changed and the
+       internal version of the files names are changed. Also if the start
+       and end times of rhte two traces are different, only the overlapping
+       time window is used.
+       Example:
+           GSAC> READ STA.N STA.E
+	    GSAC> ROT TO GC
+           GSAC> W
+       will write the files STA.R (with KCMPNM=BHR) and STA.T (with
+       KSTNM=BHT) if the original KSTNM values were BHN and BHE, 
+       respectively
+
+	Note the O, A and T0 header values are preserved from the first
+	waveform read into memory
+SAC COMPATIBILITY:
+       This automatic renaming of KCMNM and FILE NAME and cutting is
+       not in the original SAC
+SEE ALSO:
+       
+

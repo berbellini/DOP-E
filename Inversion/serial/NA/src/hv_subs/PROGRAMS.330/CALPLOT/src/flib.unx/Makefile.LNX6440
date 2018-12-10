@@ -1,0 +1,133 @@
+#####
+#	Makefile for CALPLOT/src/cmd
+#
+#	Uncomment the region for your machine
+#	Indicate the plot drivers to be compiled
+#
+#####
+
+#####
+#	LINUX RedHat 5.0 EGCS Compilers
+#####
+FCMP          = gfortran -frecord-marker=4 
+CCMP          = gcc 
+LINK          = gcc 
+RM            = rm -f 
+MV            = mv 
+FPLT          = clfplt.o
+CPLT          = dfsubs.o clcplt.o
+CTEK          = dfsubs.o clctek.o
+LDFLAGS       = 
+XVINC         =../XVIG/include
+LIBDIR        =../../../lib
+LIBORDRB     = 
+LIBORDEN     = 
+
+
+
+.f.o:
+	$(FCMP) -c $<
+
+.c.o:
+	$(CCMP) -c $<
+
+
+all: lcalpltf lcaltekf lcalxvigf install clean
+
+docp:
+	cd ../clib; cp clctek.c ../flib.unx ; cd ../flib.unx
+	cd ../clib; cp clcplt.c ../flib.unx ; cd ../flib.unx
+	cd ../clib; cp grd.c ../flib.unx ; cd ../flib.unx
+	cd ../clib; cp ponintr.c ../flib.unx ; cd ../flib.unx
+	cd ../flib; cp *.c ../flib.unx ; cd ../flib.unx
+	cd ../flib; cp *.f ../flib.unx ; cd ../flib.unx
+	cd ../cmd; cp $(TEKC) ../flib.unx ; cd ../flib.unx
+	cd ../cmd; cp $(DBC) ../flib.unx ; cd ../flib.unx
+	cd ../cmd; cp $(NPSC) ../flib.unx ; cd ../flib.unx
+	cd ../cmd; cp $(XVIGC) ../flib.unx ; cd ../flib.unx
+	cd ../cmd; cp *subs.c ../flib.unx ; cd ../flib.unx
+	cd ../include; cp *.h ../flib.unx ; cd ../flib.unx
+#	cd ../cmd; cp $(PCC) ../flib.unx ; cd ../flib.unx
+#	make -f Makefile all
+
+MAKEFILE = Makefile
+
+FOBJS = \
+	gunit.o gfont.o gwidth.o axis.o    \
+	cross.o factor.o frame.o  gptext.o line.o     \
+	newpen.o number.o  pend.o pinit.o  plots.o \
+	plot.o gmove.o gcont.o  scale.o  symbol.o where.o \
+	algaxe.o curuxy.o pltlog.o pltscl.o   \
+	plotd.o lined.o pltlgd.o shdsei.o shadep.o \
+	shader.o shadet.o dpsubs.o pinitf.o \
+	gclip.o ginfo.o gcursor.o gmesg.o gread.o grd.o gcontrol.o
+
+FSRC = \
+	gunit.f gfont.f gwidth.f axis.f    \
+	cross.f factor.f frame.f  gptext.f line.f     \
+	newpen.f number.f  pend.f pinit.f  plots.f \
+	plot.f  scale.f  symbol.f where.f \
+	algaxe.f curuxy.f pltlog.f pltscl.f   \
+	plotd.f lined.f pltlgd.f shdsei.f shadep.f \
+	shader.f shadet.f dpsubs.f pinitf.f \
+	gclip.f ginfo.f gcursor.f gmesg.f gread.f gcontrol.f
+
+PCOBJS = plotpc.o plotgen.o lineclip.o  \
+		symvec.o rline.o egaout.o herc.o 
+
+#PCC = plotpc.c plotgen.c lineclip.c  \
+#	symvec.c rline.c egaout.asm herc.asm
+
+TEKC = plot4014.c plotgen.c lineclip.c  zzpoint.c txtlbl.c \
+		symvec.c rline.c rlinevec.c
+
+DBOBJS = dbsubs.o
+
+DBC = dbsubs.c
+
+NPSOBJS = plotgen.o lineclip.o  zzpoint.o txtlbl.o symvec.o \
+	rline.o rlinevec.o plotnps.o
+
+4014OBJS = plotgen.o lineclip.o txtlbl.o  zzpoint.o  symvec.o \
+	rline.o rlinevec.o plot4014.o
+
+NPSC = plotgen.c lineclip.c  zzpoint.c txtlbl.c symvec.c \
+	rline.c rlinevec.c plotnps.c
+
+XVIGC = plotxvig.c            plotgen.c lineclip.c  \
+        symvec.c rline.c           rlinevec.c
+
+XVIGOBJS = plotxvig.o            plotgen.o lineclip.o  \
+        symvec.o rline.o           rlinevec.o
+
+
+clean:
+	@$(RM) *.o
+	@$(RM) *.c
+	@$(RM) *.f
+	@$(RM) *.h
+
+
+
+lcalpltf:	$(FOBJS) $(FPLT) $(CPLT) ponintr.o
+	ar cr libcalpltf.a $(LIBORDRB)  $(FOBJS) $(FPLT) $(CPLT)  ponintr.o $(LIBORDEN) 
+	ranlib libcalpltf.a
+
+lcaldbgf:	$(FOBJS) $(FPLT) $(CPLT) $(DBOBJS)
+	ar cr libcaldbgf.a $(LIBORDRB) $(FOBJS) $(FPLT) $(CPLT) $(DBOBJS) $(LIBORDEN)
+	ranlib libcaldbgf.a
+
+lcaltekf:	$(FOBJS) $(FPLT) $(CTEK) $(4014OBJS)
+	ar cr libcaltekf.a $(LIBORDRB) $(FOBJS) $(FPLT) $(CTEK) $(4014OBJS) $(LIBORDEN)
+	ranlib libcaltekf.a
+
+plotxvig.o:	plotxvig.c
+	$(CCMP) -c -I$(XVINC) plotxvig.c
+
+lcalxvigf:	$(FOBJS) $(FPLT) $(CTEK) $(XVIGOBJS)
+	ar cr libcalxvigf.a $(LIBORDRB) $(FOBJS) $(FPLT) $(CTEK) $(XVIGOBJS) $(LIBORDEN)
+	ranlib libcalxvigf.a
+
+install:
+	mv lib*.a $(LIBDIR)
+

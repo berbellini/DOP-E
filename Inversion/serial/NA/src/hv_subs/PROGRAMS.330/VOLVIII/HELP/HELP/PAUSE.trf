@@ -1,0 +1,28 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th PAUSE
+.S2 SUMMARY:
+Pause a specified number of seconds
+
+PAUSE Period delay
+
+.S2 INPUT:
+Period delay  : number of seconds to wait
+.S2 DESCRIPTION:
+Termination processing until the time delay is met. It was originally intended
+to await an ENGER/TRTURN but this would not work using stdio in shell scripts.
+On could of course open /dev/console in UNIX/LINUX but this may not be
+transportable.
+.sp
+The purpose of this routine lies in using a shell script to run gsac. The combination of an ECHO followed by a PAUSE permits text to be read before proceding with processing.
+.S2 "SAC COMPATIBILITY"
+SAC also permits a y/n response for continuation.
+
+.S2 EXAMPLES:
+
+.S2 "SEE ALSO":
+ECHO

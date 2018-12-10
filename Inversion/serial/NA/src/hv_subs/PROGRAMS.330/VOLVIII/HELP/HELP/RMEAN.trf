@@ -1,0 +1,17 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    RMEAN
+.S2 SUMMARY:
+Remove mean from waveform
+
+.S2 RMEAN  
+
+.S2 DESCRIPTION:
+This removes the trace mean from the trace.
+
+.S2 "SEE ALSO":
+RTREND
+

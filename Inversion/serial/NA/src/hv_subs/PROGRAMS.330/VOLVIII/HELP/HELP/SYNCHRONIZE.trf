@@ -1,0 +1,40 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                               SYNCHRONIZE
+.S2 SUMMARY:
+Synchronize reference times
+
+SYNChronize [ o | O ] [ a | A ]
+
+.S2 INPUT:
+o        : set the reference time as the origin time
+.BR
+a        : set the reference time as the P arrival time
+
+.S2 DESCRIPTION:
+The purpose of this command is to make the reference times the same
+for all traces in memory. It determines the earliest absolute starting time
+of all files, and sets the B time fo that file to 0.0. The B times of other
+files are then always >0 =. Although SAC used the latest start time, ours
+ensures that B is never set to the magic \-12345.
+.sp
+As a result of this operation, any marked times, e.g., B, E, O, A, Tn are
+result so that the absolute time of these markers are not changed.
+.sp
+A previous use for this was to ensure that MARKALL and ROTATE will work
+properly. GSAC works with absolute time.
+.sp
+The reason for the O ( oh - origin time ) option is to set the origin time
+as the reference time. This is useful when documenting events - just use saclhdr with the -KZDATE -KZTIME options.
+.sp
+The reason for the A option is to align waveforms on the P arrival in a two step process. First this option changes the reference times so that the A header value is zero. Then one can use a 
+.BR
+ch NZYEAR year NZJDAY jday NZHOUR hour NZMIN min NZSEC sec NZMSEC msec
+.BR
+to change the reference time. This is one way to overcome bad timing on the individual channels.
+.S2 "SEE ALSO":
+       
+
