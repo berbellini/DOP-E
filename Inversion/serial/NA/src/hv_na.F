@@ -215,7 +215,7 @@ c	out_folder = "../../"
 c	data_folder = "../data/"
 
 	call system("rm ../../full_list.txt")
-        call system("rm -r ../../Models/*")
+        call system("rm -r ../../models/*")
         call system("rm -r ../../out_models/*")
 	
 c^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
