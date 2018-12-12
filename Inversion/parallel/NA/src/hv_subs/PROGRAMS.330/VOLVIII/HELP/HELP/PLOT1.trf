@@ -1,0 +1,28 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    PLOT1
+.S2 SUMMARY:
+Plot traces
+
+Plot1  [options]
+.S2 INPUT: 
+Perplot [n | OFF] :Plot n traces per plot frame
+.BR
+Absolute          : Plot in absolute time
+.BR
+Relative          : Plot with all traces  starting at the first sample
+.BR
+Overlay [ ON | OFF ] : Overlay all traces in current frame 
+
+.S2 DESCRIPTION:
+When plotting the traces in more than one window, e.g., when using the perplot option, the prompt asks is 'More? y/n/b' - A return or 'y' moves to the next plot, an 'n' terminates the display, and the 'b' returns to the previous set of displayed traces. This was instroduced 02/27/2006 to facilitate the review of many traces.
+
+.S2 DEFAULT:
+PERPLOT OFF ABSOLUTE OVERLAY OFF
+
+.S2 "SEE ALSO":
+PLOTPK
+

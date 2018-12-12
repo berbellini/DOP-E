@@ -1,0 +1,36 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th DECIMATE
+.S2 SUMMARY:
+Decimate trace by an integer
+
+DECimate  [n]
+
+.S2 INPUT:
+[n]      : decimation factor - an integer
+
+.S2 DESCRIPTION:
+This routine decimates a trace by outputting the first and then every n points.
+The resultant time series changes length.
+.sp
+NOTE THE DECIMATION FACTOR IS NEVER REMEMBERED - THE DEFAULT IS ALWAYS 1
+.S2 "SAC COMPATIBILITY:"
+Sac limits the decimation interval to 2 <= n <= 7. This is because Sac permits an antialiasing filter option which meant that those filter coefficients must be built into the program.
+.sp
+In the GSAC implementation, I suggest a zero ppahse low pass filter
+at a frequency 0.5 the Nyquist frequency, or 0.25/DELTA, perhaps a
+.BR
+lp c corner_frequency n 4 p 2
+
+.S2 EXAMPLES:
+dec  2
+.S2 "HEADER VALUES SET:"
+NPTS, DELTA, B, E, DEPMIN, DEPMAX, DEPMEN
+
+.S2 "DEFAULT":
+decimate 1
+

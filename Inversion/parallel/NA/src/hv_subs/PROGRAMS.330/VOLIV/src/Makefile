@@ -1,0 +1,219 @@
+#####
+# Makefile for Volume V - Computer Programs in Seismology
+#
+# To move this to another machine, the following variables must be
+# defined:
+#
+#       #Machine Type  - Inform -fative Comment
+#       FCMP    - name of FORTRAN Compiler with appropriate flags
+#       CCMP    - name of C Compiler with appropriage flags
+#       MCHDEP  - Name of object file for machine dependent initialization
+#       MCHCMD  - Name of object file for getting number of command
+#                       line arguments
+#       CALPLTF - Name of CALPLOT graphics library or absolute path,
+#               e.g., CALPLTF=-lcalpltf if it in /lib /usr/.lib or
+#                       /usr/local/lib
+#               or CALPLTF=../../lib/libcalpltf.a
+#       DEST    - Destination for the final execuable
+#####
+#       If one of the following models is appropriate, just uncomment
+#       it by removing the first # sign
+#
+#       Otherwise, use the existing machine models as guides
+#####
+
+#####
+# LINUX gcc/gfortran -frecord-marker=4 Compilers
+#####
+FCMP=gfortran -O
+#FCMP=gfortran -pg
+CCMP=gcc -g
+MCHDEP=mchdep.o
+MCHCMD=mnmarg.o mgtarg.o ssytem.o
+CALPLTF=../../lib/libcalpltf.a
+RM= rm -f
+MV= mv
+
+DEST=../../bin
+
+  
+.c.o:
+	$(CCMP) $(CFLAG) -c $<
+
+.f.o:
+	$(FCMP) $(FFLAG) -c $<
+
+all:	alls allr allj clean
+
+mnmarg.o:
+	cp ../../SUBS/mnmarg.f .
+	$(FCMP) -c mnmarg.f
+
+mgtarg.o:
+	cp ../../SUBS/mgtarg.f .
+	$(FCMP) -c mgtarg.f
+
+mchdep.o:
+	cp ../../SUBS/mchdep.f .
+	$(FCMP) -c mchdep.f
+
+lgstr.o:
+	cp ../../SUBS/lgstr.f .
+	$(FCMP) -c lgstr.f
+
+igetmod.o:
+	cp ../../SUBS/igetmod.f .
+	$(FCMP) -c igetmod.f
+
+iputmod.o:
+	cp ../../SUBS/iputmod.f .
+	$(FCMP) -c iputmod.f
+
+sacsubf.o:
+	cp ../../SUBS/sacsubf.f .
+	$(FCMP) -c sacsubf.f
+
+grphsubf.o:
+	cp ../../SUBS/grphsubf.f .
+	$(FCMP) -c grphsubf.f
+
+
+#####
+#	receiver function inversion routines
+#####
+
+allr: rftn96  rftndr96  rftnpr96  rftnpv96  rftnvp 
+
+rftn96: rftn96.o modls.o jsamat.o jramat.o ramat.o igetmod.o iputmod.o shwrfw.o \
+		query.o rmenu.o lgstr.o shwctl.o shwwtv.o shwwtq.o $(MCHDEP) $(MCHCMD)  
+	$(FCMP) $(FFLAG) -o rftn96 rftn96.o  modls.o jsamat.o jramat.o \
+		query.o rmenu.o ramat.o shwrfw.o \
+		igetmod.o iputmod.o lgstr.o shwctl.o shwwtv.o shwwtq.o $(MCHDEP) $(MCHCMD) 
+	$(MV) rftn96 $(DEST)
+
+rftndr96: rftndr96.o lgstr.o sacsubf.o igetmod.o iputmod.o twofft.o \
+		$(MCHDEP) $(MCHCMD)
+	$(FCMP) $(FFLAG) -o rftndr96 rftndr96.o lgstr.o sacsubf.o \
+		igetmod.o iputmod.o twofft.o $(MCHDEP) $(MCHCMD)
+	$(MV) rftndr96 $(DEST)
+
+rftnpr96: rftnpr96.o lgstr.o sacsubf.o igetmod.o iputmod.o setmod.o $(MCHDEP)
+	$(FCMP) $(FFLAG) -o rftnpr96 rftnpr96.o lgstr.o sacsubf.o igetmod.o \
+	iputmod.o setmod.o $(MCHDEP)
+	$(MV) rftnpr96 $(DEST)
+	$(RM) rftnpr96.o
+	$(RM) rftnpr96.o
+
+rftnpv96:	rftnpv96.o igetmod.o grphsubf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) $(FFLAG) -o rftnpv96 rftnpv96.o igetmod.o grphsubf.o lgstr.o \
+		$(MCHDEP) $(MCHCMD) $(CALPLTF)
+	$(MV) rftnpv96 $(DEST)
+	$(RM) rftnpv96.o
+
+rftnvp: Makefile
+	cp rftnvp $(DEST)
+	touch Makefile
+
+srfker96:  srfker96.o
+	$(FCMP) srfker96.o -o srfker96
+	mv srfker96 $(DEST)
+
+#####
+#	surface wave inversion routines
+#####
+
+alls: surf96 srfdis96  srfdrl96 srfdrr96 srfinv96 srfpre96  \
+	srfgph srfphv96 srfphr96  \
+	srfrph srfvph srfker96
+
+surf96: surf96.o modls.o jsamat.o jramat.o samat.o igetmod.o iputmod.o shwrfw.o \
+		query.o smenu.o lgstr.o shwctl.o shwwtv.o shwwtq.o $(MCHDEP) $(MCHCMD)  
+	$(FCMP) $(FFLAG) -o surf96 surf96.o  modls.o jsamat.o jramat.o \
+		query.o smenu.o samat.o shwrfw.o \
+		igetmod.o iputmod.o lgstr.o shwctl.o shwwtv.o shwwtq.o $(MCHDEP) $(MCHCMD) 
+	$(MV) surf96 $(DEST)
+
+srfdis96:	srfdis96.o  $(MCHDEP) igetmod.o
+	$(FCMP) $(FFLAG) -o srfdis96 srfdis96.o   $(MCHDEP) igetmod.o
+	$(MV) srfdis96 $(DEST)
+	$(RM) srfdis96.o
+
+srfdrl96:	srfdrl96.o $(MCHDEP)
+	$(FCMP) $(FFLAG) -o srfdrl96 srfdrl96.o $(MCHDEP)
+	$(MV) srfdrl96 $(DEST)
+	$(RM) srfdrl96.o
+
+srfdrr96:	srfdrr96.o $(MCHDEP)
+	$(FCMP) $(FFLAG) -o srfdrr96 srfdrr96.o $(MCHDEP)
+	$(MV) srfdrr96 $(DEST)
+	$(RM) srfdrr96.o
+	
+srfinv96:	srfinv96.o $(MCHDEP)
+	$(FCMP) $(FFLAG) -o srfinv96 srfinv96.o $(MCHDEP)
+	$(MV) srfinv96 $(DEST)
+	$(RM) srfinv96.o
+
+
+srfphr96:	srfphr96.o grphsubf.o lgstr.o  $(MCHDEP)
+	$(FCMP) $(FFLAG) -o srfphr96 srfphr96.o grphsubf.o lgstr.o $(CALPLTF) $(MCHDEP)
+	$(MV) srfphr96 $(DEST)
+	$(RM) srfphr96.o
+
+srfphv96:	srfphv96.o igetmod.o grphsubf.o lgstr.o $(MCHDEP) $(MCHCMD) 
+	$(FCMP) $(FFLAG) -o srfphv96 srfphv96.o igetmod.o grphsubf.o  \
+		 lgstr.o $(MCHDEP) $(MCHCMD) $(CALPLTF)
+	$(MV) srfphv96 $(DEST)
+	$(RM) srfphv96.o
+
+srfpre96: srfpre96.o lgstr.o igetmod.o iputmod.o setdsp.o setmod.o $(MCHDEP)
+	$(FCMP) $(FFLAG) -o srfpre96 srfpre96.o lgstr.o \
+		igetmod.o iputmod.o setdsp.o setmod.o $(MCHDEP)
+	$(MV) srfpre96 $(DEST)
+	$(RM) srfpre96.o
+
+srfgph: Makefile
+	cp srfgph $(DEST)
+	touch Makefile
+
+srfrph: Makefile
+	cp srfrph $(DEST)
+	touch Makefile
+
+srfvph: Makefile
+	cp srfvph $(DEST)
+	touch Makefile
+
+#####
+#	surface wave inversion routines
+#####
+
+allj: joint96 jntpre96 
+
+joint96: joint96.o modls.o jsamat.o jramat.o jamat.o igetmod.o iputmod.o shwrfw.o \
+		query.o jmenu.o lgstr.o shwctl.o shwwtv.o shwwtq.o $(MCHDEP) $(MCHCMD)  
+	$(FCMP) $(FFLAG) -o joint96 joint96.o  modls.o jsamat.o jramat.o \
+		query.o jmenu.o jamat.o shwrfw.o \
+		igetmod.o iputmod.o lgstr.o shwctl.o shwwtv.o shwwtq.o $(MCHDEP) $(MCHCMD) 
+	$(MV) joint96 $(DEST)
+
+jntpre96: jntpre96.o sacsubf.o  lgstr.o igetmod.o iputmod.o setdsp.o setmod.o $(MCHDEP)
+	$(FCMP) $(FFLAG) -o jntpre96 jntpre96.o sacsubf.o  lgstr.o \
+		igetmod.o iputmod.o setdsp.o setmod.o $(MCHDEP)
+	$(MV) jntpre96 $(DEST)
+	$(RM) jntpre96.o
+
+#####
+#	clean up a work files
+#####
+
+clean:
+	$(RM) *.o
+	$(RM) grphsubf.f
+	$(RM) igetmod.f
+	$(RM) iputmod.f
+	$(RM) lgstr.f
+	$(RM) mnmarg.f
+	$(RM) mgtarg.f
+	$(RM) mchdep.f
+	$(RM) sacsubf.f
+

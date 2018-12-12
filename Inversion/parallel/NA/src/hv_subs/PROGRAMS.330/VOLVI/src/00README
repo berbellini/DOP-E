@@ -1,0 +1,9 @@
+13 SEP 2000 hwhole96 does not need pressure since for wholespace, fluid only
+has explosion and it is covered
+
+
+But hspec96p does not have at all?
+
+Also to speed things up if no pressure to be computed - do not integrate!
+
+

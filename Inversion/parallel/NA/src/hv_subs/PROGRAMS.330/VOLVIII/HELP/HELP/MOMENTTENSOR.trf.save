@@ -1,0 +1,62 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+
+.Th SHIFT
+.S2 SUMMARY:
+SUMMARY:
+Generate 3 component seismogram for moment tensor
+
+MomentTensor TO [ZRT|ZNE|Z|R|T] Mw mw Az az [Baz baz] STK stk DIP dip RAKE rake FILE fileproto
+
+.S2 INPUT:
+ZRT            : generate ZRT components named T.Z T.R T.T
+.BR
+   ZNE             :  generate  ZNE  components  named  T.Z  T.N   T.E
+.BR
+        (requires back azimuth)
+.BR
+   Z              : generate Z component named T.Z
+.BR
+   R              : generate R component named T.R
+.BR
+   T              : generate T component named T.T
+.BR
+   N               :  generate  N  component  named T.N (requires back
+        azimuth baz)
+.BR
+   E              : generate E  component  named  T.E  (requires  back
+        azimuth baz)
+.BR
+   Mw  mw           :  Moment  magnitude  (default 2.60 (for log Mo=20
+        )).This is converted to Moment using Mw = 2/3(log Mo  -  16.1)
+        Mo in dyne-cm
+.BR
+   Az az          : source to receiver azimuth. (default 0)
+.BR
+   Baz  baz         :  back  azimuth  (e.g.,  from receiver to source)
+        (default mod(az+180,360). Note for teleseisms use the true baz
+.BR
+   STK stk        : strike of double couple model
+.BR
+   DIP dip        : dip of double couple model
+.BR
+   RAKE rake      : rake off double couple model
+.BR
+   FILE fileproto : full path of Green's function prototype
+.S2 DESCRIPTION:
+
+     This program accesses the Green s functions and generates a three
+     component ground velocity  seismogram  in  units  off  m/s.   The
+     command         used         the         fileproto,         e.g.,
+     /home/rbh/PROGRAMS.310t/GREEN/nnCIA.REG/0005/011500005  and  adds
+     the  suffix  .ZDD  etc  to  find  the Greens functions, which are
+     combined to make a  three  component  seismogram  for  the  given
+     mechanism and moment
+
+.S2 EXAMPLES:
+
+.S2 SEE ALSO

@@ -1,0 +1,23 @@
+USER1 USER2 for permint permax set in trans whit filt
+                       if(sacdata[k].sachdr.rhdr[H_USER1] < permin)
+                                sacdata[k].sachdr.rhdr[H_USER1] = permin;
+                        if(sacdata[k].sachdr.rhdr[H_USER2] > permax)
+                                sacdata[k].sachdr.rhdr[H_USER2] = permax;
+
+put this into the write
+                                sacdata[k].sachdr.rhdr[H_USER1] = sacdata[k].sachdr.permin;
+                                sacdata[k].sachdr.rhdr[H_USER2] = sacdata[k].sachdr.permax;
+
+Note in tranfer with the permin permax preserve the previous bounds
+USER? header valeus
+
+USER0 - gaussian filter parameter for joint96, rftn96, 
+USER1 - minimum period of a filter (gsac)
+USER2 - maximum period of a filter (gac)
+USER4 - ray parameter for ooint96, rftn96
+USER5 - pltsac  wvfgrd96 wvfmt96 wvfmtd96 - percent fit
+        hrftn96 trftn96 percent fit
+USER6 -
+USER7 -
+USER8 -
+USER9 - pltsac wvfgrd96 wvfmt96 wvfmtd96  - time shift for waveform fit

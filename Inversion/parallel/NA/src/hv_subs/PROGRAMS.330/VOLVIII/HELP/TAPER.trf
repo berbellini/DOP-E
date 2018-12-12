@@ -1,0 +1,45 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th TAPER
+.S2 SUMMARY:
+ Apply a symmetric taper to ends of traces
+
+TAPER 
+[Cosine|HANning|HAMming]
+[WIDTH w]
+
+.S2 INPUT:
+Cosine   : apply a cosine taper to each end of the trace.
+.BR
+HANning  : apply a Hanning taper
+.BR
+HAMming  : apply a Hamming taper
+.BR
+WIDTH w  : Taper width of as a function of the entire trace. This is a value between 0.0 and 0.5. If the first and last 25% of the trace are to be tapered, w = 0.25. w = 0 implies no taper. If a value of w is > 0.5, 0.5 is used; if w < 0.0, 0.0 is used.
+
+.S2 DESCRIPTION:
+The taper function taper(x) varies from  [0,1] as t varies in the range
+[0,1]. The mathematical definitions of the function is:
+.BR
+taper(x) = A + B FUN (C x)
+.BR
+where
+.nf
+	Taper        A      B      FUN  C
+.br
+	COSINE      0.0    1.0     sin PI/2
+.br
+	HAMMING     0.54  -0.46    cos PI     [note taper(0) = 0.08 ]
+.br
+	HANNING     0.5   -0.5     cos PI
+.fi
+.S2 HEADER VALUES SET
+DEPMAX, DEPMIN, DEPMEN
+.S2 "DEFAULT:"
+TAPER HANNING W 0.05
+
+.S2 "SEE ALSO":

@@ -1,0 +1,38 @@
+GSAC Command Reference Manual                                    TRANSFER
+
+SUMMARY:
+Apply or remove an instrument response/filter from the data
+TRANSFER [FROM|TO] [POLEZERO pzfile] [FAPFILE fapfile] [EVAL afile pfile]
+         [FREQLIMITS f1 f2 f3 f4] 
+
+INPUT:
+       
+       
+       FREQLIMITS f1 f2 f3 f4 : apply a cubic taper to the response such 
+       	the response is 0 for f < f1 and for f > f4, 
+       	the response is 1 for f > f2 and for f < f3, 
+       	and tapers cubically from 0 to 1 for f1 < f < f2 and 
+               f4 > f > f3.  Note the only way to turn this off is to 
+               reset the limits as in FREQLIMITS -2 -1 1.0e5 1.0e6
+		FREQLIMITS is only used in the FROM process. 
+		This is essential for a clean deconvolution
+DESCRIPTION:
+
+SAC COMPATIBILITY:
+       This does not support the manybuilt in instrument responses of
+SAC. Instead the user must define the corresponding pole-zero or response
+file.
+	The EVAL option is different than SAC. Instead of working with a
+seed database, GSAC expects the user to have already run 'evalresp' 
+independently to create two files with names such as AMP.NM.SLM..BHZ,
+and PHASE.NM.SLM..BHZ
+	The FAP option is just prototyped at this time and not implemented
+       
+HEADER VALUES SET
+	USER1 = permin, USER2=permax, where 
+		permin=MAX[1.0/filt_f3,old permin] and
+		permax=MIN[1./filt_f2,old permax]. This feature is used
+		by sacmft96 and sacpom96
+SEE ALSO:
+       FILTER
+

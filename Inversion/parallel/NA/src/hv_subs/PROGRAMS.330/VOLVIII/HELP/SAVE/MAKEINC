@@ -1,0 +1,183 @@
+#/bin/sh
+
+rm -f gsac_help.h
+
+cat > j  << EOF
+HELP
+READ
+WRITE
+FILEID
+WHITEN
+HISTORY
+TAPER
+MARKTIMES
+REVERSE
+STACK
+SMOOTH
+XLIM
+ECHO
+PAUSE
+HOLD
+PCTL
+AGC
+YLIM
+MERGE
+LOWPASS
+HIGHPASS
+BANDPASS
+BANDREJECT
+LISTHEADER
+BEGINGRAPHICS
+RTREND
+RMEAN
+ADD
+SUB
+DIV
+MUL
+INT
+DIF
+FFT
+PLOT1
+PLOTPK
+PLOTSP
+CHNHDR
+SORT
+DELETE
+SYNCHRONIZE
+WRITEHEADER
+COLOR
+FUNCGEN
+CUTERR
+ROTATE
+ROTATE3
+CUT
+INTERPOLATE
+TRANSFER
+CD
+FILTER
+HILBERT
+ENVELOPE
+ABS
+SQR
+SQRT
+EXP 
+LOG
+EXP10
+LOG10
+YLIN
+YLOG
+LINLIN
+LINLOG
+QDP
+PRS
+CONVOLVE 
+CORRELATE
+SGN
+EOF
+
+for j in `cat j`
+do
+case $j in
+	HELP) TOP="char *help_default [] = {" ; BOT=HELP ;;
+	READ) TOP="char *help_read[] = {" ; BOT=READ ;;
+	WRITE) TOP="char *help_write[] = {" ; BOT=WRITE ;;
+	FILEID) TOP="char *help_fileid[] = {" ;BOT=FILEID ;;
+	WHITEN) TOP="char *help_whit[] = {" ;BOT=WHITEN ;;
+	HISTORY) TOP="char *help_hist[] = {" ;BOT=HISTORY ;;
+	TAPER) TOP="char *help_taper[] = {" ;BOT=TAPER ;;
+	MARKTIMES) TOP="char *help_markt[] = {" ;BOT=MARKTIMES ;;
+	REVERSE) TOP="char *help_rev[] = {" ;BOT=REVERSE ;;
+	STACK) TOP="char *help_stack[] = {" ;BOT=STACK ;;
+	CORRELATE) TOP="char *help_corr[] = {" ;BOT=CORRELATE ;;
+	CONVOLVE) TOP="char *help_conv[] = {" ;BOT=CONVOLVE ;;
+	SGN) TOP="char *help_sgn[] = {" ;BOT=SGN ;;
+	ROTATE3) TOP="char *help_rot3[] = {" ;BOT=ROTATE3 ;;
+	SMOOTH) TOP="char *help_smth[] = {" ;BOT=SMOOTH ;;
+	XLIM) TOP="char *help_xlim[] = {" ;BOT=XLIM ;;
+	ECHO) TOP="char *help_echo[] = {" ;BOT=ECHO ;;
+	PAUSE) TOP="char *help_pause[] = {" ;BOT=PAUSE ;;
+	HOLD) TOP="char *help_hold[] = {" ;BOT=HOLD ;;
+	PCTL) TOP="char *help_pctl[] = {" ;BOT=PCTL ;;
+	AGC) TOP="char *help_dagc[] = {" ;BOT=AGC ;;
+	YLIM) TOP="char *help_ylim[] = {" ; BOT=YLIM ;;
+	MERGE) TOP="char *help_merge[] = {" ; BOT=MERGE ;;
+	LOWPASS) TOP="char *help_lp[] = {" ; BOT=LOWPASS ;;
+	HIGHPASS) TOP="char *help_hp[] = {" ; BOT=HIGHPASS ;;
+	BANDPASS) TOP="char *help_bp[] = {" ; BOT=BANDPASS ;;
+	BANDREJECT) TOP="char *help_br[] = {" ; BOT=BANDREJECT ;;
+	LISTHEADER) TOP="char *help_lh[] = {" ; BOT=LISTHEADER ;;
+	BEGINGRAPHICS) TOP="char *help_bg[] = {" ; BOT=BEGINGRAPHICS ;;
+	RTREND) TOP="char *help_rtr[] = {" ; BOT=RTREND ;;
+	RMEAN) TOP="char *help_rmean[] = {" ; BOT=RMEAN ;;
+	ADD) TOP="char *help_add[] = {" ; BOT=ADD ;;
+	SUB) TOP="char *help_sub[] = {" ; BOT=SUB ;;
+	DIV) TOP="char *help_div[] = {" ; BOT=DIV ;;
+	MUL) TOP="char *help_mul[] = {" ; BOT=MUL ;;
+	INT) TOP="char *help_int[] = {" ; BOT=INT ;;
+	DIF) TOP="char *help_dif[] = {" ; BOT=DIF ;;
+	FFT) TOP="char *help_fft[] = {" ; BOT=FFT ;;
+	PLOT1) TOP="char *help_plot[] = {" ; BOT=PLOT1 ;;
+	PLOTPK) TOP="char *help_plotpk[] = {" ; BOT=PLOTPK ;;
+	PLOTSP) TOP="char *help_plotsp[] = {" ; BOT=PLOTSP ;;
+	CHNHDR) TOP="char *help_ch [] = {" ; BOT=CHNHDR ;;
+	SORT) TOP="char *help_sort [] = {" ; BOT=SORT ;;
+	DELETE) TOP="char *help_del [] = {" ; BOT=DELETE ;;
+	SYNCHRONIZE) TOP="char *help_sync [] = {" ; BOT=SYNCHRONIZE ;;
+	WRITEHEADER) TOP="char *help_wh [] = {" ; BOT=WRITEHEADER ;;
+	COLOR) TOP="char *help_color [] = {" ; BOT=COLOR ;;
+	FUNCGEN) TOP="char *help_fg [] = {" ; BOT=FUNCGEN ;;
+	CUTERR) TOP="char *help_cuterr [] = {" ; BOT=CUTERR ;;
+	ROTATE) TOP="char *help_rot [] = {" ; BOT=ROTATE ;;
+	CUT) TOP="char *help_cut [] = {" ; BOT=CUT ;;
+	INTERPOLATE) TOP="char *help_in [] = {" ; BOT=INTERPOLATE ;;
+	TRANSFER) TOP="char *help_trans [] = {" ; BOT=TRANSFER ;;
+	CD) TOP="char *help_cd [] = {" ; BOT=CD ;;
+	FILTER) TOP="char *help_filter [] = {" ; BOT=FILTER ;;
+	HILBERT) TOP="char *help_hilb [] = {" ; BOT=HILBERT ;;
+	ENVELOPE) TOP="char *help_env [] = {" ; BOT=ENVELOPE ;;
+	ABS) TOP="char *help_abs [] = {" ; BOT=ABS ;;
+	SQR) TOP="char *help_sqr [] = {" ; BOT=SQR ;;
+	SQRT) TOP="char *help_sqrt [] = {" ; BOT=SQRT ;;
+	EXP) TOP="char *help_exp [] = {" ; BOT=EXP ;;
+	EXP10) TOP="char *help_exp10 [] = {" ; BOT=EXP10 ;;
+	LOG) TOP="char *help_log [] = {" ; BOT=LOG ;;
+	QDP) TOP="char *help_qdp [] = {" ; BOT=QDP ;;
+	LOG10) TOP="char *help_log10 [] = {" ; BOT=LOG10 ;;
+	XLOG) TOP="char *help_xlog [] = {" ; BOT=XLOG ;;
+	XLIN) TOP="char *help_xlin [] = {" ; BOT=XLIN ;;
+	YLOG) TOP="char *help_ylog [] = {" ; BOT=YLOG ;;
+	YLIN) TOP="char *help_ylin [] = {" ; BOT=YLIN ;;
+	LINLIN) TOP="char *help_linlin [] = {" ; BOT=LINLIN ;;
+	LINLOG) TOP="char *help_linlog [] = {" ; BOT=LINLOG ;;
+	LOGLOG) TOP="char *help_loglog [] = {" ; BOT=LOGLOG ;;
+	LOGLIN) TOP="char *help_loglin [] = {" ; BOT=LOGLIN ;;
+	PRS) TOP="char *help_prs [] = {" ; BOT=PRS ;;
+esac
+groff -t -Tascii inc.tmac ${BOT}.trf > ${BOT}.help
+ed ${BOT}.help << EOF
+?[A-Za-z]?
+.p
+.+1,\$d
+w
+q
+EOF
+
+echo $TOP >> gsac_help.h
+rm -f lunk
+ed ${BOT}.help << EFO
+1,\$s/^/"/
+1,\$s/\$/\\\n",/p
+w lunk
+EFO
+cat lunk >> gsac_help.h
+echo -e \"\" >> gsac_help.h
+echo "};" >> gsac_help.h
+echo  >> gsac_help.h
+done
+
+#####
+#	clean up
+#####
+rm -f j
+rm -f lunk
+rm -f *.help

@@ -1,0 +1,9 @@
+#
+# Input file for receiver function inversion specific information
+#
+hv_param                                /* input model */
+hv_models                               /* output models */
+1                                       /* nwave */
+CCD_complete.ell                     /* observable */
+1.0                                     /* weight */
+CCD_crust_litho1.0.d                            /* reference model (to be used for deeper structures)*/ 

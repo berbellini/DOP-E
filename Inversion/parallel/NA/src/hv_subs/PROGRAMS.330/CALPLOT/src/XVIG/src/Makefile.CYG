@@ -1,0 +1,208 @@
+# File>>> Makefile.std
+#--
+#-- %M% -- version %I% (IMEC)		last updated: %E%
+#--
+#-- Copyright (c) 1993
+#-- IMEC vzw
+#-- Kapeldreef 75
+#-- B-3001 LEUVEN
+#-- BELGIUM
+#--
+#-- Author   : A. Demaree
+#--
+#-- Date     : February 1, 1993
+#--
+#-- Function : Makefile to create the program `calxvig' and the library `calxvig.a'.
+#--
+#-- Comment  :
+#--
+#-- Review   :
+#--
+
+#####
+# modified by RB Herrmann, 11 January 1998 
+# Just uncomment the closet machine type and OS version
+#####
+
+
+
+#-------------------------------------------------------------------------------
+# Include and library directories
+#-------------------------------------------------------------------------------
+
+IDIR          = ../include
+LIBDIR        = ../lib
+LIBS          =
+
+#-------------------------------------------------------------------------------
+# Commands and commands flags
+#-------------------------------------------------------------------------------
+
+# Adapt the following macro definitions to your configuration.
+
+
+#####
+# LINUX REDHAT 5.0 (TESTED 11 January 1998) EGCS Compilers
+#####
+CFLAGS        = -O -I$(IDIR) -I/usr/X11R6/include
+LDFLAGS       = -L/usr/X11R6/lib  -lX11 -lm
+CC            = gcc -O4
+LINKER        = gcc -O4
+RM            = /bin/rm
+AR            = /usr/bin/ar
+BINDIR	      = ../../../../bin
+RANLIB        = /usr/bin/ranlib
+LIBDIR        = ../../../../lib
+
+
+#####
+# For HP 700 Series (HP-UX 9.01)  ( NOT VERIFIED)
+#####
+
+#CFLAGS        = -Ae -O -I$(IDIR) -I/usr/include/X11R5
+#LDFLAGS       = -L/usr/lib/X11R5 -lX11 -lm
+#LINTFLAGS     = -Ae -u -I$(IDIR) -I/usr/include/X11R5
+#CC            = /bin/cc
+#LINKER        = /bin/cc
+#LINT          = /usr/bin/lint
+#RM            = /bin/rm
+#AR            = /bin/ar
+#RANLIB        = /bin/ranlib
+
+#####
+# For SUN/SPARC (SunOS 4.1.1)  ( NOT VERIFIED)
+#####
+
+#CFLAGS        = -O -I$(IDIR)
+#LDFLAGS       = -Bstatic -lX11 -lm
+#LINTFLAGS     = -u -I$(IDIR)
+#CC            = /usr/lang/acc
+#LINKER        = /usr/lang/acc
+#LINT          = /usr/lang/alint
+#RM            = /bin/rm
+#AR            = /bin/ar
+#RANLIB        = /usr/bin/ranlib
+
+#####
+# For DecStation 3000/5000 (Ultrix 4.2a)  ( NOT VERIFIED)
+#####
+
+#CFLAGS        = -O -I$(IDIR)
+#LDFLAGS       = -lX11 -lm
+#LINTFLAGS     = -u -I$(IDIR)
+#CC            = /usr/bin/c89
+#LINKER        = /usr/bin/c89
+#LINT          = /usr/bin/lint
+#RM            = /bin/rm
+#AR            = /bin/ar
+#RANLIB        = /usr/bin/ranlib
+
+#-------------------------------------------------------------------------------
+# Program, libraries, objects, sources and include files
+#-------------------------------------------------------------------------------
+
+PROGRAM       = $(BINDIR)/calxvig.exe
+
+OBJ           = xvig.o
+
+SRC           = xvig.c
+
+XVIG_LIB      = $(LIBDIR)/calxvig.a
+
+OBJS          = init.o \
+                rmdb.o \
+                color.o \
+                pattern.o \
+                window.o \
+                wlist.o \
+                cursor.o \
+                clist.o \
+                draw.o \
+                ptext.o \
+                ftext.o \
+                snskbd.o
+
+SRCS          = init.c \
+                rmdb.c \
+                color.c \
+                pattern.c \
+                window.c \
+                wlist.c \
+                cursor.c \
+                clist.c \
+                draw.c \
+                ptext.c \
+                ftext.c \
+                snskbd.c
+
+INCS          = $(IDIR)/xvig.h \
+                xviglocal.h \
+                commondata.h \
+                pattern.h \
+                charcodes.h
+
+ICON_BITMAP   = calxvig.xbm
+EMPTY_BITMAP  = empty.xbm
+
+#-------------------------------------------------------------------------------
+# Makefile targets
+#-------------------------------------------------------------------------------
+
+.c.o:
+	$(CC) $(CFLAGS) -c $<
+
+all:  $(PROGRAM) $(XVIG_LIB) clean
+
+srcs: $(SRC) $(SRCS)
+
+libs: $(XVIG_LIB)
+
+progs: $(PROGRAM) 
+
+lint:
+	$(LINT) $(LINTFLAGS) $(SRC)
+	$(LINT) $(LINTFLAGS) $(SRCS)
+
+clean:
+	$(RM) -f $(OBJ) $(OBJS)
+
+cleanall:
+	$(RM) -f $(OBJ) $(PROGRAM) $(OBJS) $(XVIG_LIB)
+
+#-------------------------------------------------------------------------------
+# Translation rules and dependancies
+#-------------------------------------------------------------------------------
+
+$(PROGRAM): $(OBJ)
+	$(LINKER) -o $@ $(OBJ) $(LDFLAGS)
+
+xvig.o: xvig.c commondata.h $(ICON_BITMAP) $(EMPTY_BITMAP)
+
+$(XVIG_LIB): $(OBJS)
+	$(AR) rv $@ $?
+	$(RANLIB) $@
+
+init.o: init.c $(IDIR)/xvig.h commondata.h xviglocal.h
+
+rmdb.o: rmdb.c $(IDIR)/xvig.h commondata.h xviglocal.h
+
+color.o: color.c $(IDIR)/xvig.h commondata.h xviglocal.h
+
+pattern.o: pattern.c $(IDIR)/xvig.h commondata.h xviglocal.h pattern.h
+
+window.o: window.c $(IDIR)/xvig.h commondata.h xviglocal.h
+
+wlist.o: wlist.c $(IDIR)/xvig.h commondata.h xviglocal.h
+
+cursor.o: cursor.c $(IDIR)/xvig.h commondata.h xviglocal.h
+
+clist.o: clist.c $(IDIR)/xvig.h commondata.h xviglocal.h
+
+draw.o: draw.c $(IDIR)/xvig.h commondata.h xviglocal.h
+
+ptext.o: ptext.c $(IDIR)/xvig.h commondata.h xviglocal.h charcodes.h
+
+ftext.o: ftext.c $(IDIR)/xvig.h commondata.h xviglocal.h
+
+snskbd.o: snskbd.c $(IDIR)/xvig.h commondata.h xviglocal.h
+

@@ -1,0 +1,115 @@
+#####
+#	Makefile for CALPLOT/src/cmd
+#
+#	Uncomment the region for your machine
+#	Indicate the plot drivers to be compiled
+#
+#####
+#	NOTE FOR PNG Graphics you miust define the locations of
+#	libz.a or libz.so and 
+#	libpng.a or libpng.so
+#####
+
+#####
+#####
+CCMP          = gcc -g
+LINK          = gcc 
+RM            = rm -f 
+MV            = mv 
+DEST          = ../../../bin
+LDFLAGS       = 
+LDFLAG        = -lm
+XDIR          = /usr/X11R6/lib
+XVINC         = ../XVIG/include
+XVLIB         = ../../../lib/calxvig.a
+LIBDIR        = ../../../lib
+XVIGLDR       = ../../../lib/calxvig.a -L/usr/X11R6/lib64  -lX11 -lm
+
+PNGINC = -I/usr/include/libpng
+PNGLIB = -L/usr/lib -lpng       # dynamically linked against libpng
+ZINC = -I/usr/include
+ZLIB = -L/usr/lib -lz           # dynamically linked against zlib
+INCS = $(PNGINC) $(ZINC)
+WLIBS = $(PNGLIB) $(ZLIB)
+
+
+
+ALL = plotdbg plotnps reframe plotgif plotxvig clean
+
+#####
+#	Do not change anything bellow here
+#####
+
+.c.o:
+	$(CCMP) -c $<
+
+docp:
+	cp ../cmd/*.c .
+	cp ../include/*.h .
+
+all: $(ALL)
+
+#####
+#	define the object dependencies
+#####
+
+DBGOBJS = plotdriv.o  dbsubs.o
+
+NPSOBJS = plotdriv.o plotgen.o lineclip.o  zzpoint.o txtlbl.o symvec.o \
+	rline.o rlinevec.o plotnps.o
+
+XVIGOBJS = plotdriv.o plotxvig.o            plotgen.o lineclip.o  \
+	symvec.o rline.o           rlinevec.o
+
+4014OBJS = plotdriv.o plotgen.o lineclip.o  zzpoint.o txtlbl.o symvec.o \
+	rline.o rlinevec.o plot4014.o
+
+GIFOBJS = plotdriv.o plotgen.o lineclip.o            txtlbl.o symvec.o \
+	rline.o plotgif.o
+
+PNGOBJS = plotdriv.o plotgen.o lineclip.o            txtlbl.o symvec.o \
+	rline.o plotpng.o writepng.o
+
+REFOBJS = reframe.o dpsubs.o
+
+# Make the executables #
+
+plotdbg:	$(DBGOBJS)
+	$(CCMP) $(DBGOBJS) -o plotdbg
+	$(MV) plotdbg $(DEST)
+
+plotnps:       $(NPSOBJS)
+	$(CCMP) $(NPSOBJS) $(LDFLAG) -o plotnps
+	$(MV) plotnps $(DEST)
+
+plot4014:       $(4014OBJS)
+	$(CCMP) $(4014OBJS)  $(LDFLAG)  -o plot4014
+	$(MV) plot4014 $(DEST)
+
+plotxvig.o:	plotxvig.c
+	$(CCMP) -c -I$(XVINC) plotxvig.c
+plotxvig:       $(XVIGOBJS)
+	$(CCMP) $(XVIGOBJS)  $(XVIGLDR) -o plotxvig
+	$(MV) plotxvig $(DEST)
+
+plotgif:       $(GIFOBJS)
+	$(CCMP) $(GIFOBJS) $(LDFLAG) -o plotgif
+	$(MV) plotgif $(DEST)
+
+writepng.o:	writepng.c
+	$(CCMP) -O -Wall $(INCS) -c writepng.c
+plotpng.o:	plotpng.c
+	$(CCMP) -O  $(INCS) -c plotpng.c
+plotpng:       $(PNGOBJS)
+	$(CCMP) $(PNGOBJS) $(LDFLAG) $(WLIBS) -o plotpng
+	$(MV) plotpng $(DEST)
+
+reframe:	$(REFOBJS)
+	$(CCMP) $(REFOBJS) -o reframe
+	mv reframe $(DEST)
+
+clean:
+	$(RM) *.o 
+	$(RM) *.c
+	$(RM) *.h
+

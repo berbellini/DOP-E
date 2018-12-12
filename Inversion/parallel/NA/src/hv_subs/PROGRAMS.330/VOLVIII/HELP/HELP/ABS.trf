@@ -1,0 +1,19 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    ABS
+.S2 SUMMARY:
+Take the absolute value of each data point
+
+ABS 
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+This determines the absolute value of each point of the trace.
+
+.S2 "SEE ALSO:"
+SQR, SQRT
+       
+

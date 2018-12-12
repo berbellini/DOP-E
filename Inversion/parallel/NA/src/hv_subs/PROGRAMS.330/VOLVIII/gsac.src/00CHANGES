@@ -1,0 +1,5 @@
+
+2004 AUG 13:  gsac_plotpk.c
+	Adjust the scaling within the trace display window
+	according to the trace within the window
+	

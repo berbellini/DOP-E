@@ -1,0 +1,18 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    SQRT
+.S2 SUMMARY:
+Take the square root of each data point in the trace.
+
+.S2 SQRT 
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+Take the square root of a trace. Note this fails if a trace value is < 0.0.
+.S2 "SEE ALSO":
+SQR, ABS
+

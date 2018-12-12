@@ -1,0 +1,81 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    ROTATE
+.S2 SUMMARY:
+Rotates horizontal components through and angle
+
+ROTate [ TO GC | TO angle ] [ Suffix suffix ]
+
+.S2 INPUT:
+TO GC           : Rotate to the great circle path. This requires that the
+BAZ and CMPAZ header variable be set. The KCMPNM headers
+are changed to replace the last character, usually N and E,
+to R and T. In addition the file name for default changes
+.BR
+TO angle        : Rotate to form the trace in the {angle} and {angle + 90}
+directions. this requires that the CMPAZ be set in the header
+The KCMPNM headers are changed as are the default write names.
+.BR
+Suffix suffix   : Append the suffix to the constructed file name.
+This is useful when the command is followed by WRITE without any arguments.
+.S2 DESCRIPTION: 
+In both uses of the command, the filename and KCMPNM are 
+converted to upper case. Note that a write will be in the 
+current directory rather in the directory of the original
+traces.
+.BR
+As an added feature, ROTATE is smart enough to handle traces
+that do not have equal lengths or absolute start time. The 
+will consist of the overlapped trace window. This means that
+it should be possible to ROTATE without having to SYNCHRONIZE
+and CUT
+.BR
+The following dialog illustrates the naming, Recall that the
+LISTHEADER gives the filename for the default write.
+.sp
+.nf
+.ba
+GSAC> r ../020618/BLOLHN.sac ../020618/BLOLHE.sac
+../020618/BLOLHN.sac ../020618/BLOLHE.sac
+GSAC> lh cmpaz cmpinc az baz
+../020618/BLOLHN.sac (0):
+           AZ             39.23643          BAZ             220.0237
+        CMPAZ                    0       CMPINC                   90
+../020618/BLOLHE.sac (1):
+           AZ             39.23643          BAZ             220.0237
+        CMPAZ                   90       CMPINC                   90
+GSAC> rotate to gc
+Rotating to great circle to form R and T
+GSAC> lh
+BLOLHR (0):
+           AZ             39.23643          BAZ             220.0237
+        CMPAZ             40.02368       CMPINC                   90
+BLOLHT (1):
+           AZ             39.23643          BAZ             220.0237
+        CMPAZ             130.0237       CMPINC                   90
+GSAC> rotate to 40
+Rotating to angle 40.000000 to form 040 and 130
+GSAC> lh
+BLOLH040 (0):
+           AZ             39.23643          BAZ             220.0237
+        CMPAZ                   40       CMPINC                   90
+BLOLH130 (1):
+           AZ             39.23643          BAZ             220.0237
+        CMPAZ                  130       CMPINC                   90
+.ad
+.fi
+.S2 "HEADER VALUES SET:"
+The CMPAZ is properly set to each rotated component. If the components are rotated to the great circle (GC), then CMPAZ for the resulting radial component
+is BAZ+180 and for the transverse component is BAZ + 270.
+.sp
+If the angle is given, then the positive motion will be in the direction of the
+angle given in the file name.
+.sp
+After the rotate command the order of traces in memory is radial and transverse, or AZ and AZ + 90.
+
+.S2 "SEE ALSO":
+       
+

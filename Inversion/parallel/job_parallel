@@ -1,0 +1,45 @@
+#!/bin/bash -l 
+#$ -S /bin/bash
+#$ -l h_rt=01:00:00
+#$ -N CCD
+#$ -pe mpi 20
+#$ -l mem=1G
+#$ -wd <path_to_working_directory>/DOP-E/Inversion/parallel
+
+module load python2/recommended      	# the cluster used here needed to load the python module.
+					#Remove this sentence if not necessary
+
+#----------------------------------------------
+# edit inversion name
+# (change it every time to avoid overwriting)
+#----------------------------------------------
+inversion_name="test_parallel"
+#----------------------------------------------
+observed_data="CCD_complete.ell"
+input_model="CCD_crust_litho1.0.d"
+#==============================================
+
+
+out_folder="results/"$inversion_name
+echo $out_folder
+mkdir $out_folder
+
+cd NA/src
+make clean
+make all
+cd ../data
+
+#---------------------------
+mpirun -np 20 ../bin/hv_na > output
+#---------------------------
+cd ../../
+mv full_list.txt 					$out_folder
+cp NA/data/hv_files/NA_MDL/hv_param 			$out_folder
+cp NA/data/hv_files/OBS/$observed_data 			$out_folder
+cp NA/data/hv_files/REF_MDL/$input_model 		$out_folder
+cp NA/data/na.in 					$out_folder
+cp NA/data/hv_files/hv.in 				$out_folder
+
+python plot_routines/plot_results.py $out_folder  $observed_data $input_model
+
+

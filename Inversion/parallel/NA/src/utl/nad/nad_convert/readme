@@ -1,0 +1,36 @@
+
+	Programs rfi2nad and nad2rfi convert to and from an ascii
+	file containing models output by the receiver function inversion
+	to a Neighbourhood Algorithm Direct access file (nad). This
+	direct access file is used as the default input format to
+	program NAB (Neighbourhood Algorithm Bayesian Inference)
+
+	Direct access files are faster to read and more compact.
+
+	Both programs act as examples of how to call the subroutines
+	read_nad and write_nad which read and write nad files. These
+	routines can be used to build other programs for converting
+	between nad and other ascii model file formats. 
+
+Compile with
+
+        make rfi2nad nad2rfi
+
+        executables are placed in Demo/bin directory
+
+
+To convert from and asci rfi file to a nad file 
+ 
+                         rfi2nad file.in file.out
+        where,
+             `file.in'  = input rfi file (e.g. `NAV22.mdl')
+             `file.out' = output direct access `*.nad' file (e.g. `NAV22.nad')
+
+
+To convert from a direct access nad file to an ascii rfi file 
+ 
+ 			 nad2rfi file.in file.out 
+ 
+ 	where 
+ 	     `file.in'  = input direct access `*.nad' file (e.g. `NAV22.nad')
+ 	     `file.out' = output ascii rfi file 

@@ -1,0 +1,31 @@
+GSAC Command Reference Manual                                    READ
+
+SUMMARY:
+Reads data from SAC data files on disk into memory.
+
+Read [options] [filelist], or
+
+where options is one or more of the following:
+
+MORE
+
+INPUT:
+       MORE  : Place the new files after the old ones. If this is
+               omitted, new data replaces the old ones.
+
+       [filelist] : name of SAC data files. The files in the list
+              are tested to determine if they are a binary file
+	      in either IEEE "Little Endian" (INTEL architecture)
+	      or "Big Endian" (SPARC, for example). Files are SAC
+	      files if the version number of the SAC file (NVHDR)
+	      is 6 AND at least ONE of the real header values is
+	      -12345.0 or integer header values is -12345
+
+SAC COMPATIBILITY:
+       The MORE option differs in that a subsequent READ will read
+       in all files. Each invocation of the READ MORE appends to 
+       list of SAC files in memory.
+
+SEE ALSO:
+	CUT
+

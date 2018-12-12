@@ -1,0 +1,38 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th PCTL
+.S2 SUMMARY:
+Control time-domain plots
+
+PCTL [options]
+
+.S2 INPUT:
+X0    x0       : X-position of lower left corner of plot
+.BR
+Y0    y0       : Y-position of lower left corner of plot
+.BR
+XLEn  xlen     : Length of x-axis
+.BR
+YLen  ylen     : Length of y-axis
+.BR
+XLAb  x-label  : Label for X-axis
+.BR
+YLAb  y-label  : Label for Y-axis
+.BR
+Grid [ ON|OFF] : Turn positioning grid on/off. This is for subplot alignment 
+.BR
+Default        : Reset to X0 1.5 Y0 1.0 XLEN 8.0 YLEN 6.0
+
+.S2 DESCRIPTION:
+This set controls for the current plot. When used with the HOLD command,
+multiple figures can be displayed on a frame,
+
+.S2 EXAMPLES:
+.S2 "Default:"
+X0 1.25 Y0 1.0 XLEN 8.0 YLEN 6.0 XLAB \\"Time (s)\\" YLAB \\"\\"
+
+.S2 "SEE ALSO":

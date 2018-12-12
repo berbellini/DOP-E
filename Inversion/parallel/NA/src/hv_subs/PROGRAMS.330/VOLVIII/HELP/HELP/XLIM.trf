@@ -1,0 +1,59 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th XLIM
+.S2 SUMMARY:
+Set time axis limits for trace plot
+
+XLIM [ON|OFF] [ ref offset | GMT beg | CAL beg ] [ ref offset | GMT end | CAL end ]
+
+
+.S2 INPUT:
+ON               : Turn on plot limits returning to previous value
+.BR
+OFF              : Turn off plot limits
+.BR
+ref              : A header reference value for the cut which is one of B|E|O|A|Tn where n=0,...,9
+.BR
+offset           : Number of seconds relative to the reference value.  refbeg offset refers to the start point refend offset refers to the  end  point
+.BR 
+CAL              : Calendar time in YEAR MONTH DAY HOUR MINUTE SECOND MILLISECOND
+.BR 
+GMT              : GMT time in YEAR DAYOFYEAR HOUR MINUTE SECOND MILLISECOND
+
+.S2 DESCRIPTION:
+This permits user modification of the trace display in PLOT1 and PLOTPK.
+One must be careful about the window because PLOT1 or PLOTPK can have either
+ABSOLUTE or RELATIVE plot modes. 
+.sp
+In the ABSOLUTE display mode, origin time is one marker that could be
+In the RELATIVE mode, trace alignment is permitted. For example, to look
+at all marked P-wave first arrivals in relative time, one may try a
+.nf
+	xlim A -10 A 10
+	plot1 RELATIVE
+.fi
+Note that if the ABSOLUTE plot mode had been used, then the display would
+have the P arrivals in absolute time and they would not be aligned.
+.sp
+Note that some combinations, such as xlim A -10 T0 +20, will not have the desired outcome with traces at different distances since the windows are different for each distance. The program will use the common window.
+.BR
+The option for CAL or GMT timesd was introduced 11 JAN 2005 to permit selection
+of time windows from very long time segments. The following are equivalent:
+.BR
+   XLIM GMT 2005 001 01 02 03 456 GMT 2005 032 06 05 04 321
+.BR
+   XLIM GMT 2005 001 01 02 03 456 CAL 2005 02 01 06 05 04 321
+.BR
+   XLIM CAL 2005 01 01 01 02 03 456 GMT 2005 032 06 05 04 321
+.BR
+   XLIM CAL 2005 01 01 02 03 456 CAL 2005 02 01 06 05 04 321
+.BR
+which cuts from January 1, 2005 01:02:03.456 to February 1, 2006 06:05:04.321
+.S2 "SAC COMPATIBILITY:"
+.S2 "SEE ALSO":
+CUT, PLOT1, PLOTPK
+

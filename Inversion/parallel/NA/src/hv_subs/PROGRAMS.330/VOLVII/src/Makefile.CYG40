@@ -1,0 +1,107 @@
+
+
+
+FCMP=gfortran -frecord-marker=4
+CCMP=gcc
+
+.f.o:
+	$(FCMP) -c $<
+
+.c.o:
+	$(CCMP) -c $<
+
+
+MCHDEP=mchdep.o 
+MCHCMD=mnmarg.o mgtarg.o
+CALFLAG=../../lib/libcalpltf.a
+GETMOD=igetmod.o
+GSUBSF=grphsubf.o
+GSUBS=lgstr.o mnmarg.o mgtarg.o sacsubf.o mchdep.o
+
+REC=mrs.o
+MTD=mtd.o
+
+
+DEST=../../bin
+
+
+sacsubf.o:
+	cp ../../SUBS/sacsubf.f .
+	$(FCMP) -c sacsubf.f
+
+sacsubc.o: sacsubc.h
+	cp ../../SUBS/sacsubc.c .
+	$(CCMP) -c -I../../SUBS sacsubc.c
+
+sacsubc.h: 
+	cp ../../SUBS/sacsubc.h
+
+grphsubf.o:	
+	cp ../../SUBS/grphsubf.f .
+	$(FCMP) -c grphsubf.f
+
+mnmarg.o:
+	cp ../../SUBS/mnmarg.f .
+	$(FCMP) -c mnmarg.f
+
+mgtarg.o:
+	cp ../../SUBS/mgtarg.f .
+	$(FCMP) -c mgtarg.f
+
+mchdep.o:
+	cp ../../SUBS/mchdep.f .
+	$(FCMP) -c mchdep.f
+
+lgstr.o:
+	cp ../../SUBS/lgstr.f .
+	$(FCMP) -c lgstr.f
+
+
+all:	wvfgrd96 wvfmtd96 wvfmt96 wvfmch96 wvfdly96 clean
+
+
+wvfgrd96:	wvfgrd96.o mtsubs.o sacsubf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) wvfgrd96.o mtsubs.o sacsubf.o lgstr.o $(MCHDEP) $(MCHCMD) -o wvfgrd96.exe
+	mv wvfgrd96.exe  $(DEST)
+
+wvfmch96:	wvfmch96.o mtsubs.o $(REC) $(MTD) sacsubf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) wvfmch96.o mtsubs.o $(REC) $(MTD) sacsubf.o lgstr.o $(MCHDEP) $(MCHCMD) -o wvfmch96.exe
+	mv wvfmch96.exe  $(DEST)
+
+wvfmtd96:	wvfmtd96.o mtsubs.o $(REC)  $(MTD)  lp_bchart.o sacsubf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) wvfmtd96.o mtsubs.o $(REC)  $(MTD)  lp_bchart.o sacsubf.o lgstr.o $(MCHDEP) $(MCHCMD) -o wvfmtd96.exe
+	mv wvfmtd96.exe  $(DEST)
+
+wvfmt96:	wvfmt96.o mtsubs.o $(REC)  $(MTD)  lp_bchart.o sacsubf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) wvfmt96.o mtsubs.o $(REC)  $(MTD)  lp_bchart.o sacsubf.o lgstr.o $(MCHDEP) $(MCHCMD) -o wvfmt96.exe
+	mv wvfmt96.exe  $(DEST)
+
+wvfdly96:	wvfdly96.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) wvfdly96.o $(MCHDEP) $(MCHCMD) -o wvfdly96
+	mv wvfdly96 $(DEST)
+
+#
+# Numerical Recipes inversion routines
+#
+svdcmp.o: svdcmp.f
+svbksb.o: svbksb.f
+svdvar.o: svdvar.f
+mrs.o: mrs.f
+#
+#
+lp_bchart.o: lp_bchart.f
+
+
+
+
+
+clean:
+	rm -f *.o
+	rm -f sacsubf.f
+	rm -f sacsubc.c
+	rm -fr sacsubc.h
+	rm -f grphsubf.f
+	rm -f mnmarg.f
+	rm -f mgtarg.f
+	rm -f mchdep.f
+	rm -f lgstr.f

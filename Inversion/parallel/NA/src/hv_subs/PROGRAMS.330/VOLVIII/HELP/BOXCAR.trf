@@ -1,0 +1,28 @@
+.de BR
+.in 0
+.in +8n
+.ti -5n
+..
+
+
+.Th BOXCAR
+.S2 SUMMARY:
+Convolve with unit area boxcar
+
+BOXCAR Width width
+
+.S2 INPUT:
+Width width : the length of the boxcar function rounded to the next sample interval.
+.S2 DESCRIPTION:
+his routine convolves all traces in memory with a unit area isoceles trianglar
+pulse.  This command is equivalent to
+.sp
+        TRAPEZOID WIDTH 0.0 width 0.0
+.sp
+This acts as a lowpass filter.
+.sp
+If Width < DELTA, nothing is done.
+.S2 EXAMPLES:
+
+.S2 "SEE ALSO":
+TRAPEZOID, TRIANGLE, RICKER

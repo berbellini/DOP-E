@@ -1,0 +1,61 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th MAP
+.S2 SUMMARY:
+Produce GMT map
+
+MAP  [options]
+
+where options may include 
+
+[ North maxlat South minlat East maxlon West minlon ] [Topography ON | OFF]
+[ STation ON | OFF ]
+[ EPicenter ON | OFF ] [ Global ON | OFF ] [Raypath ON | OFF ] [ KStnm ON | OFF ]
+[Default]
+
+.S2 INPUT:
+North maxlat : maximum latitude
+.BR
+South minlat : minimum latitude
+.BR
+East  maxlon : maximum longitude
+.BR
+West  minlon : minimum longitude
+.BR
+STation      : Do or do not plot station locations
+.BR
+EPicenter    : Do or do not plot epicenter locations
+.BR
+Global       : If ON, use a global linear projection from LATLON=-157/203/-80/80
+.BR
+Raypath      : IF ON draw great circle path between epicenter and station
+.BR
+KStnm        : IF ON draw station names
+.BR
+Default      : returns to default parameters
+.BR
+Topography   : if ON plots from global topography data base, otherwise just goasl is plotted.
+
+.S2 DESCRIPTION:
+This routine examines the sac headers and plots station locations as a filled sircle and the event locations as a star.
+.sp
+By default the SAC file headers are used to define the latitude and longitude limits.
+.sp
+If the latitude and longitude limits are not specified, the plot is based on the event and station latitude and longitudes.
+.sp
+Unless the GLOBAL is ON, a Mercator projection is used and the map LATLON variable in script never includes the poles.
+.sp
+The output of this routine is a shell script of GMT commands. To create the map.eps, you must enter the command: sh map.sh. The map.sh is annotated, so that you can easily change projections, symbol sizes and colors, raster databases with
+very little editing and some knowledge of GMT. The shell script also includes a topographic resampling so permit leass grainy plots for small regions as well as a crude image for global maps. The size of the image if kept small and should look good when converted to a PNG, GIF or JPG file.
+.sp
+The encapsulated PostScript file is called map.eps. This can be included in groff, LaTeX dociments, or converted to PNG, GIF, JPG etc using ImageMagick dispay or convert for including in Word documents or PowerPoint presentations.
+.S2 EXAMPLES:
+
+.S2 "DEFAULT:"
+map  topography off station on epicenter on global off raypath off kstnm off
+
+.S2 "SEE ALSO":

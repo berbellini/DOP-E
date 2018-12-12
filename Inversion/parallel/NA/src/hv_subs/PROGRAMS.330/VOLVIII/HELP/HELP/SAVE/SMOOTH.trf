@@ -1,0 +1,28 @@
+
+.Th SMOOTH
+.S3 SUMMARY:
+Apply a smoothing operator
+
+SMOOTH [MEAn|MEDian] [Halfwidth n ] [Pass p] [Default}
+
+.S2 INPUT:
+MEAN (default):	Apply an averaging operator
+.br
+MEDIAN:	Apply a median filter
+.br
+Halfwidth n:	Smoothing operator consists of 2n+1 points (default 1)
+.br
+Pass p:	Apply the operator p times
+.br
+Default:	Reset to MEAN Halfwidth 1 Pass 1
+
+
+.S2 DESCRIPTION:
+
+.S3 "SAC COMPATIBILITY:"
+The Pass option is new.
+.S2 "DEFAULT:"
+SMOOTH MEAN HALFWIDTH 1 PASS 1
+
+.S2 "SEE ALSO":
+ABS, ENV

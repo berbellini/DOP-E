@@ -1,0 +1,50 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th WRITESPEC
+.S2 SUMMARY:
+Write spectra
+
+WriteSPec  [options]
+
+where options are [AM ] [Append text ] [ Prepend text ]
+
+.S2 INPUT:
+AMplitude  : output the amplitude spectrum
+.BR
+Append   : Append the text to the beginning of all file names. However the leading directory information will be stripped and the file written in the current working directory.
+.BR
+Prepend  : Add the text to the end of all file names. However the leading directory information will be stripped and the file written in the current working directory.
+
+.S2 DESCRIPTION:
+If the traces have had the command FFT applied, the amplitude spectrum can be written as a trace file 
+with this command. The filename of the outfile will be the same as the trace file with an '.am' appended.
+.sp
+To distinguish this file from a time series, the following header values are set in the '.am' file:
+LEVEN = true, IFTYPE = IXY, B = 0, NPTS = N/2 + 1 where N is the power of two used in the FFT,
+DELTA = DF where DF = 1/N*DELTA is the frequency sampling. Only the positive frequencies are output. 
+The station and component names are preserved.
+
+All time markers are reset to an uninitialized value of -12345. The reference time and date are preserved.
+.S2 "SAC COMPATIBILITY:"
+
+DESCRIPTION:
+.BR
+sac2000 ( [8/8/2001 (Version 00.59.44)] ) does not have the APPEND and PREPEND options for the spectra.
+.BR
+As of August 15, 2007 the APPEND and PREPEND options will write the files in the current directory only.
+
+
+.S2 EXAMPLES:
+.S2 "HEADER VALUES SET:"
+IFTYPE is set to IXY  which means that this is a general xy plot - we use this since sac2000 does not define a frequency series. The IXY flag checked by the PLOT command to set the horizontal axis as frequency
+.BR
+LEVEN = true
+
+.S2 "DEFAULT"
+WRITESPEC AM
+
+.S2 "SEE ALSO":

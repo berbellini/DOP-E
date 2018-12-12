@@ -1,0 +1,44 @@
+GSAC Command Reference Manual                                    HELP
+
+SUMMARY:
+List syntax for GSAC command
+
+Help [command]
+
+where command is one or more of the following:
+     READ - Read SAC files
+     WRITE - Read SAC files
+     LP   - Lowpass filter
+     HP   - Highpass filter
+     BP   - Bandpass filter
+     BR   - Bandreject filter
+     LH   - List header
+     CH   - Change header
+     WH   - Write header
+     BG   - Begin graphics
+     PLOT - Plot trace
+     PLOTPK - Interactive trace plot
+     PLOTSP - Plot trace spectra
+     FFT   - Take Fourier Transform
+     RTR  - Remove trend
+     RMEAN- remove mean
+     ADD  - add constant
+     SUB  - subtract constant
+     DIV  - divide by constant
+     MUL  - multiply by constant
+     DIF  - Differentiate traces 
+     INT  - Integrate traces 
+     SORT - Sort traces
+     INTERPOLATE - resample traces
+     SYNCHRONIZE - Synchronize trace timing
+     COLOR - Control plotting colors
+     FG    - Generate an impulse function 
+     CD    - change working directory 
+     CUT - Cut trace as it is read
+     CUTERR - Control CUT
+     ROTATE - Rotate horizontal components - for radial transverse
+     TRANSFER - Apply&remove instrument response
+     FILTER - Apply or remove instrument response
+     HILBERT - Get Hilbert transform of a trace 
+     Default help message
+

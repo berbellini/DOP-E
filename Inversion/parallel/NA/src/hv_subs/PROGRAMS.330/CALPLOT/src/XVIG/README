@@ -1,0 +1,23 @@
+The CALPLOT graphics for X11 is based on a modification of
+XviG. The original XviG distribution is in ../../../XVIG.
+
+This is a very useful package that was upgraded and modified 
+to be compatible with CALPLOT graphics. 
+
+Essential changes were:
+
+1. To permit arrow, XOR line , XOR cross, and XOR line for cursor
+2. To use the 35 color CALPLOT color map, and to use dithering if
+the 35 colors are not available, e.g., Netscape grabs a lot
+at times.
+
+Robert B. Herrmann
+Department of Earth and Atmospheric Sciences
+Saint Louis University
+3507 Laclede Avenue
+St. Louis, MO 63103
+USA
+
+Email: rbh@eas.slu.edu
+
+11 January 1998

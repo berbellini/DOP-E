@@ -1,0 +1,26 @@
+
+fg comb
+a little strange when do a 
+
+fg delta 0.25 npts 4096 comb 10 0.5 - do look give a little larger at end
+else would get trapezoid/boxcar
+
+Also do normailization by a straight sum afterwords
+
+------------------
+19 MAR 2006
+
+When I do an ISYNC to O I should set the enumerated header value IZTYPE as IO instead of IB or IUNKN
+
+-----
+19 MAR 2006
+
+
+since spectra series are introduced perhaps now introduce xlog
+
+Thoughts in the IXY for the spectra -
+	look carefully at the use of absolute relative for the the
+	ixy filed type - relative has no use whatsoever
+
+	look carefully at the ppk l option - basically little of the time picking should be permitted
+

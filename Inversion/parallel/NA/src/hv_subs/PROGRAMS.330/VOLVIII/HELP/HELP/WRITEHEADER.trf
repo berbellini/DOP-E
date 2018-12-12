@@ -1,0 +1,21 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                               WRITEHEADER
+.S2 SUMMARY:
+
+WriteHeader 
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+This overwrites the header information of the corresponding trace
+files in memory. The trace information is not overwritten.  This is useful
+if one wishes to filter traces prior to picking arrival times, but only
+want to save the arrival times and not the filtered traces.
+
+.S2 "SEE ALSO":
+       
+

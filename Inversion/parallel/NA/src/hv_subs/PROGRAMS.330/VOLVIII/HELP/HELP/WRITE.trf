@@ -1,0 +1,39 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                   WRITE
+.S2 SUMMARY:
+Writes  trace files in memory to disk.
+
+Write [options] [filelist], where
+
+where options is one or more of the following:
+
+[APPEND text ] [ PREPEND text ]
+
+.S2 INPUT:
+APPEND   : Append the text to the beginning of all file names. However the leading directory information will be stripped and the file written in the current working directory.
+.BR
+PREPEND  : Add the text to the end of all file names. However the leading directory information will be stripped and the file written in the current working directory.
+.BR
+
+.S2 "SAC COMPATIBILITY:"
+
+DESCRIPTION:
+With no filelist, the original data files are overwritten by the
+current versikons in memory. The output order is that in which they were
+read in and not the way that they are sorted for display.
+.BR
+If the filelist is given, there must be a one\-to\-one correspondence
+between the number of traces in memory and the number of file names in
+filelist.
+.BR
+As of August 15, 2007 the APPEND and PREPEND options will write the files in the current directory only.
+.BR
+As of July 22, 2009, the APPEND and PREPEND options have no short cuts and must be written exactly.
+
+.S2 "SEE ALSO":
+WRITEHEADER
+

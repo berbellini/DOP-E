@@ -1,0 +1,111 @@
+#####
+#	Makefile for CALPLOT/src/cmd
+#
+#	Uncomment the region for your machine
+#	Indicate the plot drivers to be compiled
+#
+#####
+#	NOTE FOR PNG Graphics you miust define the locations of
+#	libz.a or libz.so and 
+#	libpng.a or libpng.so
+#####
+
+#####
+#	MINGW gcc/g77 compielrs for WIN32
+#####
+CCMP          = gcc -DMSDOS
+LINK          = gcc 
+RM            = rm -f 
+MV            = mv 
+DEST          = ../../../bin
+LDFLAGS       = 
+LDFLAG        = -lm
+XDIR          = /usr/X11R6/lib
+XVINC         = ../XVIG/include
+LIBDIR        = ../../../lib
+MSWLDR        = -Wl,--subsystem,console $(LIBDIR)/lg.a -mwindows
+
+#PNGINC = -I/usr/include
+#PNGLIB = -L/usr/lib -lpng       # dynamically linked against libpng
+#ZINC = -I/usr/include
+#ZLIB = -L/usr/lib -lz           # dynamically linked against zlib
+#INCS = $(PNGINC) $(ZINC)
+#WLIBS = $(PNGLIB) $(ZLIB)
+
+
+
+ALL = plotdbg plotnps reframe plotgif plotmsw  clean
+
+#####
+#	Do not change anything bellow here
+#####
+
+.c.o:
+	$(CCMP) -c $<
+
+docp:
+	cp ../cmd/*.c .
+	cp ../include/*.h .
+
+all: $(ALL)
+
+#####
+#	define the object dependencies
+#####
+
+DBGOBJS = plotdriv.o  dbsubs.o
+
+REFOBJS = reframe.o dpsubs.o
+
+NPSOBJS = plotdriv.o plotgen.o lineclip.o  zzpoint.o txtlbl.o symvec.o \
+	rline.o rlinevec.o plotnps.o
+
+MSWOBJS = plotdriv.o plotmsw.o            plotgen.o lineclip.o  \
+	symvec.o rline.o           rlinevec.o 
+
+GIFOBJS = plotdriv.o plotgen.o lineclip.o            txtlbl.o symvec.o \
+	rline.o plotgif.o
+
+PNGOBJS = plotdriv.o plotgen.o lineclip.o            txtlbl.o symvec.o \
+	rline.o plotpng.o writepng.o
+
+
+# Make the executables #
+
+plotdbg:	$(DBGOBJS)
+	$(CCMP) $(DBGOBJS) -o plotdbg.exe
+	$(MV) plotdbg.exe $(DEST)
+
+plotnps:       $(NPSOBJS)
+	$(CCMP) $(NPSOBJS) $(LDFLAG) -o plotnps.exe
+	$(MV) plotnps.exe $(DEST)
+
+plotmsw.o:	plotmsw.c
+	$(CCMP) -c -DMSW  -I$(XVINC) plotmsw.c
+xvigmsw.o:	xvigmsw.c
+	$(CCMP) -c -DMSW -I$(XVINC)  -I../../../include xvigmsw.c
+plotmsw:       $(MSWOBJS) xvigmsw.o
+	$(CCMP) $(MSWOBJS) xvigmsw.o  $(MSWLDR) -o plotmsw.exe
+	$(MV) plotmsw.exe $(DEST)
+
+plotgif:       $(GIFOBJS)
+	$(CCMP) $(GIFOBJS) $(LDFLAG) -o plotgif.exe
+	$(MV) plotgif.exe $(DEST)
+
+writepng.o:	writepng.c
+	$(CCMP) -O -Wall $(INCS) -c writepng.c
+plotpng.o:	plotpng.c
+	$(CCMP) -O  $(INCS) -c plotpng.c
+plotpng:       $(PNGOBJS)
+	$(CCMP) $(PNGOBJS) $(LDFLAG) $(WLIBS) -o plotpng.exe
+	$(MV) plotpng.exe $(DEST)
+
+reframe:	$(REFOBJS)
+	$(CCMP) $(REFOBJS) -o reframe.exe
+	mv reframe.exe $(DEST)
+
+clean:
+	$(RM) *.o 
+	$(RM) *.c
+	$(RM) *.h
+

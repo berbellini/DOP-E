@@ -1,0 +1,65 @@
+
+To install the entire NA package and all demonstration programs for
+Receiver function inversion
+
+
+	1.) Edit makena.macros to suit your platform. This file contains
+	    information about where certain programs reside on your machine.
+            Templates for several systems are in the subdirectory macros
+            If a suitable template exists you could
+
+            cp macros/makena.macros_sun makena.macros         (for f77 on a sun)
+            cp macros/makena.macros_linux_intel makena.macros (for f90 on linux)
+            cp macros/makena.macros_linux makena.macros       (for g77 on linux)
+
+	    and then edit makena.macros if need be. See HTML documentation for 
+	    further details. 
+
+	2.) to compile and install type
+	    
+	    >make all
+
+	
+If all goes well you will get a message confirming that installation 
+was successful and a series of programs will appear in Demo/bin
+
+These are
+	   rfi_na        : executable for example program running NA routines.
+	   splot-x       : scatter plot program for plotting models to screen.
+	   splot-p       : As above but out to postscript (see HTML manual)
+	   readnad       : A simple program that checks the header information
+			   in the direct access (NAD) file produced by 
+			   NA routines (used to store results of NA). 
+	   nad2asc	 : A simple conversion routine from NAD to ASCII
+	   asc2nad	 : A simple conversion routine from ASCII to NAD
+	   nad2nad       : A simple filter program that transforms a NAD file.
+	   
+           Extra programs used for display of results in RF Inversion.
+
+	   plot_model    : Plots 1-D seismic models produced in RF Inversion.  
+	   plot_rf-x     : Plots a best fit Receiver function (to screen)  
+	   plot_rf-p     : As above but postscript output.
+	   synrf         : Generates a synthetic receiver function from 
+			   input mseismic model.
+	   synrf_noise   : Generates a synthetic receiver function with noise.
+
+
+All programs are run from the data directory (or subdirectories) 
+
+cd Demo/data
+
+
+Note that if you want to remove all files associated with the Demo
+program this can be done with
+
+cd Demo/src
+make remove_demo
+
+This will save approximately 7Mb (out of 9Mb in the unpacked tar file)
+Once done the files can only be restored from the original tar file,
+and the `make all' command will no longer work. 
+
+If you do this then the top level rfi source file (rfi_na.F) containing 
+the calls to the NA routines is not deleted and may still be used as 
+a template for new programs.
+

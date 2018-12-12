@@ -1,0 +1,2 @@
+SAC has a problem with the B and E fields - The E can be in error due to roundoff - also the B in some cases if it is too large - I tired to fix this 
+once in the cut which now actually recombutes the epoch time to keep the B small

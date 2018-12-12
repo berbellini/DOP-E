@@ -1,0 +1,17 @@
+GSAC Command Reference Manual                                    DELETE
+
+SUMMARY:
+     Delete a file in memory from any trace processing
+
+DELETE trace_number 
+
+INPUT:
+
+DESCRIPTION:
+     This is useful if one finds a bad trace in a large input and
+does not appear in any trace processing. It still stays in memory
+but will never be output.
+
+SEE ALSO:
+       UNDELETE
+

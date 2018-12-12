@@ -1,0 +1,87 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    TRANSFER
+.S2 SUMMARY:
+Apply or remove an instrument response/filter from the data
+
+TRANSfer [FROM|TO] [Polezero SUBTYPE pzfile] [FApfile SUBTYPE fapfile] [evaL SUBTYPE afile pfile] [ ACC | VEL | DISP ]
+         [FREQlimits f1 f2 f3 f4] 
+
+.S2 INPUT:
+.BR
+FROM                     : Deconvolve the filter from the trace
+.BR
+TO                       : Convolve the filter with the trace
+.BR
+Polezero SUBTYPE pzfile  : Use SAC pole\-zero format
+.BR
+Eval SUBTYPE afile pfile : Use output of IRIS evalresp program which creates
+two files, each of two columns. The afile has columns of frequency and amplitude in order of increasing frequency. The pfile has colums of frequancy and phase (degrees) in order of increasing frequency.
+.BR
+FApfile SUBTYPE fapfile  : a GSE frequency amplitude period file
+.BR 
+ACC | VEL | DISP         : an internal type - 
+.BR
+basically ACC means multiply/divide by ( i omega )^2 for TO/FROM
+.BR
+basically VEL means multiply/divide by ( i omega ) for TO/FROM
+.BR
+basically DISP means multiply/divide by ( 1  ) for TO/FROM
+.BR
+FREQlimits f1 f2 f3 f4   : Apply a cubic taper to the response such 
+the response is 0 for f < f1 and for f > f4, 
+the response is 1 for f > f2 and for f < f3, 
+and tapers cubically from 0 to 1 for f1 < f < f2 and 
+f4 > f > f3.  Note the only way to turn this off is to 
+reset the limits as in FREQLIMITS \-2 \-1 1.0e5 1.0e6
+FREQLIMITS is only used in the FROM process. 
+This is essential for a clean deconvolution
+.BR
+
+.S2 DESCRIPTION:
+
+.S2 "SAC COMPATIBILITY:"
+This does not support the many built-in instrument responses of
+SAC. Instead the user must define the corresponding pole\-zero or response
+file.
+.sp
+The EVAL option is different than SAC. Instead of working with a
+seed database, GSAC expects the user to have already run 'evalresp' 
+independently to create two files with names such as AMP.NM.SLM..BHZ,
+and PHASE.NM.SLM..BHZ
+.sp
+The FAP file can have a line start with a # to indicate a comment line. The
+lines following the # signs are essential, however the count of the number of entries is ignored by GSAC. An example of this format is
+.nf
+.na
+ # Velocity response for INCN BHZ
+ #
+ #
+ #
+ # Phase unwrapped
+ #
+  theoretical  0   instrument    fap Organization
+ 40
+  0.100000E-02  0.141401E+09  0.149665E+03  0.000000E+00  0.000000E+00
+  0.100926E-02  0.143988E+09  0.149365E+03  0.000000E+00  0.000000E+00
+  0.101861E-02  0.146621E+09  0.149061E+03  0.000000E+00  0.000000E+00
+  0.102804E-02  0.149300E+09  0.148754E+03  0.000000E+00  0.000000E+00
+  0.103757E-02  0.152025E+09  0.148443E+03  0.000000E+00  0.000000E+00
+.fi
+.ad
+.sp
+For compatibility with SAC, the SUBTYPE field MUST be used.
+.sp
+Note that the use of DISP, VEL or ACC with any operation requires that the user know what the original filter relates, e.g., counts/meter 
+       
+.S2 "HEADER VALUES SET:"
+USER1 = permin, USER2=permax, where 
+permin=MAX[1.0/filt_f3,old permin] and
+permax=MIN[1./filt_f2,old permax]. This feature is used
+by sacmft96 and sacpom96
+.S2 "SEE ALSO":
+FILTER
+

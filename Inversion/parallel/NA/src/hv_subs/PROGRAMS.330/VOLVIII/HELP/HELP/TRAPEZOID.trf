@@ -1,0 +1,24 @@
+.de BR
+.in 0
+.in +8n
+.ti -5n
+..
+
+
+.Th TRAPEZOID
+.S2 SUMMARY:
+Convolve with unit area trapezoid
+
+TRAPEZOID Width L1 L2 L3
+.S2 INPUT:
+Width L1 L2 L3 :  L1, L2 and L3 define the trapezoidal pulse. These values are adjusted to lie on a sample with.
+.S2 DESCRIPTION:
+Convolve the time series in memory with a unit area trapezoidal pulse.
+.sp
+This acts as a lowpass filter.
+.sp
+If L1 + L2 + L2 < 2*DELTA, nothing is done
+.S2 EXAMPLES:
+
+.S2 "SEE ALSO":
+TRIANGLE, BOXCAR

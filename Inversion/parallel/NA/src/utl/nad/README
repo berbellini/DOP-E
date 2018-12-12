@@ -1,0 +1,23 @@
+
+readnad - Program to read Neighbourhood Algorithm Direct 
+ 	  access file and write out information to standard out.
+ 
+Comments:
+ 	This program also acts as an example of how to call the 
+ 	routine read_nad which reads a direct access nad
+ 	file and puts output into arrays models, data, header
+ 	and variables nd,ne,nh.
+ 
+Compile with
+
+	make readnad
+
+	executable is placed in Demo/bin directory
+
+Calling sequence:
+ 
+ 	readnad file.in 
+ 
+	where,
+ 	     `file.in'  = input direct access nad file `na.nad'
+ 	

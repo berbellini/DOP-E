@@ -1,0 +1,9 @@
+
+plotpk must be able to work with log amplitudes in Y and in X
+plotpk 'l' must be able to define the frequency
+
+perhaps duplicate the functionality of plotpk for spectra only
+
+---------------
+
+18 APR 2006 - note the time marker at the bottom of the plot does not reflect the global begmin for absolute plots

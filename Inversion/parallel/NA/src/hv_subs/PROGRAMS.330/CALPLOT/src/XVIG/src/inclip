@@ -1,0 +1,12 @@
+static int inclipregion(int xpos, int ypos)
+{
+	if(ypos < dc_bottom)
+		return 0;
+	else {
+		if(xpos <= dc_ClipRight && xpos >= dc_ClipLeft
+			&& ypos <=dc_ClipTop && ypos >= dc_ClipBottom)
+				return 1;
+		else
+				return 0;
+	}
+}

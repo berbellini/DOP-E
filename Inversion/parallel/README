@@ -1,0 +1,117 @@
+###########################################################################################
+#   Read me for the inversion of ellipticity curve measured with DOP-E measurement code   #
+###########################################################################################
+Created by Andrea Berbellini, November 2018
+For questions, bugs, comments please email me: andrea.berbellini@ingv.it 
+
+*******
+This parallel version is basically identical to the serial. 
+The only difference is the way to run the inversion. We provided an example of submission script 
+tested on the Legion cluster (University College London, UK). 
+Different clusters will probably need different submission script but you can use our example as a 
+template.
+
+We also provide a slightly different routine to plot the results. 
+If python2.7 with matplotlib is installed in your cluster you can plot the results directly there.
+Otherwise you can download locally the results and plotting it with the serial version of 
+the plot_results.py routine
+*******
+
+
+Citations
+--------------------------------------------------------------------
+This software is free to download. If used please cite:
+
+Berbellini, A., Schimmel, M., Ferreira, A.M.G., Morelli, A.,
+    	Constraining S-wave velocity using Rayleigh wave ellipticity
+    	from polarization analysis of seismic noise, Geophysical Journal
+    	International, 2018, in press.
+
+The inversion is based on the software created by Malcolm Sembridge:
+	Sambridge, M., 1999. Geophysical inversion with a neighbourhood algorithm-I. 
+	Searching a parameter space, Geophysical Journal International, 138(2), 479–494.
+
+The forward modeling is based on the package "Computer Programs in Seismology" by
+Robert B. Hermann:
+	Herrmann, R. B., 2013. Computer Programs in Seismology: An Evolving Tool for 
+	Instruction and Research, Seismol. Res. Lett., 84(6), 1081–1088.
+
+
+Prerequisites
+--------------------------------------------------------------------
+- gfortran or ifort (we used ifort) 
+- cc compiler
+- python 2.7
+- matplotlib 2.1.2
+
+
+
+Preparation and compilation
+--------------------------------------------------------------------
+- Install Computer Programs in Seismology:
+	>  cd to NA/src/hv_subs/PROGRAMS.330/ and type:
+	>  ./Setup
+	>  Select from the list the best configuration for your machine (in our case LINUX6440)
+	>  ./Setup LINUX6440
+	>  ./C
+	>  Add the path to export PROGRAMS.330/bin to your .bashrc file 
+		(export PATH=<path>/Inversion/serial/NA/src/hv_subs/PROGRAMS.330/bin:$PATH)
+
+	For other information about the installation please refer to the detailed guide CPSInstall.pdf in PROGRAMS.330 		folder
+
+- Compile the Neighbourhood Algorithm routines:
+	>  cd to NA/src
+	>  Edit the file "makena macros" setting your fortran and C compilers. "Type" variable has to be set to "mpi"
+	>  make clean
+	>  make all
+
+	>  If everything is ok you will get the message: "make all (MPI version) completed successfully !"
+	
+
+
+Run a demo inversion
+--------------------------------------------------------------------
+To run a demo inversion please edit the file job_parallel choosing a name for the inversion,
+then type:
+> qsub job_parallel
+
+wait for your turn in the queue.
+To check the status of the queue type
+> qstat
+
+
+When the job will be executed it will recompile the code then run a full inversion. 
+Finally it will plot the results, that will be found
+in the folder results/<name_of_the_inversion>/
+
+The inversion takes approx 10 minutes time (tested on a cluster with 20 processors).
+
+
+
+Known issues (updated 12 December 2018)
+--------------------------------------------------------------------
+- The NA routine produces a few more models than needed, due to a problem with processors synchronization.
+	This still allow a correct inversion, tested extensively with both synthetic and real cases. The only
+	problem is that if the number of models sampled should be say 4000, the NA will produce 4020 models, 
+	depending on the number of processors used. We are working to fix this problem.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

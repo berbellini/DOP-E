@@ -1,0 +1,1227 @@
+/* File>>> xvig.c
+--
+-- %M% -- version %I% (IMEC)            last updated: %E%
+--
+-- Copyright (c) 1993
+-- IMEC vzw
+-- Kapeldreef 75
+-- B-3001 LEUVEN
+-- BELGIUM
+--
+-- Author   : A. Demaree
+--
+-- Date     : February 1, 1993
+--
+-- Function : The client program for the `XviG' system that opens the
+--            graphics window, and processes the events.
+--
+-- Usage    : xvig <version> <win_name> <win_id> <x> <y> <width> <height>
+--
+-- Comment  : version   = a string to identify the version
+--            win_name  = the name of the window
+--            win_id    = the dummy window X-identifier from the parent process
+--            x         = the initial x-position of the window
+--            y         = the initial y-position of the window
+--            width     = the initial width of the window
+--            height    = the initial height of the window
+--
+--            If the x-position value and/or the y-position value are negative,
+--            then the placement of the window is left to the window manager.
+--
+-- Review   :
+--
+*/
+/*
+	revision history
+
+	12 08 2000 - fixed a XOR xhair_color bug - it was always set = 1
+			TESTED on 8bit color in LINUX
+			24 bit color on SPARC
+	11 19 2002 - caught error in WM line 862
+
+		from
+		(char *) xvig_bits, xvig_width, xvig_height);
+		to
+        	(char *) calxvig_bits, calxvig_width, calxvig_height);
+		Also changed calxvig.xbm definitions to conform
+ *	23 JUL 2003 Following Email from Meijian An, 
+ *	Department of Geophysics, Institute of Astronomics, 
+ *	Geophysical and Atmospheric Sciences, *	University of Sao Paulo
+ *	Sao Paulo, Brazil, 
+		change 
+	#include <X11/keysymdef.h>
+	to
+	#include <X11/keysym.h> 
+
+	20 MAR 2004 - fixed annoying window behavior. Since do_mft invokes a
+	system("sacmft96") which takes a while to run, the do_mft window may be
+	obscured. After the return, the do_mft grabs the keyboard which is 
+	annoying. this was fixed by invoking the Visibility Event 
+
+	now the keyboard is only grabbed IF the window is COMPLETELY in view
+
+	06 FEB 2005 if not in cursor of keyboard mode, at top of event loop	
+		ungrad the key board - this problem was seen if the initial
+		window does not overlay the terminal window 
+
+*/
+
+
+/*------------------------------------------------------------------------------
+-- Global include files
+------------------------------------------------------------------------------*/
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/Xatom.h>
+#include <X11/cursorfont.h>
+
+#define XK_MISCELLANY
+/*
+ * 
+ * #include <X11/keysymdef.h>
+ * */
+#include <X11/keysym.h>
+
+/*------------------------------------------------------------------------------
+-- Local include files
+------------------------------------------------------------------------------*/
+
+#include "commondata.h"
+#include "calxvig.xbm"
+#include "empty.xbm"
+
+/*------------------------------------------------------------------------------
+-- Some general macro definitions
+------------------------------------------------------------------------------*/
+
+#define ABS(n)    ((n) < 0 ? -(n) : (n))
+#define MAX(a,b)  ((a) > (b) ? (a) : (b))
+#define Min(a,b)  ((a) < (b) ? (a) : (b))
+
+/*------------------------------------------------------------------------------
+-- Static variable declarations
+------------------------------------------------------------------------------*/
+
+static Display *display;
+static int screen_nr;
+static Window dummy_window, window;
+static Cursor arrow_cursor, empty_cursor;
+static Pixmap pixmap, border_select, border_noselect, icon_pixmap;
+static GC gc;
+static XEvent event;
+static unsigned int window_width, window_height;
+static Atom wm_protocols_atom, wm_delete_window_atom;
+
+/*
+-- The Atoms for the ClientMessage events
+*/
+
+static Atom MESSAGE_INIT_atom,
+            MESSAGE_KEY_atom,
+            MESSAGE_BUTTON_atom,
+            MESSAGE_KEY_BUTTON_atom,
+            MESSAGE_SIZE_atom,
+            MESSAGE_SENSEKBD_ON_atom,
+            MESSAGE_SENSEKBD_OFF_atom,
+            MESSAGE_SENSEKBD_atom,
+            MESSAGE_CURSOR_atom,
+            MESSAGE_QUIT_atom;
+/* rbh extension */
+static Atom MESSAGE_CLIP_atom,
+            MESSAGE_REVERSE_atom,
+            MESSAGE_TOGRAY_atom,
+            MESSAGE_LCMAP_SIZE_atom,
+            MESSAGE_LCMAP_ENTRY_atom,
+            MESSAGE_LCMAP_RESET_atom,
+            MESSAGE_BOUNDS_atom;
+static int  title=0, border=0;
+static int Ldc_top, Ldc_right, Ldc_bottom, Ldc_left;
+static int dc_top, dc_right, dc_bottom, dc_left;
+static int dc_ClipRight, dc_ClipTop, dc_ClipBottom, dc_ClipLeft;
+static int curstype = 0;
+static int old_curstype = 0;
+static int cur_x = -1;	/* coordinates of last call to di_cross */
+static int cur_y = -1;
+static int user_curstype;
+
+
+
+/*------------------------------------------------------------------------------
+-- Local function declarations
+------------------------------------------------------------------------------*/
+
+static void Parse_Commandline(int argc,
+                              char *argv[],
+                              int *x,
+                              int *y,
+                              unsigned int *width,
+                              unsigned int *height);
+static void Set_WMproperties(char *window_name,
+                             int x,
+                             int y,
+                             unsigned int width,
+                             unsigned int height);
+static void Create_Cursors(void);
+static Pixmap New_Pixmap(unsigned int width,
+                         unsigned int height,
+                         unsigned int depth);
+static void Border_Pixmaps(unsigned int depth);
+static void Refresh_Screen(void);
+static void Window_Size(void);
+static void Cleanup(void);
+
+/* begin rbh extension */
+static void draw_cursor(int curstyp, int xc, int yc, 
+		int xl, int yl, int xh, int yh);
+static int inclipregion(int xpos, int ypos);
+static int cmap_size;
+static Colormap colormap;
+static XColor *color;
+#define YES 1
+#define NO 0
+static int DoGrabKeyboard = NO;
+static Bool keyboard_active = False;
+static Bool focus;
+
+/* end   rbh extension */
+
+/*------------------------------------------------------------------------------
+--
+--
+--
+------------------------------------------------------------------------------*/
+
+unsigned int cursor_width, cursor_height;
+int cursor_hot_x, cursor_hot_y;
+long cursor_type = DATA_CURSOR_ARROW;
+
+main(int argc, char *argv[])
+{
+  int init_x, init_y;
+  unsigned int init_width, init_height;
+  Window root_rtn;
+  int x_rtn, y_rtn;
+  unsigned int width_rtn, height_rtn, bwidth_rtn, depth_rtn;
+  KeySym keysym;
+  Bool sense_kbd_set = False,
+       sense_kbd_save = False,
+       sense_kbd = False;
+  char sense_char, tmpstr[8];
+  Bool cursor_on, cursor_drawn;
+  int prev_cursor_x, prev_cursor_y;
+  unsigned long xhair_color;
+  unsigned int xhair_width, xhair_height;
+  Bool do_event_loop = True;
+
+  /*
+  -- Parsing the command line options
+  */
+
+  Parse_Commandline(argc, argv, &init_x, &init_y, &init_width, &init_height);
+
+  /*
+  -- Open the display
+  */
+
+  if (!(display = XOpenDisplay(NULL)))
+  {
+    char *dname;
+
+    if (!(dname = getenv("DISPLAY")))
+      fprintf(stderr,
+       "ERROR (XviG) : Environment variable 'DISPLAY' has not been defined.\n");
+    else
+      fprintf(stderr,
+              "ERROR (XviG) : Cannot open display '%s'.\n", dname);
+    exit(1);
+  }
+
+  screen_nr = DefaultScreen(display);
+
+  /*
+  -- Take the default Graphic Context and set the GraphicsExposures off
+  */
+
+  gc = DefaultGC(display, screen_nr);
+  XSetGraphicsExposures(display, gc, False);
+
+  /*
+  -- Create the real window, and set the 'Window Manager' properties
+  */
+
+  if (!(window = XCreateSimpleWindow(display, RootWindow(display, screen_nr),
+                                     init_x < 0 ? 0 : init_x,
+                                     init_y < 0 ? 0 : init_y,
+                                     init_width, init_height, BORDER_WIDTH,
+                                     WhitePixel(display, screen_nr),
+                                     BlackPixel(display, screen_nr))))
+  {
+    fprintf(stderr, "ERROR (XviG) : Cannot create window.\n");
+    XCloseDisplay(display);
+    exit(1);
+  }
+
+  Set_WMproperties(argv[2], init_x, init_y, init_width, init_height);
+
+  /*
+  -- Map the window and wait for the event that it is
+  -- actually mapped (e.g. by the window manager),
+  -- taking care of the appropriate event mask
+  */
+
+  XSelectInput(display, window, ExposureMask | VisibilityChangeMask | StructureNotifyMask );
+
+  XMapWindow(display, window);
+
+  while (1)
+  {
+    XNextEvent(display, &event);
+
+    if (event.type == MapNotify)
+      break;
+  }
+
+  XSelectInput(display, window, ExposureMask | VisibilityChangeMask);
+
+  /*
+  -- Set the default cursor for the window to an arrow
+  -- and create an empty cursor
+  */
+
+  Create_Cursors();
+
+  /*
+  -- Create a pixmap with the same size as the window
+  -- and set the Xhair cursor size
+  */
+
+  if (XGetGeometry(display, window, &root_rtn, &x_rtn, &y_rtn,
+                   &width_rtn, &height_rtn, &bwidth_rtn, &depth_rtn))
+  {
+    pixmap = New_Pixmap(width_rtn, height_rtn, depth_rtn);
+    window_width  = xhair_width  = width_rtn;
+    window_height = xhair_height = height_rtn;
+  }
+  else
+  {
+    fprintf(stderr,"WARNING (XviG) : Cannot get size of initial window.\n");
+
+    pixmap = New_Pixmap(1, 1, DefaultDepth(display, screen_nr));
+    window_width  = xhair_width  = 1;
+    window_height = xhair_height = 1;
+  }
+
+  /*
+  -- Create the border pixmaps and set the window border to 'no cursor input'
+  */
+
+  Border_Pixmaps(DefaultDepth(display, screen_nr));
+
+  XSetWindowBorderPixmap(display, window, border_noselect);
+
+  /*
+  -- Create the Atoms (unique numbers) for the ClientMessage events
+  */
+
+  MESSAGE_INIT_atom = XInternAtom(display, MESSAGE_INIT, False);
+  MESSAGE_KEY_atom = XInternAtom(display, MESSAGE_KEY, False);
+  MESSAGE_BUTTON_atom = XInternAtom(display, MESSAGE_BUTTON, False);
+  MESSAGE_KEY_BUTTON_atom = XInternAtom(display, MESSAGE_KEY_BUTTON, False);
+  MESSAGE_SIZE_atom = XInternAtom(display, MESSAGE_SIZE, False);
+  MESSAGE_SENSEKBD_ON_atom = XInternAtom(display, MESSAGE_SENSEKBD_ON, False);
+  MESSAGE_SENSEKBD_OFF_atom = XInternAtom(display, MESSAGE_SENSEKBD_OFF, False);
+  MESSAGE_SENSEKBD_atom = XInternAtom(display, MESSAGE_SENSEKBD, False);
+  MESSAGE_CURSOR_atom = XInternAtom(display, MESSAGE_CURSOR, False);
+  MESSAGE_QUIT_atom = XInternAtom(display, MESSAGE_QUIT, False);
+
+/* extension rbh */
+  MESSAGE_CLIP_atom = XInternAtom(display, MESSAGE_CLIP, False);
+  MESSAGE_REVERSE_atom = XInternAtom(display, MESSAGE_REVERSE, False);
+  MESSAGE_TOGRAY_atom = XInternAtom(display, MESSAGE_TOGRAY, False);
+  MESSAGE_LCMAP_SIZE_atom = XInternAtom(display, MESSAGE_LCMAP_SIZE, False);
+  MESSAGE_LCMAP_ENTRY_atom = XInternAtom(display, MESSAGE_LCMAP_ENTRY, False);
+  MESSAGE_LCMAP_RESET_atom = XInternAtom(display, MESSAGE_LCMAP_RESET, False);
+  MESSAGE_BOUNDS_atom = XInternAtom(display, MESSAGE_BOUNDS, False);
+
+  /*
+  -- Send a ClientMessage to the dummy window with
+  -- the real window ID, the pixmap ID and the window size
+  */
+
+  event.xclient.message_type = MESSAGE_INIT_atom;
+  event.xclient.window = window;
+  event.xclient.format = 32;
+  event.xclient.data.l[0] = (long) pixmap;
+  event.xclient.data.l[1] = (long) window_width;
+  event.xclient.data.l[2] = (long) window_height;
+  event.type = ClientMessage;
+
+  if (!XSendEvent(display, dummy_window, False, NoEventMask, &event))
+    fprintf(stderr, "ERROR (XviG) : Cannot send ClientMessage 'init'.\n");
+
+/* begin rbh extension */
+	Ldc_left = 0;
+	Ldc_bottom = 0;
+	Ldc_right = window_width -1 ;
+	Ldc_top  = window_height -1 ;
+	dc_left = Ldc_left;
+	dc_right = Ldc_right;
+	dc_top = Ldc_top;
+	dc_bottom = Ldc_bottom;
+	/* define initial cursor position */
+	prev_cursor_x = (dc_right + dc_left)/2;
+	prev_cursor_y = (dc_top + dc_bottom)/2;
+
+/* end   rbh extension */
+
+  /*
+  -- Event loop for a keypress or a buttonpress
+  */
+
+  while (do_event_loop)
+  {
+    XNextEvent(display, &event);
+
+    /* if not in the key board or cross hair 
+	RBH 06 FEB 2005 */
+    if(!cursor_on || !keyboard_active ){
+		XUngrabKeyboard(display,CurrentTime);
+		DoGrabKeyboard = NO;
+    }
+
+    switch (event.type)
+    {
+      case KeyPress:
+          /* fprintf(stderr,"INFO (XviG) : KeyPress event ...\n"); */
+          keysym = XLookupKeysym(&event.xkey, 0);
+          if (IsModifierKey(keysym) == True)
+            continue;
+          if (sense_kbd_set)
+          {
+            if (XLookupString(&event.xkey, tmpstr, 8,
+                              (KeySym *) NULL, (XComposeStatus *) NULL) == 1)
+              if (tmpstr[0] == sense_char)
+                sense_kbd = True;
+            break;
+          }
+      case ButtonPress:
+          /* fprintf(stderr,"INFO (XviG) : ButtonPress event ...\n"); */
+          if (cursor_on)
+          {
+            if (cursor_drawn)
+            {
+              XSetFunction(display, gc, GXxor);
+                XSetForeground(display, gc, xhair_color);
+		draw_cursor( curstype,  prev_cursor_x,  prev_cursor_y, 
+			border+dc_ClipLeft, Ldc_top-border-dc_ClipTop, 
+			border+dc_ClipRight, Ldc_top-border-dc_ClipBottom);
+		
+              cursor_drawn = False;
+            }
+            cursor_on = False;
+          }
+          /* do bounds check */
+              prev_cursor_x = event.xmotion.x;
+              prev_cursor_y = event.xmotion.y;
+		if(prev_cursor_x < dc_left+border)
+			prev_cursor_x = dc_left+border;
+		if(prev_cursor_x > dc_right+border)
+			prev_cursor_x = dc_right+border;
+		if(prev_cursor_y > Ldc_top - border )
+			prev_cursor_y = Ldc_top - border ;
+		if(prev_cursor_y < border )
+			prev_cursor_y = border;
+		event.xmotion.x = prev_cursor_x;
+		event.xmotion.y = prev_cursor_y;
+		
+	cur_x = event.xmotion.x;
+	cur_y = event.xmotion.y;
+          if (!XSendEvent(display, dummy_window, False, NoEventMask, &event))
+            fprintf(stderr,
+                 "ERROR (XviG) : Cannot send KeyPress or ButtonPress event.\n");
+	if(DoGrabKeyboard){
+		XUngrabKeyboard(display,CurrentTime);
+		DoGrabKeyboard = NO;
+	}
+          XSetWindowBorderPixmap(display, window, border_noselect);
+          if (sense_kbd_save)
+          {
+            sense_kbd_set = True;
+            XSelectInput(display, window, KeyPressMask | ExposureMask | VisibilityChangeMask);
+            sense_kbd = False;
+          }
+          else
+            XSelectInput(display, window, ExposureMask | VisibilityChangeMask);
+          break;
+      case MotionNotify:
+          /* fprintf(stderr,"INFO (XviG) : MotionNotify event ...\n"); */
+          while (XCheckMaskEvent(display, PointerMotionMask, &event));
+          if (cursor_on)
+          {
+            XSetFunction(display, gc, GXxor);
+              XSetForeground(display, gc, xhair_color);
+              if (cursor_drawn)
+              {
+		draw_cursor( curstype,  prev_cursor_x,  prev_cursor_y, 
+			border+dc_ClipLeft, Ldc_top-border-dc_ClipTop, 
+			border+dc_ClipRight, Ldc_top-border-dc_ClipBottom);
+              }
+              prev_cursor_x = event.xmotion.x;
+              prev_cursor_y = event.xmotion.y;
+		if(prev_cursor_x < dc_left+border)
+			prev_cursor_x = dc_left+border;
+		if(prev_cursor_x > dc_right+border)
+			prev_cursor_x = dc_right+border;
+		if(prev_cursor_y > Ldc_top - border )
+			prev_cursor_y = Ldc_top - border ;
+		if(prev_cursor_y < border )
+			prev_cursor_y = border;
+		if(inclipregion(prev_cursor_x,prev_cursor_y)){
+              		XDefineCursor(display, window, empty_cursor);
+			curstype = user_curstype;
+		} else
+			curstype = 0;
+		draw_cursor( curstype,  prev_cursor_x,  prev_cursor_y, 
+			border+dc_ClipLeft, Ldc_top-border-dc_ClipTop, 
+			border+dc_ClipRight, Ldc_top-border-dc_ClipBottom);
+            cursor_drawn = True;
+          }
+          break;
+      case VisibilityNotify:
+	  /*
+	fprintf(stderr,"INFO (XviG) : VisibilityNotify event ...\n"); 
+	fprintf(stderr,"INFO (XviG) : Visivilitystate %d\n",event.xvisibility.state);
+	*/
+	if(event.xvisibility.state == VisibilityPartiallyObscured){
+		/* fprintf(stderr,"VisibilityPartiallyObscured\n"); */
+		focus = False;
+		keyboard_active = False;
+		XUngrabKeyboard(display,CurrentTime);
+	} else if(event.xvisibility.state == VisibilityFullyObscured){
+		/* fprintf(stderr,"VisibilityFullyObscured\n"); */
+		focus = False;
+		keyboard_active = False;
+		XUngrabKeyboard(display,CurrentTime);
+	} else if(event.xvisibility.state == VisibilityUnobscured){
+		/* fprintf(stderr,"VisibilityUnobscured\n"); */
+		focus = True;
+		keyboard_active = True;
+		XGrabKeyboard(display,window,False,GrabModeAsync,GrabModeAsync,CurrentTime);
+	}
+          break;
+      case Expose:
+          /* 
+	fprintf(stderr,"INFO (XviG) : Expose event ...\n"); 
+	*/
+          if (event.xexpose.count == 0)
+          {
+            Refresh_Screen();
+            cursor_drawn = False;
+            XGetGeometry(display, window, &root_rtn, &x_rtn, &y_rtn,
+                         &xhair_width, &xhair_height, &bwidth_rtn, &depth_rtn);
+          }
+          break;
+      case ClientMessage:
+          /* fprintf(stderr,"INFO (XviG) : ClientMessage event ...\n"); */
+          if (event.xclient.message_type == MESSAGE_KEY_atom)
+          {
+DoGrabKeyboard = YES;
+if(keyboard_active)
+XGrabKeyboard(display,window,False,GrabModeAsync,GrabModeAsync,CurrentTime);
+            XSetWindowBorderPixmap(display, window, border_select);
+            if (cursor_type)
+            {
+              XSelectInput(display, window,  EnterWindowMask | LeaveWindowMask |
+                           KeyPressMask | PointerMotionMask | ExposureMask | VisibilityChangeMask);
+              XDefineCursor(display, window, empty_cursor);
+              cursor_on = True;
+            }
+            else
+            {
+              XSelectInput(display, window, KeyPressMask | ExposureMask | VisibilityChangeMask);
+              cursor_on = False;
+            }
+            cursor_drawn = False;
+            sense_kbd_set = False;
+            break;
+          }
+          if (event.xclient.message_type == MESSAGE_BUTTON_atom)
+          {
+            XSetWindowBorderPixmap(display, window, border_select);
+            if (cursor_type)
+            {
+              XSelectInput(display, window, EnterWindowMask | LeaveWindowMask |
+                           ButtonPressMask | PointerMotionMask | ExposureMask | VisibilityChangeMask);
+              XDefineCursor(display, window, empty_cursor);
+              cursor_on = True;
+            }
+            else
+            {
+              XSelectInput(display, window, ButtonPressMask | ExposureMask | VisibilityChangeMask);
+              cursor_on = False;
+            }
+            cursor_drawn = False;
+            break;
+          }
+          if (event.xclient.message_type == MESSAGE_KEY_BUTTON_atom)
+          {
+DoGrabKeyboard = YES;
+if(keyboard_active)
+XGrabKeyboard(display,window,False,GrabModeAsync,GrabModeAsync,CurrentTime);
+            XSetWindowBorderPixmap(display, window, border_select);
+            if (cursor_type)
+            {
+              XSelectInput(display, window,  EnterWindowMask | LeaveWindowMask |
+                           KeyPressMask | ButtonPressMask |
+                           PointerMotionMask | ExposureMask | VisibilityChangeMask);
+              XDefineCursor(display, window, empty_cursor);
+              cursor_on = True;
+            }
+            else
+            {
+              XSelectInput(display, window,  EnterWindowMask | LeaveWindowMask |
+                           KeyPressMask | ButtonPressMask | ExposureMask | VisibilityChangeMask);
+              cursor_on = False;
+            }
+            cursor_drawn = False;
+            sense_kbd_set = False;
+            break;
+          }
+          if (event.xclient.message_type == MESSAGE_SIZE_atom)
+          {
+            Window_Size();
+            break;
+          }
+          if (event.xclient.message_type == MESSAGE_SENSEKBD_ON_atom)
+          {
+            sense_kbd_set = sense_kbd_save = True;
+            sense_char = event.xclient.data.b[0];
+            XSelectInput(display, window, KeyPressMask | ExposureMask | VisibilityChangeMask);
+            sense_kbd = False;
+            break;
+          }
+          if (event.xclient.message_type == MESSAGE_SENSEKBD_OFF_atom)
+          {
+            sense_kbd_set = sense_kbd_save = False;
+            XSelectInput(display, window, ExposureMask | VisibilityChangeMask);
+            sense_kbd = False;
+            break;
+          }
+          if (event.xclient.message_type == MESSAGE_SENSEKBD_atom)
+          {
+            event.xclient.message_type = MESSAGE_SENSEKBD_atom;
+            event.xclient.format = 8;
+            event.xclient.data.b[0] = sense_kbd ? DATA_SENSEKBD_YES
+                                                : DATA_SENSEKBD_NO;
+            event.type = ClientMessage;
+            if (!XSendEvent(display, dummy_window, False, NoEventMask, &event))
+              fprintf(stderr,
+                     "ERROR (XviG) : Cannot send ClientMessage 'sense_kbd'.\n");
+            sense_kbd = False;
+            break;
+          }
+          if (event.xclient.message_type == MESSAGE_CURSOR_atom)
+          {
+            cursor_type = event.xclient.data.l[0];
+            if (cursor_type == DATA_CURSOR_ARROW) {
+		XDefineCursor(display, window, arrow_cursor);
+              user_curstype = 0;
+		old_curstype = user_curstype ;
+            } else if (cursor_type == DATA_CURSOR_XORARROW) {
+              user_curstype = 0;
+              xhair_color = (unsigned long) event.xclient.data.l[1];
+              XDefineCursor(display, window, empty_cursor);
+              user_curstype = 1;
+		old_curstype = user_curstype ;
+            } else if (cursor_type == DATA_CURSOR_XHAIR) {
+              xhair_color = (unsigned long) event.xclient.data.l[1];
+              XDefineCursor(display, window, empty_cursor);
+              user_curstype = 2;
+		old_curstype = user_curstype ;
+            } else if (cursor_type == DATA_CURSOR_HYPERBOLA) {
+              xhair_color = (unsigned long) event.xclient.data.l[1];
+              XDefineCursor(display, window, empty_cursor);
+              user_curstype = 8;
+		old_curstype = user_curstype ;
+            } else if (cursor_type == DATA_CURSOR_PLUS) {
+              xhair_color = (unsigned long) event.xclient.data.l[1];
+              XDefineCursor(display, window, empty_cursor);
+              user_curstype = 3;
+		old_curstype = user_curstype ;
+            } else if (cursor_type == DATA_CURSOR_BOX ) {
+              xhair_color = (unsigned long) event.xclient.data.l[1];
+              XDefineCursor(display, window, empty_cursor);
+              user_curstype = 4;
+            } else if (cursor_type == DATA_CURSOR_RUBBER ) {
+              xhair_color = (unsigned long) event.xclient.data.l[1];
+              XDefineCursor(display, window, empty_cursor);
+              user_curstype = 5;
+            } else if (cursor_type == DATA_CURSOR_OFF ) {
+              user_curstype = old_curstype;
+		cur_x = -1 ; cur_y = -1 ;
+	    } else if (cursor_type != DATA_CURSOR_ARROW) {
+              cursor_width = (unsigned int) event.xclient.data.l[1];
+              cursor_height = (unsigned int) event.xclient.data.l[2];
+              cursor_hot_x = (int) event.xclient.data.l[3];
+              cursor_hot_y = (int) event.xclient.data.l[4];
+              user_curstype = 7;
+            }
+/*
+	NOTE UNTIL 00 12 06 this line was used - this was the wrong code for
+	24 bit color --- does it work for 8 bit LINUX GNOME?
+            xhair_color = 1;
+*/
+/*
+            XSetFunction(display, gc, GXxor);
+              XSetForeground(display, gc, xhair_color);
+		if(inclipregion(prev_cursor_x,prev_cursor_y)){
+              		XDefineCursor(display, window, empty_cursor);
+			curstype = user_curstype;
+		} else
+			curstype = 0;
+		draw_cursor( curstype,  prev_cursor_x,  prev_cursor_y, 
+			border+dc_ClipLeft, Ldc_top-border-dc_ClipTop, 
+			border+dc_ClipRight, Ldc_top-border-dc_ClipBottom);
+              cursor_on = True;
+              cursor_drawn = True;
+*/
+              cursor_type = 1;
+            break;
+          }
+          if (event.xclient.message_type == MESSAGE_QUIT_atom)
+          {
+            do_event_loop = False;
+            break;
+          }
+          if (event.xclient.message_type == wm_protocols_atom)
+          {
+            if ((Atom) event.xclient.data.l[0] != wm_delete_window_atom)
+              fprintf(stderr,"WARNING (XviG) : Unknown Protocols message received.\n");
+            /*
+            else
+              fprintf(stderr,"INFO (XviG) : WM_DELETE_WINDOW received.\n");
+            */
+            break;
+          }
+          /* begin rbh extension */
+          if (event.xclient.message_type == MESSAGE_BOUNDS_atom)
+          {
+                border = event.xclient.data.l[0];
+                title  = event.xclient.data.l[1];
+		dc_right = Ldc_right - border - border;
+        	dc_top = Ldc_top -  border - border - title;
+            break;
+          }
+          if (event.xclient.message_type == MESSAGE_CLIP_atom)
+          {
+        	dc_ClipLeft	= event.xclient.data.l[0];
+        	dc_ClipBottom	= event.xclient.data.l[1];
+        	dc_ClipRight	= event.xclient.data.l[2];
+        	dc_ClipTop	= event.xclient.data.l[3];
+
+            break;
+          }
+          if (event.xclient.message_type == MESSAGE_REVERSE_atom)
+          {
+		Refresh_Screen();
+		printf("REVERSE %ld \n",
+			event.xclient.data.l[0]);
+            break;
+          }
+          if (event.xclient.message_type == MESSAGE_TOGRAY_atom)
+          {
+		printf("TOGRAY %ld \n",
+			event.xclient.data.l[0]);
+            break;
+          }
+          if (event.xclient.message_type == MESSAGE_LCMAP_SIZE_atom)
+          {
+		int cmapsize;
+        	cmapsize	= event.xclient.data.l[0];
+/*
+printf("LCMAP_SIZE %d\n",cmapsize);
+*/
+		if(color != (XColor *)NULL)
+			free(color);
+		color = (XColor *) malloc(cmapsize * sizeof(XColor));
+		colormap = DefaultColormap(display, screen_nr);
+            break;
+          }
+          if (event.xclient.message_type == MESSAGE_LCMAP_ENTRY_atom)
+          {
+		int i;
+        	i	= event.xclient.data.l[0];
+		color[i].red    =  257*event.xclient.data.l[1];
+		color[i].green  =  257*event.xclient.data.l[2];
+		color[i].blue   =  257*event.xclient.data.l[3];
+		color[i].flags = DoRed | DoGreen | DoBlue;
+		if(!XAllocColor(display, colormap, &color[i]))
+printf("Cannot allocate the color\n");
+            break;
+          }
+          if (event.xclient.message_type == MESSAGE_LCMAP_RESET_atom)
+          {
+/*
+printf("LCMAP_RESET\n");
+*/
+XSetWindowColormap(display,window,colormap);
+            break;
+          }
+          /* end   rbh extension */
+          /*
+          fprintf(stderr,"WARNING (XviG) : Unknown ClientMessage received .....\n");
+          */
+      case EnterNotify:
+/*
+printf("EnterNotify\n");
+*/
+		(keyboard_active = True);;
+if(keyboard_active)
+XGrabKeyboard(display,window,False,GrabModeAsync,GrabModeAsync,CurrentTime);
+else
+XUngrabKeyboard(display,CurrentTime);
+		break;
+      case LeaveNotify:
+/*
+printf("LeaveNotify\n");
+*/
+			 (keyboard_active = False);
+if(keyboard_active)
+XGrabKeyboard(display,window,False,GrabModeAsync,GrabModeAsync,CurrentTime);
+else
+XUngrabKeyboard(display,CurrentTime);
+		break;
+      case FocusIn:
+printf("FocusIn\n");
+/*
+*/
+		focus = True;
+		keyboard_active = True;
+XGrabKeyboard(display,window,False,GrabModeAsync,GrabModeAsync,CurrentTime);
+		break;
+      case FocusOut:
+printf("FocusOut\n");
+/*
+*/
+		focus = False;
+		keyboard_active = False;
+	XUngrabKeyboard(display,CurrentTime);
+		break;
+
+      default: ;
+    }
+  }
+
+  /*
+  -- Quit .....
+  */
+
+  Cleanup();
+
+  return 0;
+}
+
+/*------------------------------------------------------------------------------
+--
+--
+--
+------------------------------------------------------------------------------*/
+
+static void Parse_Commandline(int argc,
+                              char *argv[],
+                              int *x,
+                              int *y,
+                              unsigned int *width,
+                              unsigned int *height)
+{
+  long nr;
+  char *endptr;
+
+  if (argc != 8)
+  {
+    fprintf(stderr, "ERROR (XviG) : Wrong number of arguments.\n");
+    exit(1);
+  }
+
+  if (strcmp(argv[1], XviG_VERSION))
+  {
+    fprintf(stderr, "ERROR (XviG) : Wrong version of XviG.\n");
+    fprintf(stderr, "               Please relink with the correct version.\n");
+    exit(1);
+  }
+
+  nr = strtol(argv[3], &endptr, 10);
+  if ((*endptr != '\0') || (nr <= 0))
+  {
+    fprintf(stderr, "ERROR (XviG) : Invalid window number.\n");
+    exit(1);
+  }
+  dummy_window = (Window) nr;
+
+  *x = (int) strtol(argv[4], &endptr, 10);
+  if (*endptr != '\0')
+  {
+    fprintf(stderr,"WARNING (XviG) : Invalid x-position, assuming not specified.\n");
+    *x = -1;
+  }
+
+  *y = (int) strtol(argv[5], &endptr, 10);
+  if (*endptr != '\0')
+  {
+    fprintf(stderr,"WARNING (XviG) : Invalid y-position, assuming not specified.\n");
+    *y = -1;
+  }
+
+  *width = (int) strtol(argv[6], &endptr, 10);
+  if ((*endptr != '\0') || (*width <= 0))
+  {
+    fprintf(stderr,"WARNING (XviG) : Invalid initial window width, setting to 300.\n");
+    *width = 300;
+  }
+
+  *height = (int) strtol(argv[7], &endptr, 10);
+  if ((*endptr != '\0') || (*height <= 0))
+  {
+    fprintf(stderr,"WARNING (XviG) : Invalid initial window height, setting to 300.\n");
+    *height = 300;
+  }
+}
+
+/*------------------------------------------------------------------------------
+--
+--
+--
+------------------------------------------------------------------------------*/
+
+static void Set_WMproperties(char *window_name,
+                             int x,
+                             int y,
+                             unsigned int width,
+                             unsigned int height)
+{
+  XTextProperty text_prop;
+  XSizeHints size_hints;
+  XWMHints wm_hints;
+
+  text_prop.value = (unsigned char *) window_name;
+  text_prop.encoding = XA_STRING;
+  text_prop.format = 8;
+  text_prop.nitems = strlen(window_name);
+  XSetWMName(display, window, &text_prop);
+
+  text_prop.value = (unsigned char *) window_name;
+  text_prop.encoding = XA_STRING;
+  text_prop.format = 8;
+  text_prop.nitems = strlen(window_name);
+  XSetWMIconName(display, window, &text_prop);
+
+  wm_hints.flags = IconPixmapHint;
+  wm_hints.icon_pixmap = icon_pixmap
+                       = XCreateBitmapFromData(display, window,
+                                (char *) calxvig_bits, calxvig_width, calxvig_height);
+  XSetWMHints(display, window, &wm_hints);
+
+  if (!((x < 0) || (y < 0)))
+  {
+    size_hints.flags = USPosition | USSize;
+    size_hints.x = x;
+    size_hints.y = y;
+    size_hints.width = width;
+    size_hints.height = height;
+    XSetWMNormalHints(display, window, &size_hints);
+  }
+
+  /*
+  -- Set the WM_PROTOCOLS property to catch an accidental close of the window
+  */
+
+  wm_protocols_atom = XInternAtom(display, "WM_PROTOCOLS", False);
+  wm_delete_window_atom = XInternAtom(display, "WM_DELETE_WINDOW", False);
+  if (XSetWMProtocols(display, window, &wm_delete_window_atom, 1) == 0)
+    fprintf(stderr,"WARNING (XviG) : Cannot set WM_DELETE_WINDOW protocol.\n");
+}
+
+/*------------------------------------------------------------------------------
+--
+--
+--
+------------------------------------------------------------------------------*/
+
+static void Create_Cursors(void)
+{
+  Pixmap bitmap;
+  XColor color;
+
+  if (!(arrow_cursor = XCreateFontCursor(display, XC_left_ptr)))
+    fprintf(stderr,"WARNING (XviG) : Cannot create arrow cursor.\n");
+  else
+    XDefineCursor(display, window, arrow_cursor);
+
+  if (!(bitmap = XCreateBitmapFromData(display, window,
+                                       empty_bits, empty_width, empty_height)))
+  {
+    fprintf(stderr,"WARNING (XviG) : Cannot create empty bitmap.\n");
+    empty_cursor = None;
+    return;
+  }
+
+  if (!(empty_cursor = XCreatePixmapCursor(display, bitmap, bitmap,
+                                           &color, &color, 0, 0)))
+    fprintf(stderr,"WARNING (XviG) : Cannot create empty cursor.\n");
+
+  XFreePixmap(display, bitmap);
+}
+
+/*------------------------------------------------------------------------------
+--
+--
+--
+------------------------------------------------------------------------------*/
+
+static Pixmap New_Pixmap(unsigned int width,
+                         unsigned int height,
+                         unsigned int depth)
+{
+  Pixmap pixmap;
+
+  pixmap = XCreatePixmap(display, window, width, height, depth);
+  XSetForeground(display, gc, BlackPixel(display, screen_nr));
+  XSetFillStyle(display, gc, FillSolid);
+  XSetFunction(display, gc, GXcopy);
+  XFillRectangle(display, pixmap, gc, 0, 0, width, height);
+
+  return pixmap;
+}
+
+/*------------------------------------------------------------------------------
+--
+--
+--
+------------------------------------------------------------------------------*/
+
+static void Border_Pixmaps(unsigned int depth)
+{
+  border_select = XCreatePixmap(display, window, 4, 4, depth);
+  XSetForeground(display, gc, WhitePixel(display, screen_nr));
+  XFillRectangle(display, border_select, gc, 0, 0, 4, 4);
+
+  border_noselect = XCreatePixmap(display, window, 4, 4, depth);
+  XSetForeground(display, gc, BlackPixel(display, screen_nr));
+  XFillRectangle(display, border_noselect, gc, 0, 0, 4, 4);
+  XSetForeground(display, gc, WhitePixel(display, screen_nr));
+  XDrawPoint(display, border_noselect, gc, 0, 0);
+  XDrawPoint(display, border_noselect, gc, 2, 0);
+  XDrawPoint(display, border_noselect, gc, 1, 1);
+  XDrawPoint(display, border_noselect, gc, 3, 1);
+  XDrawPoint(display, border_noselect, gc, 0, 2);
+  XDrawPoint(display, border_noselect, gc, 2, 2);
+  XDrawPoint(display, border_noselect, gc, 1, 3);
+  XDrawPoint(display, border_noselect, gc, 3, 3);
+}
+
+/*------------------------------------------------------------------------------
+--
+--
+--
+------------------------------------------------------------------------------*/
+
+static void Refresh_Screen(void)
+{
+  /*
+  -- To avoid that any 'rubbish' remains on the window
+  -- (e.g. from a cursor), we clear the window first
+  */
+
+  XClearWindow(display, window);
+
+  XSetFunction(display, gc, GXcopy);
+  XCopyArea(display, pixmap, window, gc,
+            0, 0, window_width, window_height, 0, 0);
+}
+
+/*------------------------------------------------------------------------------
+--
+--
+--
+------------------------------------------------------------------------------*/
+
+static void Window_Size(void)
+{
+  Window root_rtn;
+  int x_rtn, y_rtn;
+  unsigned int width_rtn, height_rtn, bwidth_rtn, depth_rtn;
+  Pixmap new_pixmap;
+
+  event.xclient.message_type = MESSAGE_SIZE_atom;
+  event.xclient.format = 32;
+  event.type = ClientMessage;
+
+  if (XGetGeometry(display, window, &root_rtn, &x_rtn, &y_rtn,
+                   &width_rtn, &height_rtn, &bwidth_rtn, &depth_rtn))
+  {
+    event.xclient.data.l[0] = (long) width_rtn;
+    event.xclient.data.l[1] = (long) height_rtn;
+
+    if ((width_rtn != window_width) || (height_rtn != window_height))
+    {
+      new_pixmap = New_Pixmap(width_rtn, height_rtn, depth_rtn);
+
+      XCopyArea(display, pixmap, new_pixmap, gc,
+                0, 0,
+                Min(width_rtn, window_width), Min(height_rtn, window_height),
+                0, 0);
+
+      XFreePixmap(display, pixmap);
+      pixmap = new_pixmap;
+      window_width = width_rtn;
+      window_height = height_rtn;
+    }
+  }
+  else
+  {
+    fprintf(stderr,"WARNING (XviG) : Cannot get size of window.\n");
+    event.xclient.data.l[0] = (long) window_width;
+    event.xclient.data.l[1] = (long) window_height;
+  }
+
+  event.xclient.data.l[2] = (long) pixmap;
+
+  if (!XSendEvent(display, dummy_window, False, NoEventMask, &event))
+    fprintf(stderr, "ERROR (XviG) : Cannot send ClientMessage 'size'.\n");
+}
+
+/*------------------------------------------------------------------------------
+--
+--
+--
+------------------------------------------------------------------------------*/
+
+static void Cleanup(void)
+{
+  if (arrow_cursor)
+    XFreeCursor(display, arrow_cursor);
+  if (empty_cursor)
+    XFreeCursor(display, empty_cursor);
+
+  XFreePixmap(display, pixmap);
+  XFreePixmap(display, border_select);
+  XFreePixmap(display, border_noselect);
+
+  if (icon_pixmap)
+    XFreePixmap(display, icon_pixmap);
+
+  XDestroyWindow(display, window);
+  XCloseDisplay(display);
+}
+
+struct curs {
+	int yv;
+	int xlv;
+	int xhv;
+} ;
+struct curs curs_arrow[] = {
+	{  0, 0, 0 },
+	{  1, 0, 1 },
+	{  2, 0, 2 },
+	{  3, 0, 3 },
+	{  4, 0, 4 },
+	{  5, 0, 5 },
+	{  6, 0, 6 },
+	{  7, 0, 7 },
+	{  8, 0, 4 },
+	{  9, 0, 1 },
+	{ 10, 0, 0 },
+	{  9, 3, 4 },
+	{ 10, 4, 5 },
+	{ 11, 4, 5 },
+	{ 12, 5, 5 }
+};
+
+static void draw_cursor(int curstyp, int xc, int yc, 
+		int xl, int yl, int xh, int yh)
+{
+/* (xc,yc) is the center point
+	The xl,yl,xh,yh are screen coordinates of clip region
+	curstyp	0	arrow
+		1	arrow
+		2	cross hair
+		3	plus
+		4	rubber box  mode
+		5	rubber band mode
+		6	rubber mode off 
+		7	User pixmap
+		8	Hyperbola pixmap
+*/
+	int nl, i;
+	int xp,xm,yp,ym;
+	nl = sizeof(curs_arrow)/sizeof(struct curs);
+	if(curstyp == 0){
+              XDefineCursor(display, window, arrow_cursor);
+/*
+		for(i=0;i<nl;i++)
+                	XDrawLine(display, window, gc,
+				xc+curs_arrow[i].xlv,
+				yc+curs_arrow[i].yv,
+				xc+curs_arrow[i].xhv,
+				yc+curs_arrow[i].yv);
+*/
+	} else if (curstyp == 1) {
+		for(i=0;i<nl;i++)
+                	XDrawLine(display, window, gc,
+				xc+curs_arrow[i].xlv,
+				yc+curs_arrow[i].yv,
+				xc+curs_arrow[i].xhv,
+				yc+curs_arrow[i].yv);
+
+	} else if (curstyp == 2) {
+		/* cross hair */
+                XDrawLine(display, window, gc,
+			xc, yl, xc, yh);
+                XDrawLine(display, window, gc,
+			xl, yc, xh, yc);
+	} else if (curstyp == 3) {
+		xp = Min((xc+10),xh);
+		xm = MAX((xc-10),xl);
+		yp = Min((yc-10),yh);
+		ym = MAX((yc+10),yl);
+                XDrawLine(display, window, gc,
+			xc, ym, xc, yp);
+                XDrawLine(display, window, gc,
+			xm, yc, xp, yc);
+	} else if (curstyp == 4) {
+                XDrawLine(display, window, gc,
+			cur_x, cur_y, xc, cur_y);
+                XDrawLine(display, window, gc,
+			xc, cur_y, xc, yc);
+                XDrawLine(display, window, gc,
+			xc, yc, cur_x, yc);
+                XDrawLine(display, window, gc,
+			cur_x, yc, cur_x, cur_y);
+	} else if (curstyp == 5) {
+                XDrawLine(display, window, gc,
+			cur_x, cur_y, xc, yc);
+	} else if (curstyp == 8) {
+                XDrawLine(display, window, gc,
+			xl, yh, xc, yc);
+	}
+}
+
+static int inclipregion(int xpos, int ypos)
+{
+	/* the clip region is in user coordinates */
+	xpos = xpos - border;
+	ypos = Ldc_top - border - ypos;
+	if(ypos < dc_bottom)
+		return 0;
+	else {
+		if(xpos <= dc_ClipRight && xpos >= dc_ClipLeft
+			&& ypos <=dc_ClipTop && ypos >= dc_ClipBottom)
+				return 1;
+		else
+				return 0;
+	}
+}

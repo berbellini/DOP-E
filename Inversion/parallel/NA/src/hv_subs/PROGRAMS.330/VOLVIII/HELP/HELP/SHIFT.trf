@@ -1,0 +1,22 @@
+.de BR
+.in 0
+.in +8n
+.ti -5n
+..
+
+
+.Th SHIFT
+.S2 SUMMARY:
+Shift trace in time
+
+SHIFT Fixed sec
+
+.S2 INPUT:
+Fixed amount    : Shift the trace by amount seconds. 
+
+.S2 DESCRIPTION:
+The purpose of this is to adjust synthetics for a source delay. If the amount is positive, then the trace is shifted to be later in time.  This is accomplished by changing the B and E parameters in the header. In addition all arrival time picks, such as A, T0 ... T9 are adjusted also. The orgintime offset is NOT changed.
+
+.S2 EXAMPLES:
+
+.S2 "SEE ALSO":

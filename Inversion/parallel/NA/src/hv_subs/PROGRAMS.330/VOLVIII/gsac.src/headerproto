@@ -1,0 +1,13 @@
+#include	<stdio.h>
+#include        <string.h>
+#include "gsac.h"
+#include "gsac_docommand.h"
+#include "gsac_sac.h"
+#include "gsac_sachdr.h"
+#include "gsac_arg.h"
+#include "csstim.h"
+
+extern struct sacfile_ *sacdata;
+extern int *sortptr;
+EXTERN struct sac_control_ gsac_control;
+

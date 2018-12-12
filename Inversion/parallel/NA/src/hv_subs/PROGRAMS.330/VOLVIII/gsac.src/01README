@@ -1,0 +1,29 @@
+09 JAN 2005
+	Implemented HISTORY
+	Also agumented correlate to have even odd
+
+	TODO SLANT  with master argument perhaps
+		also baz p pdel
+CONVOLVE
+WHITEN
+SLANT  MASTER n p pdel baz
+
+Note check to see if cut takes arguments such as o gmt
+
+FG shoudl remove everything from memory and start anew DONE
+currently it used dregs in memory
+	why doesn't PSP plot the spectra the first time
+	what is wrong with the axes om the flog plot?
+
+stangeness in display - the the max time correcely reset
+
+-------
+CUT - when trying to put in the GMT and CAL, we must be very careful to
+skip those entries in the desac routine
+------
+do XLIM gsac_plot calls gsac_exec_doxlim to set everything up - so simple?
+-----
+	for crossnoise whitening - may work better using segments since
+	then the teleseism is actually proportionately weighted down
+
+WHITEN could have freq limits? as in bandpass

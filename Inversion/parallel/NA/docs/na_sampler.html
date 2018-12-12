@@ -1,0 +1,1145 @@
+ <!doctype html public "-//w3c//dtd html 4.0 transitional//en">
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+   <meta name="GENERATOR" content="Mozilla/4.5 [en] (X11; I; SunOS 5.6 sun4u) [Netscape]">
+   <title>NA-sampler notes </title>
+</head>
+<body text="#000000" background="Images/parchr.gif" LINK = "#660000"  ALINK ="#AA4400" VLINK="#AA044"> 
+<A NAME="top"></A>
+<table>
+<tr>
+<td valign="top" WIDTH=120>
+<a href="http://online.anu.edu.au/">
+<IMG ALIGN=LEFT  SRC="myimages/anu-badge.gif" border=0 alt="ANU online"></a> </p>
+<p>&nbsp;</p><P>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<a href="http://wwwrses.anu.edu.au/">
+<img src="Images/testrses.gif" border=0 alt="RSES Home Page"></A>
+<p>
+<FONT FACE="Georgia, Verdana, Arial, Helvetica" >
+<font color="#660000">
+
+<HR WIDTH=95% SIZE=1 SHADE align=left>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#top">Top </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#install">Installation </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#code">Using NA routines</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#input">Input parameters</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#tuning">Tuning</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#utility">Utility programs</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#example">Examples</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#cond">Conditions of use</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#contact">Contacting the author </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#papers">Papers and www</a>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#top">Top </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#install">Installation </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#code">Using NA routines</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#input">Input parameters</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#tuning">Tuning</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#utility">Utility programs</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#example">Examples</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#cond">Conditions of use</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#contact">Contacting the author </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#papers">Papers and www</a>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#top">Top </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#install">Installation </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#code">Using NA routines</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#input">Input parameters</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#tuning">Tuning</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#utility">Utility programs</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#example">Examples</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#cond">Conditions of use</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#contact">Contacting the author </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#papers">Papers and www</a>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#top">Top </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#install">Installation </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#code">Using NA routines</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#input">Input parameters</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#tuning">Tuning</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#utility">Utility programs</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#example">Examples</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#cond">Conditions of use</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#contact">Contacting the author </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#papers">Papers and www</a>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#top">Top </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#install">Installation </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#code">Using NA routines</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#input">Input parameters</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#tuning">Tuning</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#utility">Utility programs</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#example">Examples</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#cond">Conditions of use</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#contact">Contacting the author </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#papers">Papers and www</a>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#top">Top </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#install">Installation </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#code">Using NA routines</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#input">Input parameters</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#tuning">Tuning</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#utility">Utility programs</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#example">Examples</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#cond">Conditions of use</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#contact">Contacting the author </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#papers">Papers and www</a>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#top">Top </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#install">Installation </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#code">Using NA routines</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#input">Input parameters</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#tuning">Tuning</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#utility">Utility programs</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#example">Examples</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#cond">Conditions of use</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#contact">Contacting the author </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#papers">Papers and www</a>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#top">Top </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#install">Installation </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#code">Using NA routines</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#input">Input parameters</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#tuning">Tuning</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#utility">Utility programs</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#example">Examples</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#cond">Conditions of use</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#contact">Contacting the author </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#papers">Papers and www</a>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+<br>&nbsp;<p>&nbsp;</p>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#top">Top </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#install">Installation </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#code">Using NA routines</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#input">Input parameters</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#tuning">Tuning</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#utility">Utility programs</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#example">Examples</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#cond">Conditions of use</a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#contact">Contacting the author </a>
+<p>
+<IMG SRC="Images/purcube.gif" BORDER=0 ALT="" WIDTH=7 HEIGHT=7>&nbsp;
+<A href="#papers">Papers and www</a>
+ <HR WIDTH=95% SIZE=1 SHADE align=left>
+</font>
+</td>
+
+<td valign="top">
+&#160;&#160;&#160;&#160;&#160;&#160;
+
+</td>
+<td valign="top" WIDTH=800>
+
+<HTML>
+
+
+<BODY BGCOLOR="#FFFFFF">
+<IMG SRC="Images/colorbar.gif" width=700 height=3 ALT="-----">
+<H1>NA-sampler</H1>
+<p>
+</b>This page describes the package <i>NA-sampler</i>. It consists
+of a set of user callable subroutines which implement the
+NA multi-dimensional parameter space search algorithm. 
+The package contains source code
+for the NA routines and an example driver program.
+The latter applies the NA algorithm to the 
+estimation of crustal seismic velocity profiles from inversion of
+seismic receiver functions (RFI).  
+Several independent `utility' programs are also
+provided which manipulate the output files of the main program and plot
+some results. Some of these programs are specific to the RFI problem,
+and others may be more generally useful.
+</p>
+
+These pages are meant only as a guide. For more information
+look at the various README files in the <tt>src</tt> sub-directories, 
+the comments in the source code for the RFI example,
+and the input files for the utility plot programs. Finally if you
+are that adventurous you can look at the code itself. 
+<p>
+This package performs a derivative free parameter space search using the 
+Neighourhood Algorithm. See references below for details. The latest 
+details of NA-sampler and the related ensemble inference algorithm NA-Bayes 
+can be found at the 
+<a href="http://rses.anu.edu.au/~malcolm/NA/na.html">NA homepage</a>
+(http://rses.anu.edu.au/~malcolm/na/na.html)
+<p>
+<ul>
+<li>
+<a href="#install"> Installation </a> </li>
+
+<li>
+<a href="#code"> Using the NA subroutines </a> </li>
+
+<li>
+<a href="#input">Controlling the Neighbourhood Algorithm</a> </li>
+
+<li>
+<a href="#tuning"> Tuning the control parameters</a></li>
+
+<li>
+<a href="#utility"> Utility programs</a></li>
+
+<li>
+<a href="#example"> Running the RFI examples</a></li>
+
+<li>
+<a href="#cond"> Conditions of use</a> </li>
+
+<li>
+<a href="#contact"> Contacting the author</a> </li>
+
+<li>
+<a href="#papers"> Papers and related www sites</a> </li>
+</ul>
+</ul>
+
+<p>
+</ul>
+<A NAME="install"></A>
+<IMG SRC="Images/colorbar.gif" width=700 height=3 ALT="-----">
+
+<p>
+<b>Installation </b></p>
+
+When the tar file is unpacked it produces four directories:
+<ul>
+<tt><b>src</b></tt> - contains all Fortran and C source code for NA
+subroutines and RFI example program and utility/plot programs.
+<p>
+<tt><b>data</b></tt> - contains data input files and example output files
+created by RFI example problem. Also contains data files for
+running <i>splot</i> graphics program, and RFI plot programs.
+(See <a href="#utility"> utility programs</a> for more details.)
+<p>
+<tt><b>bin</b></tt> - contains executable for RFI example program and all
+utility programs.
+<p>
+<tt><b>docs</b></tt> - contains these HTML pages.
+
+</ul>
+To remove all object and source files prior to a re-installation type
+<tt>`make clean'</tt>. Examine the Makefile if you do not want to compile
+all of the utility programs. <b> Note that </b> the
+file <tt>`makena.macros'</tt> contains the location of the Fortran and
+C compilers and <b> must be edited to suit your system prior to
+installation</b>.
+Typical configuration files are provided for compaq alpha, sun, GNU, 
+and Linux. These can be used by typing,
+<ul><tt>
+> cd src <br>
+> cp macros/makena.macros_sun makena.macros </tt></ul>
+<p>
+To compile the complete set of programs from the <tt> src </tt> directory
+<ul><tt>
+> make all
+</tt></ul>
+<p>
+If compilation is successful, all executables are placed in the bin directory
+and all examples demonstrating the utility programs can be run from the
+data directory (See below). The reverse of <tt>make all</tt> is, 
+<ul><tt>
+> make clean
+</tt></ul>
+<p>
+which will remove all .o files and all executables.
+
+<p>
+Note that the Demo directory, the Makefile and the file <tt>rfi_na.f</tt>
+can serve as a <b>template</b> for new user applications. If you are 
+not interested in running, or looking at output from the seismic 
+example program then you can remove all 
+RFI specific source code and programs by,
+<ul><tt>
+> cd src <br>
+> \rm -fr rfi_subs<br>
+> cd ../data<br>
+> \rm -fr demo_results rfi_files<br>
+</tt></ul> 
+<em> This will save disk space but please note that the 
+RFI programs will be gone and the command
+<tt> `make all' </tt> will no longer work</em>. 
+A re-installation from a tar file will be necessary to retrieve the
+RFI example files. </p>
+
+
+<A NAME="NA with MPI"></A>
+<p>
+<i>Parallelization with MPI</i>
+<p>
+In May 2002 message passing interface (MPI) calls
+were added to the NA source code. This allows the possibility of running
+the search algorithm across a cluster of machines simultaneously
+(e.g. a linux Beowulf cluster). The advantage of this is that the 
+forward modelling for each model in an ensemble can be performed
+on separate machines, giving much faster overall run times.   
+Note that this does <b>not mean</b> that the user's own forward modelling
+code needs to be parallelized with MPI. All MPI calls appear
+in the NA source code and are used to farm the forward modelling
+out to different processors.
+<p>
+The MPI code is activated by a switch in the installation file 
+<tt>`makena.macros'</tt>. If you have say a linux cluster running MPI
+then you need to set the <tt>TYPE=mpi</tt>
+and the <tt>MF77</tt> variable to the location of the MPI fortran 77 compiler
+on your system. See the example <tt>makena.macros</tt> files for examples.
+(If you want the usual single processor version then set <tt>TYPE=serial</tt>.)
+ If installation occurs with these variables then you must execute
+the program using the <tt>mpirun</tt> command provided by your MPI installation
+in the usual way.  For example one might run the seismic example executable
+with a command like,
+<p>
+<ul><tt>
+> mpirun -np 20 rfi_na
+</ul></tt>
+<p>
+which will execute the program rfi_na with the forward modelling distributed
+across the first 20 machines that your MPI is set up to run on.
+<p>
+Note that when the number of processors (e.g. 20 in this example) 
+divides equally into the number of models generated at each 
+iteration (see parameter <tt>Ns2</tt> <a href="#input">below</a>)
+then one gets perfect parallelization in the forward
+modelling part of the code, and this usually means a significant 
+overall speed up, e.g. a factor of Ns1/20 in the forward modelling
+part of the code. Since for many applications most time will be spent
+on forward modelling then this can represent a significant speed up of
+the overall code. When the number 
+of processes is not a factor of <tt>Ns2</tt> then one gets a
+smaller speed up factor. Note that there is <b>no point in asking for
+more processors than <tt>Ns2</tt></b> because there will be nothing
+for the extra processors to do. 
+
+<A NAME="prob"></A>
+
+<p>
+<i>Compiling problems and platform dependency</i>
+<p>
+
+So far I have succesfully compiled and run all codes in this package 
+on a SUN workstation (running Solaris 2.6 or later) using both the native 
+compiler and the GNU compilers g77 and gcc; on a Compaq Alpha 
+(running OSF1 V4.0) using the Digital Fortran and C compilers; on a
+linux box with g77, or intel fortran/C compilers ifc and icc.
+In all cases exactly the same results were obtained.
+Using the intel fortran and C compilers on Linux I obtained different answers.
+Possibly due to rounding error changing the Monte Carlo sequence.
+The default <tt>makena.macros file</tt> is for a linux box running the intel 
+compiler.  When installing on other platforms SUN you will need to 
+edit the file <tt>src/makena.macros</tt> appropriately.
+<p>
+
+<p>
+If you are using a Dec/Compaq alpha/compaq platform then you will need to 
+use the compiling option
+<tt> -assume byterecl </tt> which makes the Fortran open statement for
+direct access files the same as on a sun, i.e. with record length
+specified in bytes rather than words. This can be done
+by editing the file <tt>src/makena.macros</tt>, which is used 
+to define compilers and options during the make.
+An example file <tt>makena.macros_alpha</tt> is provided as an example.
+<p>
+Note that for the example problem direct access output (<b>nad</b>) files 
+are provided with the package (in directory <tt>data/demo_results</tt>).
+To allow platform independence both little endian and big endian
+binary versions are included. The make file uses your choice of
+platform (specified in file <tt>makena.macros</tt>) to decide
+which type of binary file to link to the examples.  
+This is a change over earlier
+distributions and means that you will now be able to run
+all of the utility programs, e.g. <b> splot </b> (showing the models
+generated by the NA ) on the <i>example output files provided</i>. 
+The downside of this is that the distribution tar file is larger.
+
+<p>
+Some programs (from T. Shibutani, RCEP, DPRI, Kyoto Univ., Japan) are 
+provided in the directory 
+<tt>src/utl/byteconv</tt> for converting SAC files between a sun and a 
+Compaq Alpha machine. This may be useful for seismologists with many 
+sac files. Note that SAC files are the format used to store the input 
+and output seismic receiver functions used in the RFI example. They are
+specific to this example and are read in by the user routines. They are not
+a generic NA input file. 
+
+<p>
+<i>Fortran 90</i>
+<p>
+In January 2004 the source codes of the NA_sampler package were changed to
+incorporate dynamic memory allocation using Fortran 90. This means that
+array bounds in file <tt>na_param.inc</tt> only need to be set if using 
+Fortran 77 compatibility mode, which is itself set by <b>-DNA_F77_COMPATIBILITY=1</b>
+in the file <tt>makena.macros</tt>. Try the following
+
+<ul><tt>
+> cd src/macros <br>
+> diff makena.macros_alpha_f90 makena.macros_alpha_f77 <br>
+</tt></ul>
+Fortran 90 will be the default compiler from January 2004.
+
+<p>
+</ul>
+<A NAME="code"></A>
+<IMG SRC="Images/colorbar.gif" width=700 height=3 ALT="-----">
+
+<p>
+<b>Code structure and interfacing </b></p>
+
+<p>
+<p>
+<ul><IMG SRC="na_sampler_figs/NAcode.gif" ALT="NA code structure"></ul>
+<p>
+The figure above shows the structure of the NA code and how it is
+interfaced with the user code. The green routines must be provided
+by the user.  The main routine passes control to
+the NA code by calling the subroutine <tt>`na'</tt> with no arguments.
+This then calls three user written subroutines. 
+<ul> 
+<tt><b>user_init </b></tt> - provides the definition of the
+parameter space to the NA routines and performs any user problem
+specific tasks and I/O.
+<p>
+<tt><b>forward </b></tt> - calculates the misfit/objective function
+for a given input model.  
+<p>
+<tt><b>writemodels</b></tt> - allows the user to write out,
+in their own format, all of the models, misfit values etc, from the 
+ensemble produced by the NA.
+<p>
+</ul>
+
+Only <tt>forward</tt> is called more than once.
+Each of these subroutines are fully described in the header
+of the example source files for the RFI problem.
+
+<p>
+The file <tt>rfi_na.f</tt> contains the main driver program and the 
+three subroutines which implement the RFI example problem. In this
+case the driver routine merely calls <tt>na</tt> and exits. All
+data I/O and initialization is performed inside the routine
+<tt>user_init</tt>. The three RFI interface routines make use
+of many other problem specific subroutines and libraries. Source files
+for all of these are in the directory <tt>src/rfi_files</tt>.
+They are compiled and linked into the main program by the Makefile.
+
+<p>
+To use the NA subroutines you need to do the following,
+<ul>
+<li> Create the three subroutines for your problem. (Use
+the RFI examples as a template)</li>
+<li> Create the main routine that calls <tt>na</tt> (This can be
+trivially simple as in the RFI example.)</li>
+<li> Edit the file <tt>na_param.inc</tt> to adjust array sizes if
+necessary. <font color="red"> 
+Since January 2004 this is not needed if using Dynamic memory allocation
+under the fortran 90 compiler (set NA_F77_COMPATIBILITY=0 in makena.macros)
+</font>
+</li>
+<li> Edit the <tt>Makefile</tt> and <tt>makena.macros</tt>
+to compile the users subroutines</li>
+<li> Compile the new program with
+<ul><tt> > make rfi_na </tt> (or the equivalent)</ul>
+and run it from the <tt>data</tt> directory.</li>
+
+</ul>
+<p>
+Note that the only essential information that 
+the NA routines need from the user routines is the definition of the
+parameter space (from <tt>user_init</tt>) and the misfit for a
+given model (from <tt>forward</tt>). The routine <tt>writemodels</tt>
+is called once after the NA has finished and can be null.
+
+<p>
+<i>Output files</i></p>
+The two generic output files are <tt>na.sum</tt> and <tt>na.nad</tt>
+The first is an ascii file with summary information on the performance,
+the second is a direct access file binary file containing all of the 
+models generated by the NA during the search. The format of this file 
+is described in Appendix C. The NAD file is used as a compact storage 
+format which allows users to add their own information in a header. 
+NAD files are read in by certain utility programs like the plot program 
+splot (See appendix A). NAD files are also read in by the appraisal 
+algorithm NA-Bayes, which is a separate package that can be downloaded. 
+See the 
+<a href="http://rses.anu.edu.au/~malcolm/NA/na.html">NA homepage</a>
+for details.
+
+
+<p>
+<i>Code development</i></p>
+The development of this code is an ongoing research effort and I
+expect that the NA subroutines will be updated from time to time, however,
+it is intended that the interface routines will remain unchanged.
+(The input file <tt>na.in</tt> will probably change)
+In this way the incorporation of updated NA routines into an existing
+application should be quite straightforward, i.e. compiling 
+the new na.f to obtain <tt> na.o </tt> and linking with the
+existing driver code. Note that the NA source code in
+sub-directory <tt>NA_src</tt> <em> should not normally need editing </em>!
+(Edit at your own risk !)
+
+<p>
+The code was developed on a sun network under Solaris 2.6.
+Note that there are some issues to consider when transporting the
+code across to new platforms and compilers 
+systems. The ones that I am aware of are described
+in the section on <a href="#prob"> Compiling problems</a>.
+
+</ul>
+<A NAME="input"></A>
+<p>
+<IMG SRC="Images/colorbar.gif" width=700 height=3 ALT="-----">
+
+<p>
+<b>Controlling the Neighbourhood algorithm</b></p>
+
+The NA control parameters and other options are read in from the file
+<tt>na.in</tt>. <br> Each line is described below. 
+<font color="#000088" size=-1>
+<ul>
+<tt>
+# <br>
+#       Neighbourhood Algorithm input options file <br>
+# <br>
+ialg &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  
+: Algorithm type (1=Uniform search, 2=Neighbourhood algorithm)<br>
+maxit &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+: Maximum number of iterations<br>
+Ns1 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+: Number of models for initial sample<br>
+Ns2 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+: Number of models generated at each iteration<br>
+Nr &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+: Number of Neighbourhoods re-sampled at each iteration<br>
+YorN, iseed &nbsp; : Use quasi random number generator ? (y/n);
+random seed <br>
+istype &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+: Type of initial sample (0=random;+-1=read in a NAD file)<br>
+olevel &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+: Output info level (0=silent;1=summary info;2=1+write models)<br>
+YorN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+: Turn timing mode on ? (y/n)<br>
+YorN &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+: Turn debug mode on ? (y/n)<br>
+</tt>
+
+<p>
+</ul>
+</font>
+Most of these are self-explanatory. The examples in the <tt>data</tt> 
+directory contain `typical' values for the parameters, although the
+main tuning parameters <tt>Ns2</tt> and <tt>Nr</tt> should be tuned for
+the particular problem. 
+(See <a href="#tuning"> tuning the control parameters</a>)
+<p>
+The parameter <tt>istype</tt> controls the type of initial ensemble
+of models used.  Several options are available. 
+<p>
+<ul>
+<li>
+<tt>istype=0</tt> - then the initial sample is generated using a 
+uniform random distribution 
+and has size <tt>Ns1</tt>.<p>
+<li>
+<tt>istype=1</tt> - then the initial sample is read in from a direct
+access file in <b>nad</b> format 
+called <tt>`na.nad'</tt>
+and the initial sample size <tt>Ns1</tt> is reset to the number
+of models in the <b>nad</b> file. <p>
+<li>
+<tt>istype=-1</tt> - same as <tt>istype=1</tt> except that the forward
+problem is not solved for the initial ensemble and instead the
+misfit values are taken from the file. <p>
+<li>
+<tt>istype=2</tt> - then the initial sample is read in from an ascii file 
+<tt>models.in</tt>. 
+For each model the format is a triplet of a blank line followed by the
+misfit value on a line by itself followed by the <tt>nd</tt> values of
+the model. This is repeated for each model. See the data directory for
+an example. If the number of models in the file is less that 
+<tt>Ns1</tt> then the remaining models are
+generated randomly. If greater than <tt>Ns1</tt>, 
+then <tt>Ns1</tt> is reset to that value. <p>
+<li>
+<tt>istype=-2</tt> - same as <tt>istype=2</tt> except that the forward
+problem is not solved for the initial ensemble and instead the
+misfit values are taken from the file. <p>
+
+<p>
+</li>
+</ul>
+With these options it is possible to restart the NA using the output ensemble
+from a previous run of NA (<tt>istype=1</tt>). This might be useful if
+one wanted to change the tuning parameters (<tt>Ns2</tt> and <tt>Nr</tt>),
+or perhaps change the misfit function its self (say to add regularization
+or incorporate some new type of data),
+and continue on. If <tt>istype=+-2</tt> then its possible to seed the
+initial distribution with one or more previously known `good' models with
+low misfit. This will naturally attract the sampling towards them
+and allow a gradually focusing search in their neighbourhood.
+
+Examples of programs 
+which read and write NAD files are contained in the 
+<a href="#utility">utility programs</a> section. 
+<p>
+If a quasi random number generator is not chosen then a pseudo-random
+number generator is used. (See the papers cited below or
+Press et al 1992 <i>Numerical Recipes, C.U.P.</i>, for a discussion
+of the difference.)
+<p>
+
+<A NAME="tuning"></A>
+<p>
+<IMG SRC="Images/colorbar.gif" width=700 height=3 ALT="-----">
+<p>
+<b>Tuning the control parameters</b></p>
+
+<p>
+The two control parameters usually need to be tuned for the
+problem in hand and the style of sampling that you want.
+There are no well defined rules but experience has proven to
+be a useful guide. Most of my understanding is based on 
+empirical evidence from applications at RSES. 
+
+The usual objective with a direct sampling algorithm is 
+to try and achieve a balance between exploration of the 
+parameter space and exploitation of
+the previous samples. The more explorative an algorithm is, the more
+likely it will be robust against local minima, and the starting
+random seeds, the more exploitative it is the faster it will
+reduce the objective function. The amount of exploration
+and exploitation performed by the NA is largely controlled
+by the two control parameters <tt>ns</tt> (<tt>ns2</tt>) 
+and <tt>nr</tt>. 
+<p><ul> <tt> ns</tt> = Number of models generated at each iteration. </p>
+<p> <tt> nr</tt> = Number of Voronoi cells re-sampled at each iteration. </p>
+<ul> and so <tt>ns/nr</tt> models are placed in each cell.</ul> </p>
+</ul>
+<p>
+See the papers below for more details. As <tt>ns</tt> and <tt>nr</tt> 
+are increased it will be more explorative and as they are decreased 
+it will be more exploitative.
+
+<p>
+Our experience has shown that reasonable results can be obtained
+<i> after enough iterations </i> when <tt> ns </tt> is of the order 
+of twice the number of dimensions, and <tt>nr</tt> is in 
+the range <tt>2 - ns/2</tt>.
+The number of iterations is more difficult to judge. I have used
+used 10 - 100 times <tt>ns</tt>. It is clear that the larger values 
+of <tt>ns</tt> and <tt>nr</tt> (i.e. more explorative) require 
+more iterations to concentrate sampling (especially in high dimensions). 
+In our experiments we have found in all cases that the
+sampling does eventually concentrate quite well, even for larger
+nr values, although you might not want to wait that long ! 
+
+<p>
+My strategy is often that <b> it is better to get good sampling slowly
+than poor sampling quickly</b>. However, small values of <tt>nr</tt> do 
+seem to concentrate sampling quickly, especially in small dimensional
+(e.g. d ~ 4) problems. These issues are also discussed in 
+<A href="#papers"><i>Sambridge (1999a)</i></a>.
+
+
+I would be interested to hear of other peoples experiences
+(see <A href="#contact">contacting the author </a>).
+
+
+<A NAME="utility"></A>
+<p>
+<IMG SRC="Images/colorbar.gif" width=700 height=3 ALT="-----">
+<p>
+<b>Utility programs</b></p>
+
+When the package is compiled the following general utility programs are 
+put in the <tt>bin</tt> directory (source in <tt>src/utl</tt>). <br>
+<ul>
+<b>readnad</b> - reads in a nad file and writes summary information 
+to the screen.
+<p>
+<ul><ul>To read a nad file called <tt>`na.nad'</tt> then type<br>
+<p>
+<font color="#111177"><ul><tt>readnad  na.nad</tt></ul></ul></ul>
+</font>
+
+<p>
+<b>nad2asc</b> - reads in a nad file and writes out all models to an ascii file<br>
+<ul> 
+<p>
+<ul>Execute with <br>
+<p>
+<font color="#111177"><ul><tt>nad2asc  na.nad outputfile</tt></ul></ul>
+</font>
+</ul>
+
+<p>
+<b>asc2nad</b> - goes the other way<br>
+<ul> 
+<p>
+<ul>Execute with <br>
+<p>
+<font color="#111177"><ul><tt>asc2nad inputfile  output.nad </tt></ul></ul>
+</font>
+</ul>
+
+<p>
+<b>splot</b> - reads in a nad file and plots a scatter diagram
+of all models (PS or X)<br>
+<ul> &nbsp;&nbsp;&nbsp;projected onto a pair of axes. See the 
+<a href="./splot.html">splot manual </a> for more details.
+</ul>
+</ul>
+
+</ul>
+The following are utility programs specific to the receiver function example: 
+<ul>
+<b>plot_rf</b> - plots the observed and predicted receiver function <br>
+<ul>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+for the best fitting velocity profile found by the NA.
+</ul>
+<p>
+<b>plot_model</b> - a density plot of all velocity profiles produced
+by the NA search.
+<p>
+<b>synrf</b> - calculates a synthetic receiver function from an input velocity profile.
+<p>
+<b>synrf_noise</b> - Same as <tt>synrf</tt> but adds noise to the result.
+<p>
+<p>
+<b>nad2rfi</b> - converts direct access NAD file to an ascii file containing
+<br><ul>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+velocity profiles, in a format specific to RFI problem.
+</ul> 
+<p>
+<b>rfi2nad</b> - performs opposite conversion to <tt>nad2rfi</tt>.
+</ul> 
+Executables from all utility programs are put in the 
+<tt> bin</tt> directory. <br>
+Further details can be found at the 
+<a href="./rfi.html">RFI utility programs </a> page.
+
+<p>
+
+</ul>
+
+
+<A NAME="example"></A>
+<p>
+<IMG SRC="Images/colorbar.gif" width=700 height=3 ALT="-----">
+<p>
+<b>Running the receiver function inversion example</b></p>
+<p>
+The example driver program provided with the <i>NA-sampler</i> 
+package is for the inversion of receiver functions for crustal
+seismic structure. This is described further in the two 
+NA papers cited below. Note that the driver program is
+not intended to be a general purpose receiver
+function code, but merely an example of using the NA
+routines on a realistic seismic problem. Changes to the 
+code may be required if it is applied to other data sets
+(For example, the maximum number of layers, and waveforms 
+may need adjusting etc.)
+
+<p>
+To run the RFI examples after compilation of the package (see above),
+<p><ul><tt> 
+> cd data  <br>
+> cp na.in_examples/na.in_9_2 na.in <br>
+> rfi_na<br>
+</tt>
+</ul>
+<p>
+This will run a short (3 iteration) test run with <tt>Ns=9</tt>
+and <tt>Nr=2</tt>. 
+The output should be similar to that in <tt>demo_results/na.sum_3_9_2</tt>.
+ A similar set of steps is required to run one of the longer example
+inputs in directory <tt>na.in_examples</tt>. You could try editing 
+<tt>na.in</tt> to adjust input parameters and repeating the test run.
+<p>
+The RFI subroutines use several input and output files. All
+of which are in sub-directories of <tt>data/rfi_files</tt>.
+The main one is <tt>rfi.in</tt>, which contains parameters
+associated with the input data and the names of the other I/O files.
+<p>
+Two other input files are used. In the default setup these are
+<ul>
+<b> rfi_param </b> - in sub-directory <tt>NA_MDL</tt>, which contains
+the bounds of the model parameters (Thicknesses, velocities and 
+Vs/Vp ratio's in each of 6 layers). 
+<p>
+<b> rec_func </b> - in sub-directory <tt>ORF</tt>, which contains
+the one or more input (stacked) receiver functions.
+<p>
+</ul>
+Two output files are produced. In the default setup these are
+<ul>
+<p>
+<b> rec_models </b> - in sub-directory <tt>NA_MDL</tt>, which contains
+all models generated at each iteration of the NA in a convenient format.
+<p>
+<b> rec_func </b> - in sub-directory <tt>NA_SRF</tt>, which contains
+the predicted receiver function from the best fit model.
+<p>
+
+</ul>
+The output files produced by a 500 iteration example are 
+included in the <tt>demo_results</tt> directory.
+They can be used to demonstrate the use of <b>splot</b> and the 
+RFI graphics programs. See the 
+<a href="./splot.html">splot manual </a> for examples of using splot
+on the 500 iteration results. 
+See <a href="./rfi.html">RFI utility programs</a> for examples of
+plotting receiver functions and the ensemble of velocity profiles 
+produced by the NA.
+
+<A NAME="cond"></A>
+<p>
+<IMG SRC="Images/colorbar.gif" width=700 height=3 ALT="-----">
+<p>
+<b>Conditions of use</b></p>
+
+<p>
+<ul>   1. The NA routines may not be distributed to third parties. 
+       <br>Interested  parties  should contact the author directly.
+<p>
+       2. Due acknowledgment  must be  made of the  use of the NA
+      routines in research  reports  or  publications.  Whenever
+      such reports are released for public access, a copy should 
+      be forwarded to the author.
+<p>
+      3. The  NA  routines  may  only  be  used  for not-for-profit
+      research and development, unless it has been agreed in advance 
+      with the author in writing.
+<p>
+</ul>
+Use of any part of this package will be taken as acceptance of these conditions.
+
+<A NAME="contact"></A>
+<IMG SRC="Images/colorbar.gif" width=700 height=3 ALT="-----">
+<p>
+<b>Contacting the author</b>
+<p>
+The purpose of this documentation and the associated README files, is
+to reduce the likelihood of running into problems. I would be
+grateful if you do not contact me with queries on the 
+installation, or running, of the code unless you have thoroughly looked 
+for the answer yourself. 
+(Note that either these HTML pages, the README files, example files
+and the source code itself may provide an answer). Note that 
+for detailed queries on the RFI example it may be best to contact
+Dr. T. Shibutani, (shibutan@rcep.dpri.kyoto-u.ac.jp)
+who wrote the original versions of the RFI code and plot programs.
+His contribution is much appreciated.
+
+<p>
+I am interested in obtaining feedback on people's experiences with
+this code. Especially to hear what type of problems it has been applied 
+to. 
+I expect that the code will be updated from time to time.
+Information on new developments will be posted on the 
+<a href="http://rses.anu.edu.au/~malcolm/NA/na.html">NA homepage</a>.
+If you develop your own web pages showing work where NA has been
+used, or publish papers then I would be happy to add a reference on
+the NA homepage.
+<p>
+<A NAME="papers"></A>
+<IMG SRC="Images/colorbar.gif" width=700 height=3 ALT="-----">
+<br>
+<p>
+Related sites:
+
+<ul>
+<li><a href="http://rses.anu.edu.au/~malcolm/NA/na.html">NA homepage</a>
+ - where the latest versions of NA-Bayes and NA-sampler can be accessed.</li>
+
+<li><a href="http://rses.anu.edu.au/~malcolm/NA/na_sampler.html">NA-sampler</a>
+ - the latest version of this manual.</li>
+
+<li><a href="splot.html">splot</a> - graphics program for display of
+multi-dimensional ensembles. </li>
+
+<li><a href="nad.html">NAD</a> - explanation of direct access nad files. </li>
+
+<li><a href="rfi.html">RFI</a> - Receiver function utility programs and
+graphics (included with <i>NA-Sampler</i> package.) </li>
+
+<li><a href="http://rses.anu.edu.au/~malcolm/NA/na_bayes.html">NA-Bayes</a>
+ - the manual for the neighbourhood algorithm Bayesian inference package.</li>
+
+<li><a href="http://rses.anu.edu.au/~malcolm/NA/naplot.html">naplot</a>
+ - graphics program for displaying Bayesian estimators 
+(included with <i>NA-Bayes</i> package).</li>
+
+<li><a href="http://rses.anu.edu.au/~malcolm/NA/summary.pdf">
+summary.pdf</a></li> - A short summary of NA-sampler written for 
+the IASPEI handbook (PDF file)
+<li><a href="http://rses.anu.edu.au/~malcolm">Malcolm's homepage</a> </li>
+
+</ul>
+
+<IMG SRC="Images/colorbar.gif" width=700 height=3 ALT="-----">
+<p>
+References:
+
+<ul>
+The Neighbourhood algorithm for searching a multi-dimensional parameter space
+for models (points) with `acceptable data fit' is implemented
+in the program <i> NA-sampler</i>, and is described in the paper:
+   
+<p>
+<i> Geophysical Inversion with a Neighbourhood Algorithm I: searching
+a parameter space, <br> Sambridge, M., Geophys. J. Int., <b> 138</b>,
+479-494, 1999</i>.
+
+<p>
+A related paper describes the Neighbourhood re-sampling algorithm
+(implemented in program <i>NA-bayes</i>) for
+calculating Bayesian integrals from a finite set of samples produced
+by the NA algorithm or any other search method (e.g. GA or SA etc.).
+
+<p>
+<i> Geophysical Inversion with a Neighbourhood Algorithm II: appraising
+the ensemble, <br> Sambridge, M., Geophys. J. Int., <b> 138</b>,
+727-746, 1999</i>.
+
+<p>
+Postscript and PDF versions of these papers can be found on the 
+<a href="http://rses.anu.edu.au/~malcolm/NA/na.html">NA homepage</a>.
+
+<p>
+</ul>
+
+<IMG SRC="Images/colorbar.gif" width=700 height=3 ALT="-----">
+<br>Enquires to Malcolm Sambridge: <A HREF="mailto:malcolm@rses.anu.edu.au">
+<EM>malcolm@rses.anu.edu.au</EM></A><br>
+<IMG SRC="Images/colorbar.gif" width=700 height=3 ALT="-----">
+<p>
+Last modified July 2002.
+
+</td>
+</tr>
+</table>
+
+</body>
+</html>
+

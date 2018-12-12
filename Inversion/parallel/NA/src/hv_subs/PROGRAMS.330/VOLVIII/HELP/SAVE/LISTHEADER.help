@@ -1,0 +1,28 @@
+GSAC Command Reference Manual                              LISTHEADER
+
+SUMMARY:
+List trace header values 
+
+ListHeader [options] 
+where options is one or more of the following:
+
+[Default ] [ list] 
+
+INPUT:
+       Default    : Output all defined header fields 
+
+       list       : a listing of header fields to output
+
+       Columns 1  : 1 column output
+
+       Columns 2  : 2 column output
+
+DESCRIPTION:
+     Output header values.
+
+EXAMPLES:
+List distance, azimuth and P and S picks
+     LH DIST AZ A T0
+
+SEE ALSO:
+

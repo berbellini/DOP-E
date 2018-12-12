@@ -1,0 +1,55 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th MARKTIMES
+.S2 SUMMARY:
+Marks velocity times in plot
+
+MARKTIMES 
+[DEFault]
+[Distance Header|dist]
+[Origin   Header|GMT time | CAL time]
+[Velocities v ... ]
+[ON|OFF]
+
+.S2 INPUT:
+DEFault         : reset to default values
+.BR
+Distance Header : Use the distance in the trace header if set
+.BR
+Distance dist   : Use dist  as the  distance 
+.BR
+Origin Header   : Use the origin time in the trace headers if set
+.BR
+Origin GMT time : Use time of the form  YEAR JDAY HOUR MINUTE SECOND MILLISECOND
+.BR
+Origin CAL time : Use time of the form  YEAR MONTH DAY HOUR MINUTE SECOND MILLISECOND
+.BR
+Velocities v ... : Set of  velocities (km/s) to be used. No more than 10 are permitted
+.BR
+ON              : Mark the times. This is automatically the condition when called unless turned off explicitly by the OFF command. 
+.BR
+OFF             : Turn off marking
+
+.S2 DESCRIPTION:
+This routine marks the velocity arrival times as a function of the origin time, distance and velocity set.
+These are indicated by BLUE colored tics with the command plot. The arrival times are determined from the
+simple equation
+.BR
+arrival_time = origin_time + distance/velocity
+.BR
+.S2 "SAC COMPATIBILITY:"
+Nothing is set in the header. The purpose is to indicate approximate arrival times for phase identification. The default values also include 1, 7 and 8 km/sec.
+
+
+
+.S2 EXAMPLES:
+.S2 "DEFAULT"
+MARKTIMES VELOCITIES 1. 2. 3. 4. 5. 6. 7. 8. DISTANCE HEADER ORIGIN HEADER
+
+
+.S2 "SEE ALSO":
+PLOT

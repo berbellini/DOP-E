@@ -1,0 +1,110 @@
+
+
+echo Checking for existence of bin and lib directories
+for i in bin lib include include/readline
+do
+if [ -f $i ]
+then
+	echo Found the ordinary file $i which does not belong
+	echo Deleting this file to be able to create the $i directory
+	rm -f $i
+fi
+if [ -d  $i ]
+then
+	echo Directory $i exists
+else
+	echo Creating Directory $i ; mkdir $i
+fi
+done
+
+echo Building CALPLOT libraries and commands
+cd CALPLOT/src/XVIG/src ; make all clean ; cd ../../../..
+cd CALPLOT/src/cmd.unx ; make docp ; make all ; cd ../../..
+cd CALPLOT/src/clib.unx ; make docp ; make all ; cd ../../..
+cd CALPLOT/src/flib.unx ; make docp ; make all ; cd ../../..
+cd CALPLOT/src/util     ;             make all ; cd ../../..
+cd CALPLOT/Utility      ;             make all ; cd ../..
+
+echo Building GNU Readline libraries required by gsac
+mkdir include/readline
+cd  readline-5.0
+./configure
+
+#####
+#	make sure that SOL means use cc compiler, even if gcc is there
+#####
+if [ $CTARGET = "SOL" ]
+then
+ed Makefile << EOF
+/gcc/s//cc/p
+w
+q
+EOF
+ed examples/Makefile << EOF
+/gcc/s//cc/p
+w
+q
+EOF
+ed shlib/Makefile << EOF
+g/gcc/s//cc/p
+w
+q
+EOF
+fi
+#####
+#	end of SLU Solaris fix
+#####
+#####
+#	make sure that OSX40-32 means use gcc  -m32
+#####
+if [ $CTARGET = "OSX40-32" ]
+then
+ed Makefile << EOF
+/gcc/s//gcc -m32 /p
+w
+q
+EOF
+ed examples/Makefile << EOF
+/gcc/s//gcc -m32 /p
+w
+q
+EOF
+ed shlib/Makefile << EOF
+g/gcc/s//gcc -m32 /p
+w
+q
+EOF
+fi
+#####
+#	end of SLU OSX40-32 fix
+#####
+make static
+cp -p *.h ../include/readline
+cp -p *.a ../lib
+make clean
+cd ..
+
+echo Building Commands
+cd VOLI/src ; make all ; cd ../..
+cd VOLII/src ; make all ; cd ../..
+cd VOLIII/src ; make all ; cd ../..
+cd VOLIV/src ; make all ; cd ../..
+cd VOLV/src ; make all ; cd ../..
+cd VOLVI/src ; make all ; cd ../..
+cd VOLVII/src ; make all ; cd ../..
+cd VOLVIII/src ; make all ; cd ../..
+cd VOLVIII/gsac.src ; make all ; cd ../..
+cd VOLIX/src ; make all ; cd ../..
+cd IRIS; ./DOCOMPILE ; cd ..
+
+echo compiling dialog which is required by source inversion scripts
+cd dialog-1.1-20080819
+./configure
+make all
+mv dialog ../bin
+make clean
+cd ..
+
+
+echo Compile of Computer Programs in Seismology is Over
+echo `ls -1 bin/* | wc -l` programs were compiled

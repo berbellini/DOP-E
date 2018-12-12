@@ -1,0 +1,36 @@
+GSAC Command Reference Manual                                    FUNCGEN
+
+SUMMARY:
+Generate a synthetic time series for testing.
+FuncGen IMPULSE DELTA delta NPTS npts 
+
+INPUT:
+	IMPULSE	Generate a time series with a single point with amplitude
+		equal to 1.0/delta, where delta is the smapling interval in
+		seconds. The impulse is centered at npts/2, and the B header
+		value is set as - (npts/2)*delta 
+	DELTA	Sample interval in seconds
+	NPTS	Number of points in the time series
+DESCRIPTION:
+     This generates a synthetic time series. At present only an impulse
+is supported. The internal file name is 'impulse.sac' Since this command will 
+increase the number of files in memory, a second call will this create two
+files with the name 'impulse.sac' and a WRITE will actually only leave one
+visible in the file system, since only the lst write is preserved.
+
+SAC COMPATIBILITY:
+     Only IMPULSE is implemented. By default SAC creates this with
+DELTA = 1 sec, NPTS = 100 and with the maximum amplitude = 1. GSAC
+creates this single point representation of an impulse with a maximum
+amplitude = 1/delta so that the Fourier spectrum level at zero
+frequency = 1.0  This is done to permit an easy view of the instrument response:
+	funcgen impulse deltaa  0.05 npts 4096
+	transfer from none to polezero subtype resp.paz
+	fft
+	psp am
+DEFAULT
+	FUNCGEN IMPULSE DELTA 1.0 NPTS 1024
+
+SEE ALSO:
+       
+

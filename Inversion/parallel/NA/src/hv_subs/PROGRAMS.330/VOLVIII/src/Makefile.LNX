@@ -1,0 +1,144 @@
+#####
+#	LINUX
+#####
+FCMP=g77
+CCMP=gcc -g
+CPS=../..
+MCHCMD = mnmarg.o mgtarg.o
+MCHDEP = mchdep.o
+CALPLTPF=${CPS}/lib/libcalpltf.a
+CALPLTVC=${CPS}/lib/libcalxvigc.a ${CPS}/lib/calxvig.a
+CALPLTVF=${CPS}/lib/libcalxvigf.a ${CPS}/lib/calxvig.a
+LDFLAGS         =  -L/usr/X11R6/lib  -lX11 -lm
+DEST=../../bin
+
+GSUBSF=grphsubf.o
+GSUBS=lgstr.o mnmarg.o mgtarg.o sacsubf.o mchdep.o
+GCCLIB=
+
+RM=rm -f
+
+.f.o:
+	$(FCMP) -c $<
+
+.c.o:
+	$(CCMP) -c $<
+
+
+grphsubf.o:
+	cp ../../SUBS/grphsubf.f .
+	$(FCMP) -c grphsubf.f 
+mchdep.o:
+	cp ../../SUBS/mchdep.f .
+	$(FCMP) -c mchdep.f
+mnmarg.o:
+	cp ../../SUBS/mnmarg.f .
+	$(FCMP) -c mnmarg.f
+mgtarg.o:
+	cp ../../SUBS/mgtarg.f .
+	$(FCMP) -c mgtarg.f
+sacsubf.o:
+	cp ../../SUBS/sacsubf.f .
+	$(FCMP) -c sacsubf.f
+sacsubc.h:
+	cp ../../SUBS/sacsubc.h .
+sacsubc.o: sacsubc.h
+	cp ../../SUBS/sacsubc.c .
+	$(CCMP) -c sacsubc.c
+csstime.h:
+	cp ../../SUBS/csstime.h .
+csstime.o: csstime.h
+	cp ../../SUBS/csstime.c .
+	$(CCMP) -c csstime.c
+calplot.h:
+	cp ../../include/calplot.h .
+lgstr.o:
+	cp ../../SUBS/lgstr.f .
+	$(FCMP) -c lgstr.f
+
+grphsubc.h:
+	cp $(CPS)/SUBS/grphsubc.h .
+
+grphsubc.c:
+	cp $(CPS)/SUBS/grphsubc.c .
+
+all: \
+	shwsac sactoasc asctosac sacevalr sacdecon saciterdc saciterd saclhdr \
+	sacspc96 saccvt sacfilt pltsac \
+	elocate sac2eloc sacpsd clean
+
+#####
+#	ELOCATE LOCATION PROGRAM
+#####
+
+elocate: elocate.o $(MCHCMD)
+	$(FCMP) -o elocate elocate.o  $(MCHCMD)
+	mv elocate $(DEST)
+
+sac2eloc: sac2eloc.o sacsubf.o lgstr.o $(MCHCMD)
+	$(FCMP) -o sac2eloc sac2eloc.o lgstr.o sacsubf.o $(MCHCMD)
+	mv sac2eloc $(DEST)
+#####
+#	SAC manipulation programs
+#####
+
+shwsac:	shwsac.o sacsubf.o lgstr.o $(MCHDEP) $(MCHCMD)
+	$(FCMP) shwsac.o sacsubf.o lgstr.o $(MCHDEP) $(MCHCMD) $(CALPLTPF) -o shwsac
+	mv shwsac $(DEST)
+
+sactoasc:	sactoasc.o sacsubf.o lgstr.o $(MCHCMD)
+	$(FCMP) sactoasc.o sacsubf.o lgstr.o $(MCHCMD) -o sactoasc
+	mv sactoasc $(DEST)
+
+asctosac:	asctosac.o sacsubf.o lgstr.o $(MCHCMD)
+	$(FCMP) asctosac.o sacsubf.o lgstr.o $(MCHCMD) -o asctosac
+	mv asctosac $(DEST)
+
+sacevalr:	sacevalr.o sacsubf.o $(MCHCMD) lgstr.o $(MCHDEP)
+	$(FCMP) sacevalr.o sacsubf.o $(MCHCMD) lgstr.o $(MCHDEP) -o sacevalr
+	mv sacevalr $(DEST)
+
+sacdecon:	sacdecon.o sacsubf.o $(MCHCMD) lgstr.o $(MCHDEP)
+	$(FCMP) sacdecon.o sacsubf.o $(MCHCMD) lgstr.o $(MCHDEP) -o sacdecon
+	mv sacdecon $(DEST)
+
+saciterdc:	saciterdc.c sacsubc.o 
+	$(CCMP)  -I../../SUBS -c saciterdc.c
+	$(CCMP)  saciterdc.o sacsubc.o -o saciterdc -lm
+	mv saciterdc  ${DEST}
+
+saciterd:	saciterd.o sacsubf.o $(MCHCMD) lgstr.o $(MCHDEP)
+	$(FCMP) saciterd.o sacsubf.o $(MCHCMD) lgstr.o $(MCHDEP) -o saciterd
+	mv saciterd $(DEST)
+
+saclhdr:        saclhdr.c sacsubc.o csstime.o
+	$(CCMP) -I../../SUBS -c saclhdr.c
+	$(CCMP) saclhdr.o sacsubc.o csstime.o -o saclhdr
+	mv saclhdr $(DEST)
+
+sacfilt:	sacfilt.o sacsubf.o $(MCHCMD) lgstr.o $(MCHDEP)
+	$(FCMP) sacfilt.o sacsubf.o $(MCHCMD) lgstr.o $(MCHDEP) -o sacfilt
+	mv sacfilt $(DEST)
+
+sacspc96:	sacspc96.o  $(GSUBSF) $(GSUBS) 
+	$(FCMP) sacspc96.o  $(GSUBSF) $(GSUBS) $(CALPLTPF)  -o sacspc96
+	mv sacspc96 $(DEST)
+
+
+saccvt:	saccvt.o sacsubc.o 
+	$(CCMP) saccvt.o sacsubc.o -lm -o saccvt
+	mv saccvt $(DEST)
+
+pltsac:	pltsac.o sacsubf.o lgstr.o grphsubf.o $(MCHCMD)
+	$(FCMP) pltsac.o sacsubf.o lgstr.o grphsubf.o $(MCHCMD) $(CALPLTPF) -o $(DEST)/pltsac
+
+sacpsd:  csstime.h sacsubc.h calplot.h grphsubc.h sacpsd.o sacsubc.o  grphsubc.o csstime.o
+	$(CCMP) sacpsd.o sacsubc.o grphsubc.o csstime.o ${CPS}/lib/libcalpltc.a  -lm -o sacpsd
+	mv sacpsd ${DEST}
+
+clean:
+	$(RM) *.o
+	$(RM) -f grphsubf.f mchdep.f mnmarg.f mgtarg.f sacsubf.f sacsubc.? lgstr.f
+	${RM} -f csstime.? grphsubc.? calplot.h
+
+

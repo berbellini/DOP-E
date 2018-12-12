@@ -1,0 +1,43 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th YLIM
+.S2 SUMMARY:
+Define plot limits for y-axis
+
+YLIM [ALL | OFF | Scale min max ]
+
+.S2 INPUT:
+.BR
+ALL           : Plot all traces in the current window to the same scale
+.BR
+OFF           : Each trace is autoscaled
+.BR
+Scale min max : User specified minimum and maximum values
+.BR
+
+.S2 DESCRIPTION:
+This option permits all traces on a screen to be plotted using the same 
+scale so that the relative differences in amplitude are obvious. Otherwise
+eash trace is plotted with its own scale.
+.sp
+The min max in scale can be in scientific notation, e.g.,
+.BR
+     YLIM SCALE 1.0e-6 2.0e-5
+.BR
+.S2 EXAMPLES:
+
+.S2 "SAC COMPATIBILITY:"
+Sac permits a PM v to set +- v. It also permits setting the scaling of 
+individual traces in a multitrace plot. GSAC does not permit either.
+
+Note this command only affects the time series plots using the command plot1.
+It does not affect the spectra plot using the command plotsp or the record
+section plot  prs.
+.S2 DEFAULT:
+YLIM OFF
+
+.S2 "SEE ALSO":

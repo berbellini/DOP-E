@@ -1,0 +1,21 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th INT
+.S2 SUMMARY:
+Integrate  all SAC data files in  memory.
+
+INT 
+
+
+.S2 "SAC COMPATIBILITY:"
+SAC permits  a choice of TRAPEZOIDAL or RECTANGULAR rules. A simple one\-point running summation is used. The first point of the output
+is set to zero to avoid a linear trend in the output.
+DEFAULT
+       
+
+.S2 "SEE ALSO":
+DIF
+

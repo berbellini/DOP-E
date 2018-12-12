@@ -1,0 +1,96 @@
+#####
+# Makefile for Volume V - Computer Programs in Seismology
+#
+# To move this to another machine, the following variables must be
+# defined:
+#
+#	#Machine Type  - Inform -fative Comment
+#	FCMP	- name of FORTRAN Compiler with appropriate flags
+#	CCMP	- name of C Compiler with appropriage flags
+#	MCHDEP	- Name of object file for machine dependent initialization
+#	MCHCMD	- Name of object file for getting number of command 
+#			line arguments
+#	CALFLAG - Name of CALPLOT graphics library or absolute path,
+#		e.g., CALFLAG=-lcalpltf if it in /lib /usr/.lib or
+#			/usr/local/lib
+#		or CALFLAG=../../lib/libcalpltf.a
+#	DEST	- Destination for the final execuable
+#####
+#	If one of the following models is appropriate, just uncomment
+#	it by removing the first # sign
+#
+#	Otherwise, use the existing machine models as guides
+#####
+
+#####
+#	LINUX Compilers
+#####
+##### FOR SOME REASON AN -O flag optimazation causes cseis96 to bomb
+FCMP=gfortran -frecord-marker=4  -O
+CCMP=gcc -O
+MCHDEP=mchdep.o 
+MCHCMD=mnmarg.o mgtarg.o
+CALFLAG=../../lib/libcalpltf.a
+GETMOD=igetmod.o
+DEST=../../bin
+
+
+.f.o:
+	$(FCMP) $(FFLAG) -c $< 
+
+.c.o:
+	$(CCMP) -c $<
+
+f96subf.o:
+	cp ../../SUBS/f96subf.f .
+	$(FCMP) -c f96subf.f
+
+mnmarg.o:
+	cp ../../SUBS/mnmarg.f .
+	$(FCMP) -c mnmarg.f
+
+mgtarg.o:
+	cp ../../SUBS/mgtarg.f .
+	$(FCMP) -c mgtarg.f
+
+mchdep.o:
+	cp ../../SUBS/mchdep.f .
+	$(FCMP) -c mchdep.f
+
+lgstr.o:
+	cp ../../SUBS/lgstr.f .
+	$(FCMP) -c lgstr.f
+
+
+all: cseis96 cray96 cprep96 cpulse96  clean
+
+
+
+cprep96:	cprep96.o lgetmod.o $(MCHCMD) \
+		gt1dcv.o gt1dvv.o gt2dcv.o gt2dvv.o lgstr.o
+	$(FCMP) -o cprep96 cprep96.o lgetmod.o $(MCHCMD) \
+		gt1dcv.o gt1dvv.o gt2dcv.o gt2dvv.o lgstr.o $(CALFLAG)
+	mv cprep96 $(DEST)
+
+cseis96: cseis96.o $(MCHDEP) $(MCHCMD) lgstr.o
+	$(FCMP) $(FFLAG) -o cseis96 cseis96.o lgstr.o $(MCHDEP) $(MCHCMD)
+	mv cseis96 $(DEST)
+
+cray96: cray96.o $(MCHDEP) $(MCHCMD) lgstr.o
+	$(FCMP) $(FFLAG) -o cray96 cray96.o lgstr.o $(CALFLAG) \
+		$(MCHDEP) $(MCHCMD)
+	mv cray96 $(DEST)
+
+cpulse96:	cpulse96.o f96subf.o $(MCHDEP)  $(MCHCMD) lgstr.o
+	$(FCMP) $(FFLAG) -o cpulse96 cpulse96.o f96subf.o lgstr.o \
+		$(MCHDEP)  $(MCHCMD)
+	mv cpulse96 $(DEST)
+
+
+clean:
+	rm -f mchdep.f
+	rm -f $(MCHCMD) $(MCHDEP)
+	rm -f f96subf.f f2csub.f mnmarg.f mgtarg.f
+	rm -f lgstr.f
+	rm -f *.o
+

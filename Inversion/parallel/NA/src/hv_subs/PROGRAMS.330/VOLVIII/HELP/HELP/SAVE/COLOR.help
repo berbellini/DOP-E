@@ -1,0 +1,28 @@
+GSAC Command Reference Manual                                    COLOR
+
+SUMMARY:
+Controls color of trace plots
+COLOR [ON|OFF] [options]  
+where options is on of the following:
+     DEFAULT RAINBOW LIST list_entries
+INPUT:
+	ON        Enable color output
+	OFF       Disable color output - traces will be CALPLOT foreground
+	DEFAULT   Use the default color sequence
+	INCREMENT Each trace uses the next color in the list_entries or 
+	          default color table.
+	LIST      A user specificed list for the alternating colors is used
+	          which are one of the following keywords: BLACK, RED, GREEN
+	          BLUE, ORANGE, CYAN, YELLOW
+DESCRIPTION:
+	This permits different traces to be plotted with different colors. 
+color BLACK is actually the foreground color. By default this is BLACK in
+CALPLOT, but if the interactive disply environment is set by the SHELL  
+command  'export PLOTXVIG=:-K:-I:' under the 'bash shell', the background
+will be black and the foreground white.
+	The RAINBOW option indicates that the traces will be plotted in a
+progression from RED to BLUE, as in a rainbow.
+
+SEE ALSO:
+       
+

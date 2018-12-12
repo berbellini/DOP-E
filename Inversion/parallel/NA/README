@@ -1,0 +1,30 @@
+
+
+		Neighbourhood algorithm na_sampler package
+
+directory src: 
+		contains all fortran source for na routines
+		and example program rfi_na.f
+		This performs a receiver function inversion.
+directory data: 
+		contains data input files and example output files 
+		produced for receiver function inversion. 
+directory bin: 
+		contains all executables
+		
+directory docs: 
+		contains HTML user guides. 
+
+	        Look at `na_sampler.html' for all instructions.
+
+	        Also includes a PDF file summary.pdf which may be useful.
+
+Acknowledgements
+
+Thanks to those of you that have already provided feedback and help
+in curing bugs that appear under some platforms.
+
+
+
+Malcolm Sambridge, RSES, ANU.  Last updated 31st January 2004.
+

@@ -1,0 +1,131 @@
+
+#####
+#	LINUX 
+#####
+FCMP		=gfortran -frecord-marker=4   -g
+#### 
+# this creates a PLOT file
+#CALPLOT	=../../lib/libcalpltf.a 
+#LDFLAGS	= -lm
+####
+# this creates tektronix output
+#CALPLOT	=../../lib/libcaltekf.a -lbsd
+#LDFLAGS	= -lm
+####
+# this creates interactive X11 output
+CALPLOT		=../../lib/libcalxvigf.a  ../../lib/calxvig.a
+LDFLAGS		=  -L/usr/X11R6/lib  -lX11 -lm
+#####
+
+
+###############################################################
+#	All this should not have to be changed
+###############################################################
+
+RM = rm -f
+
+
+.f.o:
+	$(FCMP) -c $<
+
+
+all: button dtest gphtxt graysc gread \
+	grid grytst new nseitst plttst stars \
+	tabl testl testld \
+	tritst tstcur wid width \
+	clean
+
+button:	button.o 
+	$(FCMP) button.o $(CALPLOT) $(LDFLAGS)
+	mv a.exe button.exe
+
+dtest: dtest.o 
+	$(FCMP) dtest.o $(CALPLOT) $(LDFLAGS)  
+	mv a.exe  dtest.exe
+	rm dtest.o
+
+gphtxt: gphtxt.o 
+	$(FCMP) gphtxt.o $(CALPLOT) $(LDFLAGS)  
+	mv a.exe  gphtxt.exe
+	rm gphtxt.o
+
+graysc: graysc.o 
+	$(FCMP) graysc.o $(CALPLOT) $(LDFLAGS)  
+	mv a.exe  graysc.exe
+	rm graysc.o
+
+grid:	grid.o 
+	$(FCMP) grid.o $(CALPLOT) $(LDFLAGS)
+	mv a.exe grid.exe
+
+grytst: grytst.o 
+	$(FCMP) grytst.o $(CALPLOT) $(LDFLAGS)  
+	mv a.exe  grytst.exe
+	rm grytst.o
+
+new:	new.o 
+	$(FCMP) new.o $(CALPLOT) $(LDFLAGS)
+	mv a.exe new.exe
+
+nseitst: nseitst.o 
+	$(FCMP) nseitst.o $(CALPLOT) $(LDFLAGS)  
+	mv a.exe  nseitst.exe
+	rm nseitst.o
+
+plttst: plttst.o 
+	$(FCMP) plttst.o $(CALPLOT) $(LDFLAGS)  
+	mv a.exe  plttst.exe
+	rm plttst.o
+	plttst
+	reframe -N1 -O < PLTTST.PLT > PLTTST.1
+	reframe -N2 -O < PLTTST.PLT > PLTTST.2
+
+stars:	stars.o 
+	$(FCMP) stars.o $(CALPLOT) $(LDFLAGS)
+	mv a.exe stars.exe
+
+gread:	gread.o 
+	$(FCMP) gread.o $(CALPLOT) $(LDFLAGS)
+	mv a.exe gread.exe
+
+tabl: tabl.o 
+	$(FCMP) tabl.o $(CALPLOT) $(LDFLAGS)  
+	mv a.exe  tabl.exe
+	rm tabl.o
+
+testl: testl.o 
+	$(FCMP) testl.o $(CALPLOT) $(LDFLAGS)  
+	mv a.exe  testl.exe
+	rm testl.o
+
+testld: testld.o 
+	$(FCMP) testld.o $(CALPLOT) $(LDFLAGS)  
+	mv a.exe  testld.exe
+	rm testld.o
+
+tritst: tritst.o 
+	$(FCMP) tritst.o $(CALPLOT) $(LDFLAGS)  
+	mv a.exe  tritst.exe
+	rm tritst.o
+
+tstcur: tstcur.o 
+	$(FCMP) tstcur.o $(CALPLOT) $(LDFLAGS)  
+	mv a.exe  tstcur.exe
+	rm tstcur.o
+
+wid: wid.o 
+	$(FCMP) wid.o $(CALPLOT) $(LDFLAGS)  
+	mv a.exe  wid.exe
+	rm wid.o
+
+width: width.o 
+	$(FCMP) width.o $(CALPLOT) $(LDFLAGS)  
+	mv a.exe  width.exe
+	rm width.o
+
+clean:
+	rm -f *.o
+	rm -f *.exe
+	rm -f *.PLT
+
+

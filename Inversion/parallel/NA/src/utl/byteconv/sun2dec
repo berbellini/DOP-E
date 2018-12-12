@@ -1,0 +1,7 @@
+# byteconv for SAC file from SUN to DEC
+# T. Shibutani, RCEP, DPRI, Kyoto Univ.
+# 1998-08-08
+
+foreach sacfile ( * )
+  sacsun2dec $sacfile
+end

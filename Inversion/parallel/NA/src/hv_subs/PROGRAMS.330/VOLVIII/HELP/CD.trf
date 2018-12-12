@@ -1,0 +1,22 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    CD
+.S2 SUMMARY:
+Change the current working directory
+
+CD path 
+
+.S2 INPUT:
+path     : path to the next directory 
+
+.S2 DESCRIPTION:
+This changes the working directory. If there are already traces in memory and
+one decides to do a write, the operation may not work if the file path is
+no longer valid from the new directory
+
+.S2 "SEE ALSO":
+       
+

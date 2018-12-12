@@ -1,0 +1,53 @@
+To: ammon, koper@eas.slu.edu
+Subject: GSAC
+
+Well time to start making presentations - Beijing tomorrow
+
+I am finally un jetlagged - and GSAC is slowly moving forward
+
+The Butterworth filtering works - there was a nice trick in sac that
+got me going into the right direction - actually derived an alternative
+method that did not use complex numbers (Hey I am using C and not C++)
+
+I believe that I have the worst behind me - i just got CHANGEHEADER working
+So to be able to do what I normally use SAC for I need to implement
+
+PLOTRECORDSECTION - this will be interesting
+        PRS will do it -- I will figure out limits later
+        If we look at receiver functions with the ray parameter set
+                in USER4, then
+        PRS USER4   will plot trace(time) vs ray parameter, or
+        PRS AZ  will plot traces vs AZIMUTH (always handy for RFTN's
+                The only question for PRS is how to present the time series
+                We could have time to right and distance or USER 4 down,
+
+                Perhaps we should borrow an option form GHOSTVIEW
+                PORTRAIT LANDSCAPE SEA-SCAPE UPSIDE-DOWN
+                I see the need for the following for the default plot
+                of traces vs distance
+
+
+                X-axis          Y-axis
+                Distance        Time increaing up
+                Distance        Time increasing down (reflection profiles)
+                Time            Ray parameter increasing down
+
+                I know how to do this, but what to call this
+
+
+-------------
+At present I am happy with time series with equally spaced DT.
+I do not see a need for a general plot of xy and especially not xyz
+
+I also implemented the FFT internally so that the time series is
+not overwritten so that
+        p1
+        fft
+        psp
+        p1
+is possible withouot a reread
+
+I may only implement a WRITESP AM or WRITESP PH so that I will nto have to suppo
+rt SAC complex spectra files.
+
+

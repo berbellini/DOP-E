@@ -1,0 +1,48 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    CUT
+.S2 SUMMARY:
+Cut a trace as it is read.
+
+CUT [ON|OFF] [ ref offset | GMT beg | CAL beg ] [ ref offset | GMT end | CAL end ]
+
+.S2 INPUT:
+ON       : Permit cutting on read
+.BR
+OFF      : Turn off cutting on read
+.BR
+ref      : A header reference value for the cut which is one of B|E|O|A|Tn where n=0,...,9
+.BR
+offset   : Number of seconds relative to the reference value.  refbeg offset refers to the start point refend offset refers to the  end  point
+.BR 
+CAL      : Calendar time in YEAR MONTH DAY HOUR MINUTE SECOND MILLISECOND
+.BR 
+GMT      : GMT time in YEAR DAYOFYEAR HOUR MINUTE SECOND MILLISECOND
+
+.S2 DESCRIPTION:
+This routine cuts a trace on the next READ according to specified header 
+values. This is useful for focusing on one part of the trace.
+.BR
+The option for CAL or GMT times was introduced 11 JAN 2005 to permit selection
+of time windows from very long time segments. The following are equivalent:
+.BR
+CUT GMT 2005 001 01 02 03 456 GMT 2005 032 06 05 04 321
+.BR
+CUT GMT 2005 001 01 02 03 456 CAL 2005 02 01 06 05 04 321
+.BR
+CUT CAL 2005 01 01 01 02 03 456 GMT 2005 032 06 05 04 321
+.BR
+CUT CAL 2005 01 01 02 03 456 CAL 2005 02 01 06 05 04 321
+.BR
+which cuts from January 1, 2005 01:02:03.456 to February 1, 2006 06:05:04.321
+
+
+.S2 "SAC COMPATIBILITY:"
+.S2 "SEE ALSO":
+CUTERR
+.S2 Note
+The CUTERR FILLZ is done by default
+

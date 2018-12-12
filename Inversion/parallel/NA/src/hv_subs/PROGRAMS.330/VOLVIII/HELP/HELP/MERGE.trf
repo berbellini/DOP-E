@@ -1,0 +1,18 @@
+.Th                                     MERGE
+.S3 SUMMARY:
+Merge all files in memory to form a single trace.
+
+MERGE [ GAP gap_value ]
+
+.S2 INPUT:
+GAP gap_value    :  Insert gap_value when filling in gaps. The default is to use a value of 0.0
+
+.S2 "DESCRIPTION"
+Data requests from the IRIS DMC often yield segmented traces when the SEED volume is read using rdseed to create SAC files. This segmentation may reflect actual data gaps, or just different submissions to the database.  The merge command will combine all files and provide disgnostic information on the absolute time/date of the beginning and end of each trace, whether there are data gaps, and whether there are data inconsistencies in the individual amplitude values.
+
+.S2 "SAC COMPATIBILITY:"
+sac2000 does not permit changing the default fill of the gap. 
+.S2 DEFAULT
+
+.S2 "SEE ALSO":
+

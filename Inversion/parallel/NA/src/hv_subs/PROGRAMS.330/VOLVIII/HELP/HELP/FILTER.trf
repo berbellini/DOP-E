@@ -1,0 +1,59 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    FILTER
+.S2 SUMMARY:
+Apply or remove an instrument response/filter from the data
+
+FILTER [FROM|TO] [APPLY|REMOVE] [POLEZERO pzfile] [FAPFILE fapfile] [EVAL afile pfile]
+         [FREQLIMITS f1 f2 f3 f4] [NOFREQLIMITS]
+
+.S2 INPUT:
+APPLY or TO      : The wave form is passed through the filter
+.BR
+REMOVE or FROM   : The instrument filter is deconvolved from the trace
+.BR
+POLEZERO pzfile  : Use the SAC Pole\-zero format
+.BR
+EVAL afile pfile : Use the output of the IRIS evalresp which gives two files, one of gain(frequency) and the other phase(freq)
+.BR
+FAPFILE fapfile  : Use the Frequency/amplitude/phase file
+.BR
+FREQLIMITS f1 f2 f3 f4i : Apply a cubic taper to the response such 
+the response is 0 for f < f1 and for f > f4, 
+the response is 1 for f > f2 and for f < f3, 
+and tapers cubically from 0 to 1 for f1 < f < f2 and 
+f4 > f > f3.  Note the only way to turn this off is to 
+reset the limits as in FREQLIMITS \-2 \-1 1.0e5 1.0e6
+FREQLIMITS is only used in the FROM process. 
+This is essential for a clean deconvolution
+.S2 DESCRIPTION:
+
+.S2 "SAC COMPATIBILITY:"
+This is similar in concept to the the SAC TRANSFER, which
+where the pazfile is the displacement sensitivity of the instrument. This
+command is suitable to the forward transform, but must not be used for
+a deconvolution that involves a second transformation, e.g., do not try
+       FILTER FROM POLEZERO pzfile FREQLIMITS f1 f2 f3 f4
+       FILTER TO VEL
+because this actually creates two time series and used the Fast Fourier
+transform to accomplish the filtering. Taking a derivative of the
+second series to yield velocity, may introduce a glitch at the last point
+This artifact could be eliminated if a frequency domain 
+bilinear Z\-transform differentiator were implemented.
+Instead use the syntax
+.BR
+TRANSFER FROM POLEZERO SUBTYPE  pzfile FREQLIMITS f1 f2 f3 f4 TO VEL
+.BR       
+NOFREQLIMITS is not in SAC
+       
+.S2 "HEADER VALUES SET"
+USER1 = permin, USER2=permax, where 
+ permin=MAX[1.0/filt_f3,old permin] and
+ permax=MIN[1./filt_f2,old permax]. This feature is used
+ by sacmft96 and sacpom96
+.S2 "SEE ALSO":
+TRANSFER
+

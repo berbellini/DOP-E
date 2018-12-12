@@ -1,0 +1,55 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    FUNCGEN
+.S2 SUMMARY:
+Generate a synthetic time series for testing.
+
+FuncGen [Impulse | Triangle | Box ]  Delta delta Npts npts [ Length  length ] [Comp ncomb delay ]
+.S2 INPUT:
+Impulse  : Generate a time series with a single point with amplitude
+equal to 1.0/delta, where delta is the sampling interval in
+seconds. The impulse is centered at npts/2, and the B header
+value is set as \- (npts/2)*delta. The default output file is called impulse.sac
+This will have a unit Foureir amplitude spectrum.
+.BR
+Triangle : Generate a time series with three points with amplitudes equal to
+( 0.25/deta, 0.50/delta, 0.25/delta)
+where delta is the sampling interval in
+seconds. The triangle is centered at npts/2, and the B header
+value is set as \- (npts/2)*delta. The default output file is called triangle.sac
+This will have a unit spectral maplitude at zero frequency and a spectral zero
+at the Nyquist frequency, 0.5/delta. 
+.BR
+Box     : Create a boxcar with duration of 'length' seconds, starting at center of the trace. The minimum length is internally set to 10*delta!
+.BR
+Delta   : Sample interval in seconds
+.BR
+Npts    : Number of points in the time series
+.BR
+Comb    : repeat the chosen pulse 'ncomb' times with a separation of 'delay' seconds. The total area of this function is 1.0. This is designed to create compulciated pulses.
+.S2 DESCRIPTION:
+This generates a synthetic time series. At present only the   impulse and triangle pulses
+are supported. The internal file name is either 'impulse.sac' or 'triangle.sac'. 
+
+.S2 "SAC COMPATIBILITY:"
+SAC creates an impulse to have unit amplitude int the time domain, which means that the
+spectral amplitude will be 'delta'. GSAC creates an impulse with unit spectral amplitude
+at zero frequency.
+This is done to permit an easy view of the instrument response:
+.nf
+.ad
+	funcgen impulse deltaa  0.05 npts 4096
+	transfer from none to polezero subtype resp.paz
+	fft
+	psp am
+.ad
+.fi
+.S2 DEFAULT:
+FUNCGEN IMPULSE DELTA 1.0 NPTS 1024
+
+.S2 "SEE ALSO":
+       
+

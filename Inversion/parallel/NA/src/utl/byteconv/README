@@ -1,0 +1,20 @@
+README for sacsun2dec
+T. Shibutani, RCEP, DPRI, Kyoto Univ. 
+1999.10.22
+
+sacsun2dec writes a byte-swaped little endian SAC file 
+from a big endian SAC file. 
+This byte-conversion program should be run on a little endian machine, 
+such as DEC alpha. 
+
+1. compile
+make sacsun2dec
+
+2. usage
+sacsun2dec (SUN_SAC_file)
+
+The big endian SUN_SAC_file will be replaced by its byte-swaped 
+little endian SAC file. 
+
+A shell script sun2dec can be used to convert several SAC files.
+

@@ -1,0 +1,7 @@
+Modified Evalresp to add EJH modifications to handle the way that some SEED writers partition up an overly long
+FIR state.  The problem is that the evalresp-3.2.38 expected the in/out units to be counts. The SEED writers
+set them to be
+
+B054F05     Response in units lookup:              No Abbreviation Referenced
+B054F06     Response out units lookup:             No Abbreviation Referenced
+

@@ -1,0 +1,24 @@
+
+void XviG_SendMessage(int type, int i1, int  i2, int i3, int i4);
+
+Send a message to the program xvig for display:
+
+type
+
+1	Purpose: Pass inforation on border and title sizes
+	i1:	border
+	i2:	title
+	i3:	not used
+	i4:	not used
+
+2	Purpose: Pass information on current clip region
+	i1:	LX - lower X
+	i2:	LY - lower Y
+	i3:	UX - upper X
+	i4:	UY - upper Y
+
+3	Purpose: Reverse Video
+	i1:	1 = on, 0 = off
+
+4	Purpose: Change color map to gray scale
+	i1:	3 = to gray, 2 to color

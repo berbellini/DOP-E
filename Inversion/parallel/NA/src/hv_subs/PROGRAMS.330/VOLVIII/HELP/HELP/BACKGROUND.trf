@@ -1,0 +1,26 @@
+.de BR
+.in 0
+.in +8n
+.ti -5n
+..
+
+
+.Th BACKGROUND
+.S2 SUMMARY:
+Set trace background color
+
+BACKGROUND [ ON | OFF ] [ Color color_int ] [ DEFAULT ]
+
+.S2 INPUT:
+ON        : turn background color on
+.BR
+OFF       : turn background color off
+.BR
+Color Color_int : set the color - default value = 0; An integer between 0 and 1100. 0 is always background of screen, 1 is the screen foreground. for color displays 2 = Red, 3= Green, 4 = Blue etc. 1000 to 1100 is a transition from red to blue.
+.S2 DESCRIPTION:
+Set the background display for the plots.  Note this does not change the fram background.
+.S2 EXAMPLES:
+
+.S2 DEFAULT
+BACKGROUND OFF
+.S2 "SEE ALSO":

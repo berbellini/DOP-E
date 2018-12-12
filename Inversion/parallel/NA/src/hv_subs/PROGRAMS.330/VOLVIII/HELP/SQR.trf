@@ -1,0 +1,19 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    SQR
+.S2 SUMMARY:
+Square each data point of the trace
+
+.S2 SQR 
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+
+.S2 "SEE ALSO":
+SQRT, ABS
+       
+

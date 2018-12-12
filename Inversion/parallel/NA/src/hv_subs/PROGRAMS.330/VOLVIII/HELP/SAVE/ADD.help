@@ -1,0 +1,19 @@
+GSAC Command Reference Manual                                     ADD
+
+SUMMARY:
+Add a constant to  all SAC data files in  memory.
+
+ADD [v], 
+
+INPUT:
+       [v] : constant to be added to all files
+
+SAC COMPATIBILITY:
+       SAC permits an extended syntax that permits applying different constants
+       to respective files in memory. We have not implemented this complexity.
+DEFAULT
+       ADD 0
+
+SEE ALSO:
+	SUB, MUL, DIV
+

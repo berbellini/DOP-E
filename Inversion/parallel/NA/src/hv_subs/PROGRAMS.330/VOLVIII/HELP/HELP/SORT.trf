@@ -1,0 +1,43 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+.Th                                    SORT
+.S2 SUMMARY:
+Sort all displays by the key 
+
+SORT [OFF|DEFAULT] [UP|DOWN] [FORWARD|REVERSE] [ASCEND|DESCEND] header_variable
+
+.S2 INPUT:
+header_variable       : The header value to be sorted, e.g, O, DIST, GCARC, etc.
+.BR
+UP, ASCEND, FORWARD   : Sort in order of increasing value so that a 
+LISTHEADER header_variable gives the smallest 
+value first
+.BR
+DOWN, DESCEND, REVERSE: Sort in order of decreasing value so that a
+LISTHEADER header_variable gives the largest 
+value first
+.BR
+OFF, DEFAULT          : Do not sort
+.S2 DESCRIPTION:
+This sorts the trace display according to the value of key.  
+To sort on distance,
+.BR
+sort dist
+.BR
+If USER4 has a ray parameter from saciterd, then
+.sp
+sort user4
+plot1
+.BR
+will display the traces in order of the ray parameter.
+.sp
+At present only a sort on the integer or floating point header values is
+implemented.
+
+.S2 "SEE ALSO":
+LISTHEADER
+       
+

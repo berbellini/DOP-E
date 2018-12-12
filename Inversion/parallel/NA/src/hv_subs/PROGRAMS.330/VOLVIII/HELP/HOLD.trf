@@ -1,0 +1,26 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th HOLD
+.S2 SUMMARY:
+Permit plot overlay in current frame
+
+HOLD [ON | OFF]
+
+.S2 INPUT:
+ON       : Set the HOLD for the next plot
+.BR
+OFF      : Unset the HOLD option. The next instance of PRS PSP or P1 will 
+start on a new page.
+
+.S2 DESCRIPTION:
+To permit an overlay of different graphics on a current plot frame, one must not
+perform an erase. HOLD is similar to the MATLAB HOLD command which has the same purpose.
+
+.S2 EXAMPLES:
+
+.S2 "SEE ALSO":
+PCTL, P1, PSP, PRS

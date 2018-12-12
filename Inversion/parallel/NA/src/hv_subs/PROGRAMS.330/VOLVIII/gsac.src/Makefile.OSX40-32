@@ -1,0 +1,150 @@
+#####
+#	LINUX
+#####
+FCMP=gfortran -frecord-marker=4 -m32
+CCMP=gcc -g -m32
+CPS=../..
+CALPLTVC=${CPS}/lib/libcalxvigc.a ${CPS}/lib/calxvig.a
+READLINE_LIB = ${CPS}/lib/libreadline.a ${CPS}/lib/libhistory.a
+TERMCAP_LIB = -lncurses
+LDFLAGS = -L../../lib -L/usr/lib   $(READLINE_LIB)  $(TERMCAP_LIB)  -L/usr/X11R6/lib  -lX11 -lm  -L/usr/X11R6/lib -lX11 -lm
+INCLUDES=../../include/readline
+DEST=../../bin
+
+GCCLIB=
+
+RM=rm -f
+
+.f.o:
+	$(FCMP) -c $<
+
+.c.o:
+	$(CCMP) -c $<
+
+gsac_hist.o: gsac_hist.c
+	$(CCMP) -c -DREADLINE_LIBRARY -I$(INCLUDES) gsac_hist.c
+
+gsac_parse_command.o: gsac_parse_command.c
+	$(CCMP) -c -DREADLINE_LIBRARY -I$(INCLUDES) gsac_parse_command.c
+
+calplot.h:
+	cp ../../CALPLOT/include/calplot.h .
+grphsubc.c: grphsubc.h calplot.h
+	cp ../../SUBS/grphsubc.c .
+grphsubc.h:
+	cp ../../SUBS/grphsubc.h .
+grphsubc.o: grphsubc.c grphsubc.h
+	$(CCMP) -c grphsubc.c
+
+all: grphsubc.o calplot.h gsac clean
+
+#####
+#	GSAC
+#####
+
+GSACOBJS = gsac.o \
+	gsac_subs.o \
+	gsac_init.o \
+	gsac_sac.o \
+	gsac_parse_command.o \
+	gsac_docommand.o \
+	gsac_gen.o \
+	gsac_lp.o \
+	gsac_hp.o \
+	gsac_bp.o \
+	gsac_br.o \
+	gsac_in.o \
+	gsac_nop.o \
+	gsac_wh.o \
+	gsac_lh.o \
+	gsac_read.o \
+	gsac_write.o \
+	gsac_plot.o \
+	gsac_plotpk.o \
+	gsac_plotsub.o \
+	gsac_help.o \
+	gsac_arg.o \
+	gsac_filt.o \
+	gsac_rtr.o \
+	gsac_rmean.o \
+	gsac_bg.o \
+	gsac_add.o \
+	gsac_sub.o \
+	gsac_mul.o \
+	gsac_div.o \
+	gsac_int.o \
+	gsac_dif.o \
+	gsac_fft.o \
+	gsac_plotsp.o \
+	gsac_ch.o \
+	csstim.o \
+	gsac_sort.o \
+	gsac_del.o \
+	gsac_sync.o \
+	gsac_color.o \
+	gsac_fg.o \
+	gsac_cuterr.o \
+	gsac_rot.o \
+	gsac_cut.o \
+	gsac_trans.o \
+	gsac_cd.o \
+	gsac_hilb.o \
+	gsac_env.o \
+	gsac_math.o \
+	gsac_plotctl.o \
+	gsac_qdp.o \
+	gsac_prs.o \
+	gsac_merge.o \
+	gsac_ylim.o \
+	gsac_dagc.o \
+	gsac_pctl.o \
+	gsac_hold.o \
+	gsac_pause.o \
+	gsac_echo.o \
+	gsac_xlim.o \
+	gsac_rot3.o \
+	gsac_sgn.o \
+	gsac_conv.o \
+	gsac_corr.o \
+	gsac_stack.o \
+	gsac_rev.o \
+	gsac_markt.o \
+	gsac_taper.o \
+	gsac_hist.o \
+	gsac_whit.o \
+	gsac_desac.o \
+	gsac_fileid.o \
+	gsac_smth.o \
+	gsac_refr.o \
+	gsac_mulf.o \
+	gsac_divf.o \
+	gsac_addf.o \
+	gsac_subf.o \
+	gsac_writesp.o \
+	gsac_dec.o \
+	gsac_map.o \
+	gsac_triangle.o \
+	gsac_boxcar.o \
+	gsac_trapezoid.o \
+	gsac_v.o \
+	gsac_xgrid.o \
+	gsac_ygrid.o \
+	gsac_grid.o \
+	gsac_back.o \
+	gsac_outcsv.o \
+	gsac_rh.o \
+	gsac_title.o \
+	gsac_mt.o \
+	gsac_shift.o \
+	gsac_ricker.o \
+	$(GCCLIB) grphsubc.o
+
+gsac: calplot.h grphsubc.h $(GSACOBJS) $(GSACINCLUDE)
+	$(CCMP) $(GSACOBJS) $(CALPLTVC) $(LDFLAGS) -o gsac
+	mv gsac $(DEST)
+
+clean:
+	$(RM) *.o
+	$(RM) calplot.h grphsubc.c grphsubc.h
+
+

@@ -1,0 +1,72 @@
+
+#####
+#	LINUX RedHat 5.0 EGCS Compilers
+#####
+FCMP		= gfortran -frecord-marker=4 -m32
+CCMP		= gcc   -m32
+#### 
+# this creates a PLOT file
+CALPLTF	=../../lib/libcalpltf.a 
+LDFLAGS	= -lm
+####
+# this creates tektronix output
+#CALPLTF	=../../lib/libcaltekf.a -lbsd
+#LDFLAGS	= -lm
+####
+# this creates interactive X11 output
+#CALPLTF		=../../lib/libcalxvigf.a  ../../lib/calxvig.a
+#LDFLAGS		=  -L/usr/X11R6/lib  -lX11 -lm
+#####
+
+
+RM = rm -f
+DEST=../../bin
+MCHCMD= mnmarg.o mgtarg.o
+
+
+.f.o:
+	$(FCMP) -c $<
+
+.c.o:
+	$(CCMP) -c $<
+
+	$(FCMP) -c mchdep.f
+
+mchdep.o:
+	cp ../../SUBS/mchdep.f .
+	$(FCMP) -c mchdep.f
+
+mnmarg.o:
+	cp ../../SUBS/mnmarg.f .
+	$(FCMP) -c mnmarg.f
+
+mgtarg.o:
+	cp ../../SUBS/mgtarg.f .
+	$(FCMP) -c mgtarg.f
+
+lgstr.o:
+	cp ../../SUBS/lgstr.f .
+	$(FCMP) -c lgstr.f
+
+grphsubf.o:
+	cp ../../SUBS/grphsubf.f .
+	$(FCMP) -c grphsubf.f
+
+all: calplt genplt	\
+	clean
+
+calplt:	calplt.o $(MCHCMD) $(CALPLTF)
+	$(FCMP) calplt.o $(MCHCMD) $(CALPLTF) $(LDFLAGS) -o calplt
+	mv calplt $(DEST)
+
+CAL:	CAL.o $(MCHCMD) $(CALPLTF)
+	$(FCMP) CAL.o $(MCHCMD) $(CALPLTF) $(LDFLAGS) -o CAL
+	mv CAL $(DEST)
+
+genplt: genplt.o lgstr.o grphsubf.o mnmarg.o mgtarg.o
+	$(FCMP) -o genplt genplt.o lgstr.o grphsubf.o mnmarg.o mgtarg.o $(CALPLTF)
+	mv genplt ${DEST}
+
+clean:
+	$(RM) *.o
+	rm -f lgstr.f mnmarg.o mgtarg.f mchdep.f grphsubf.f

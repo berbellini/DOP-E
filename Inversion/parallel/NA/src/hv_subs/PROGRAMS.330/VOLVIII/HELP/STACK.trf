@@ -1,0 +1,35 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th STACK
+.S2 SUMMARY:
+Stack traces
+
+STACK 
+[Relative|Absolute] [Norm On | Off ]
+[Suffix suffix]
+
+.S2 INPUT:
+Relative      : stack according to first sample. Output length is controlled by smallest time window
+.BR
+Absolute      : Stack in absolute time. Output window is based on latest begin time and earliest end time.
+.BR 
+Norm On | Off : If on divide the stack by the number of traces used
+.BR
+Suffix        : suffix for the files names. The default is .stk
+
+.S2 DESCRIPTION:
+
+.S2 EXAMPLES:
+
+.S2 "DEFAULT:"
+STACK ABSOLUTE NORM OFF
+
+.S2 "HEADER CHANGES:"
+DEPMIN, DEPMAX, DEPMEN. IHDR11 is set to the number of traces actually stacked.
+
+.S2 "SEE ALSO":
+CORRELATE

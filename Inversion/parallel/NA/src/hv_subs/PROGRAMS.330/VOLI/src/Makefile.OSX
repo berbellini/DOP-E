@@ -1,0 +1,62 @@
+#####
+#	MacOS-X using gcc/g77 compilers
+#####
+FCMP=g77
+CCMP=gcc
+DEST=../../bin
+MCHCMD= mnmarg.o mgtarg.o
+MCHDEP=mchdep.o
+CALPLTPF=../../lib/libcalpltf.a
+GSUBSF=grphsubf.o lgstr.o
+RM=rm -f
+
+.f.o:
+	$(FCMP) -c $<
+
+.c.o:
+	$(CCMP) -c $<
+
+mnmarg.o:
+	cp ../../SUBS/mnmarg.f .
+	$(FCMP) -c mnmarg.f
+
+mgtarg.o:
+	cp ../../SUBS/mgtarg.f .
+	$(FCMP) -c mgtarg.f
+
+mchdep.o:
+	cp ../../SUBS/mchdep.f .
+	$(FCMP) -c mchdep.f
+
+grphsubf.o:
+	cp ../../SUBS/grphsubf.f .
+	$(FCMP) -c grphsubf.f
+
+lgstr.o:
+	cp ../../SUBS/lgstr.f .
+	$(FCMP) -c lgstr.f
+
+all: udelaz udtdd stereo redodate clean
+
+
+udelaz:	udelaz.o
+	$(CCMP) udelaz.o  -lm -o udelaz
+	mv udelaz $(DEST)
+
+udtdd:	udtdd.o $(MCHCMD)
+	$(FCMP) udtdd.o $(MCHCMD) -o udtdd
+	mv udtdd $(DEST)
+
+stereo: stereo.o $(GSUBSF) $(MCHDEP) $(MCHCMD)
+	$(FCMP) -o stereo stereo.o $(GSUBSF) $(MCHDEP) $(MCHCMD) $(CALPLTPF) 
+	mv stereo $(DEST)
+
+redodate:	redodate.o csstim.o
+	$(CCMP) redodate.o csstim.o -lm -o redodate
+	mv redodate $(DEST)
+
+clean:
+	$(RM) *.o
+	$(RM) mnmarg.f
+	$(RM) mgtarg.f
+	$(RM) grphsubf.f lgstr.f mchdep.f

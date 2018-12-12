@@ -1,0 +1,32 @@
+.de BR
+.in 0
+.in +8n
+.ti -3n
+..
+
+.Th MULF
+.S2 SUMMARY:
+Multiply Files in memory
+
+MULF  [Master n] [ Suffix suffix ] [ Default ]
+
+.S2 INPUT:
+Master        : Trace uses as master trace. Default is 0, which is the first in memory.
+.BR
+Suffix siffix : The traces are renamed and the original traces in memory are overwritten to be of the form
+ [STA2][CMP2]_[STA1][CMP1].suffix. The default value ofthe suffix is '.mul'
+
+.S2 DESCRIPTION:
+This multiplies all traces in memory by the master trace. After the multiplication operation the files are named as follow: 
+[STA2][CMP2]_[STA1][CMP1].suffix 
+Beware that nothing is done to the original header other than to reset the start and end times since the output trace  is only for the common overlapping absolute time window.
+.sp
+The result on the master trace is to square it, and perhaps to change the begin and end of the trace.
+.S2 "HEADER CHANGES"
+DEPMAX, DEPMIN, DEPMEN, NPTS, B, O
+
+.S2 EXAMPLES:
+.S2 DEFAULT:
+MULF MASTER 0 Suffix .mul
+.S2 "SEE ALSO":
+ADDF, SUBF, DIVF

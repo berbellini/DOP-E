@@ -1,0 +1,25 @@
+.de BR
+.in 0
+.in +8n
+.ti -5n
+..
+
+
+.Th OUTCSV
+.S2 SUMMARY:
+Output time series as CSV for spreadsheet
+
+.S2 INPUT:
+
+.S2 DESCRIPTION:
+This writes all times series in memory in ASCII to a file f001.csv, which consists of N+1 columns, where N is the number of traces in memory. Column 1 is the time with respect tot he reference time, and the remaining columns are the samples.
+.sp
+This program handles differing time windows by outputing the common time segment, as is done by the commands rotate, rotate3, addf, subf, mulf and divf.
+.sp
+The number of data points (rows) that can be read into a spreadsheet is limited. For example OpenOffice only permits 65536 rows.
+.sp
+This command was created to facilitate student manipulation of traces using EXCEL or OpenOffice.
+
+.S2 EXAMPLES:
+
+.S2 "SEE ALSO":
