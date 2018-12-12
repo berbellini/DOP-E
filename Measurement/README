@@ -1,5 +1,5 @@
 ###############################################
-#   Read me for the DOP-E analysis software   #
+#   Read me for the DOP-E measurement software   #
 ###############################################
 
 Created by Andrea Berbellini, November 2018
@@ -22,7 +22,7 @@ Prerequisites
 - python 2.7
 - matplotlib 2.1.2
 
-This routines have been tested on a Ubuntu 16.04 64-bit machine.
+This routines have been tested on Ubuntu 16.10 and 18.04.
 
 
 Installation

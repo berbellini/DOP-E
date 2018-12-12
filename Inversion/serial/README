@@ -6,23 +6,8 @@ Created by Andrea Berbellini, November 2018
 For questions, bugs, comments please email me: andrea.berbellini@ingv.it 
 
 
-Citations
---------------------------------------------------------------------
-This software is free to download. If used please cite:
-
-Berbellini, A., Schimmel, M., Ferreira, A.M.G., Morelli, A.,
-    	Constraining S-wave velocity using Rayleigh wave ellipticity
-    	from polarization analysis of seismic noise, Geophysical Journal
-    	International, 2018, in press.
-
-The inversion is based on the software created by Malcolm Sembridge:
-	Sambridge, M., 1999. Geophysical inversion with a neighbourhood algorithm-I. 
-	Searching a parameter space, Geophysical Journal International, 138(2), 479–494.
-
-The forward modelling is based on the package "Computer Programs in Seismology" by
-Robert B. Hermann:
-	Herrmann, R. B., 2013. Computer Programs in Seismology: An Evolving Tool for 
-	Instruction and Research, Seismol. Res. Lett., 84(6), 1081–1088.
+For other details about the Neighbourhood Algorithm implementation please refer to http://rses.anu.edu.au/~malcolm/na/ 
+where you can find manuals and papers.
 
 
 Prerequisites
@@ -69,6 +54,28 @@ in the folder results/<name_of_the_inversion>/
 
 The inversion takes approx 1hr time (tested on a laptop with this processor: Intel® Core™ i7-7500U CPU @ 2.70GHz × 4)
 
+
+
+
+
+
+Citations
+--------------------------------------------------------------------
+This software is free to download. If used please cite:
+
+Berbellini, A., Schimmel, M., Ferreira, A.M.G., Morelli, A.,
+    	Constraining S-wave velocity using Rayleigh wave ellipticity
+    	from polarization analysis of seismic noise, Geophysical Journal
+    	International, 2018, in press.
+
+The inversion is based on the software created by Malcolm Sembridge:
+	Sambridge, M., 1999. Geophysical inversion with a neighbourhood algorithm-I. 
+	Searching a parameter space, Geophysical Journal International, 138(2), 479–494.
+
+The forward modelling is based on the package "Computer Programs in Seismology" by
+Robert B. Hermann:
+	Herrmann, R. B., 2013. Computer Programs in Seismology: An Evolving Tool for 
+	Instruction and Research, Seismol. Res. Lett., 84(6), 1081–1088.
 
 
 
