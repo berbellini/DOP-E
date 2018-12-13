@@ -6,16 +6,6 @@ Created by Andrea Berbellini, November 2018
 For questions, bugs, comments please email me: andrea.berbellini@ingv.it 
 
 
-Citation
---------------------------------------------------------------------
-This software is free to download. If used please cite:
-
-Berbellini, A., Schimmel, M., Ferreira, A.M.G., Morelli, A.,
-    Constraining S-wave velocity using Rayleigh wave ellipticity
-    from polarization analysis of seismic noise, Geophysical Journal
-    International, 2018, in press.
-
-
 Prerequisites
 --------------------------------------------------------------------
 - gfortran or ifort
@@ -73,21 +63,33 @@ Berbellini et al. (2016). It also compare the results with the theoretical ellip
 by Herrmann (2013) from the model Litho1.0 and Crust1.0 (Laske, 2013)
 
 
-References
+Citations
 --------------------------------------------------------------------
-Berbellini, A., Schimmel, M., Ferreira, A.M.G., Morelli, A., Constraining S-wave velocity using 
-Rayleigh wave ellipticity from polarization analysis of seismic noise, Geophysical Journal
-International, 2018, in press.
-    
-Berbellini, A., Morelli, A., & Ferreira, A. M., 2016. Ellipticity of Rayleigh waves in basin and
-hard-rock sites in Northern Italy, Geophysical Journal International, 206(1), 395–407.
+This software is free to download. If used please cite:
+        
+        Berbellini, A., Schimmel, M., Ferreira, A.M.G., Morelli, A., Constraining S-wave velocity
+        using Rayleigh wave ellipticity from polarization analysis of seismic noise, Geophysical
+        Journal International, 2018, in press.
+	
+The DOP-E method is an update of the method implemented by Martin Schimmel:
+	   
+        Schimmel, M. & Gallart, J., 2004. Degree of polarization filter for frequency-dependent
+	    signal enhancement through noise suppression, Bull. Seismol. Soc. Am., 94(3), 1016–1035.
+	
+	    Schimmel, M., Stutzmann, E., Ardhuin, F., & Gallart, J., 2011. Polarized Earth’s ambient 
+	    microseismic noise, Geochemistry, Geophys. Geosystems, 12(7), 1–14.
 
-Herrmann, R. B., 2013. Computer Programs in Seismology: An Evolving Tool for Instruction and
-Research, Seismol. Res. Lett., 84(6), 1081–1088.
+Other references
+-------------------------------------------------------------------    
+        Berbellini, A., Morelli, A., & Ferreira, A. M., 2016. Ellipticity of Rayleigh waves in basin and
+        hard-rock sites in Northern Italy, Geophysical Journal International, 206(1), 395–407.
 
-Laske, G., Masters, G., Ma, Z., & Pasyanos, M., 2013. Update on CRUST1.0 - A 1-degree Global
-Model of Earth’s Crust, Geophys. Res. Abstr., 15, EGU General Assembly 2013, held 7-12 April,
-2013 in Vienna, Austria, id. EGU2013-2658.
+        Herrmann, R. B., 2013. Computer Programs in Seismology: An Evolving Tool for Instruction and
+        Research, Seismol. Res. Lett., 84(6), 1081–1088.
+
+        Laske, G., Masters, G., Ma, Z., & Pasyanos, M., 2013. Update on CRUST1.0 - A 1-degree Global
+        Model of Earth’s Crust, Geophys. Res. Abstr., 15, EGU General Assembly 2013, held 7-12 April,
+        2013 in Vienna, Austria, id. EGU2013-2658.
 
 
 
