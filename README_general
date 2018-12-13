@@ -4,8 +4,9 @@
 Created by Andrea Berbellini, November 2018
 For questions, bugs, comments please email me: andrea.berbellini@ingv.it 
 
-The goal of this package is to measure Rayleigh wave ellipticity from the polarization of ambient noise and to invert it
-to contrain S-wave velocity beneath the station Concordia (CCD, Antarctica), as in Berbellini et al. 2018.
+The goal of this package is to measure Rayleigh wave ellipticity from the 
+polarization of ambient noise and to invert it to constrain S-wave velocity,
+as in Berbellini et al. 2018.
 
 We provide this package to reproduce our results.
 
