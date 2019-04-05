@@ -9,13 +9,16 @@ from plot_results import *
 inversion_name = "DEMO1.1"   # choose a name for your inversion
 
 
-
-
-out_folder = "results/" + inversion_name
-
-
+# preparing folders
+os.system("mkdir Results")
+out_folder = "Results/" + inversion_name
 os.system("mkdir " + out_folder)
+os.system("mkdir models")
+os.system("mkdir out_models")
+
 exists = os.path.isfile(out_folder + "/full_list.txt") # check if the result file exists, to avoid overwriting it
+
+
 
 if exists == True:
 	print "\n\n*** Warning: result file already exists! ***"
@@ -26,9 +29,11 @@ else:
 	os.system("make all")
 	os.chdir("../data")
 
+
 	#************************
 	# RUN INVERSION
 	os.system("../bin/hv_na")
+	sys.exit()
 	#************************
 	os.chdir("../../")
 
