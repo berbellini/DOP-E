@@ -42,7 +42,7 @@ echo $Z $N $E
 # EXECUTE PG
 #############
 \rm -f azi_dopm.asc
-bin/DOP-E_v1.0 $Z $N $E $par1 $par2 hv wdeg=10 zdeg=10
+bin/DOP-E_v1.2 $Z $N $E $par1 $par2 hv wdeg=10 zdeg=10
 cat azi_dopm.asc >> output_file.asc
 
 
