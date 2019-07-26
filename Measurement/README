@@ -15,6 +15,12 @@ Prerequisites
 This routines have been tested on Ubuntu 16.10 and 18.04.
 
 
+Disclaimer
+--------------------------------------------------------------------
+The latest version 1.2 has been modified by Andrea Berbellini and it is a beta version.
+Stay tuned for further updates.
+
+
 Installation
 --------------------------------------------------------------------
 Modify the makefile (src/makefile) setting the correct fortran compiler.
@@ -66,10 +72,10 @@ by Herrmann (2013) from the model Litho1.0 and Crust1.0 (Laske, 2013)
 Citations
 --------------------------------------------------------------------
 This software is free to download. If used please cite:
-        
+
         Berbellini, A., Schimmel, M., Ferreira, A.M.G., Morelli, A., Constraining S-wave velocity
         using Rayleigh wave ellipticity from polarization analysis of seismic noise, Geophysical
-        Journal International, 2018, in press.
+        Journal International, Volume 216, Issue 3, March 2019, Pages 1817–1830, https://doi.org/10.1093/gji/ggy512
 	
 The DOP-E method is an update of the method implemented by Martin Schimmel:
 	   
