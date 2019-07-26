@@ -6,5 +6,5 @@ fort=gfortran
 libsac=./sacio.a
 
 
-DOP-E_v1.0el: DOP-E_v1.0.f
-	$(fort) DOP-E_v1.0.f -o ../bin/DOP-E_v1.0 $(libsac) 
+DOP-E_v1.2el: DOP-E_v1.2.f
+	$(fort) DOP-E_v1.2.f -o ../bin/DOP-E_v1.2 $(libsac) 
