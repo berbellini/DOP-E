@@ -34,7 +34,7 @@ nsp=8192
 ##### average spectral matrix rather than spectra (keep as it is):
 ave=ave
 ##### frequencies are spaced on a log scale (default is linear)
-flog=flog
+#flog=flog
 
  
 par1=" wlenf="$wlen" pow="$pow" "$ave" dopm="$dopm" nsp="$nsp" "
