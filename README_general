@@ -6,7 +6,7 @@ For questions, bugs, comments please email me: andrea.berbellini@ingv.it
 
 The goal of this package is to measure Rayleigh wave ellipticity from the 
 polarization of ambient noise and to invert it to constrain S-wave velocity,
-as in Berbellini et al. 2018.
+as in Berbellini et al. 2019.
 
 We provide this package to reproduce our results.
 
@@ -34,7 +34,8 @@ This software is free to download. If used please cite:
 Berbellini, A., Schimmel, M., Ferreira, A.M.G., Morelli, A.,
     	Constraining S-wave velocity using Rayleigh wave ellipticity
     	from polarization analysis of seismic noise, Geophysical Journal
-    	International, 2018, in press.
+    	International,  Volume 216, Issue 3, 1 March 2019, Pages 1817–1830,
+	https://doi-org.eres.qnl.qa/10.1093/gji/ggy512
 	
 The DOP-E method is an update of the method implemented byMartin Schimmel:
 	Schimmel, M. & Gallart, J., 2004. Degree of polarization filter for frequency-dependent
