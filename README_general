@@ -2,7 +2,7 @@
 #   General read me for DOP-E package   #
 #########################################
 Created by Andrea Berbellini, November 2018
-For questions, bugs, comments please email me: andrea.berbellini@ingv.it 
+For questions, bugs, comments please email me: andrea.berbellini@gmail.it 
 
 The goal of this package is to measure Rayleigh wave ellipticity from the 
 polarization of ambient noise and to invert it to constrain S-wave velocity,
